@@ -1,19 +1,31 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
+    var user = await UserManager.GetUserAsync(User);
+    IList<string> roles =  await UserManager.GetRolesAsync(user);
+    string role = roles[0];
+
+    string text = "";
+    if (role == "Admin")
+        text = "an Admin";
+    else
+        text = "a Patient";
 }
 
+@if (SignInManager.IsSignedIn(User))
+{
+
     <div class="text-center">
-        <div id="curve_chart" style="width: 1250px; height: 500px;"></div>
-        <button id="btn-start">Start</button>
-        <button id="btn-stop">Stop</button>
-        <button id="btn-send">Send</button>
+        <h1>You are an @text</h1>
     </div>
 
-
-@section Scripts {
-    <script type="text/javascript"
-            src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"
-            type="text/javascript"></script>
-    <script src="~/js/script.js"></script>
+}
+else
+{
+    <div class="text-center">
+        <h1>Welcome to HealthyMan</h1>
+    </div>
 }

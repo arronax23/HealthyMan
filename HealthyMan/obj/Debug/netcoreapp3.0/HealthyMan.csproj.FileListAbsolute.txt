@@ -156,3 +156,4 @@ D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Hea
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Home\Index.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\_ViewImports.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\_ViewStart.cshtml.g.cs
+D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Views\Shared\_NavigationPartial.cshtml.g.cs
