@@ -12,11 +12,11 @@ namespace HealthyMan.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class HomeController : Controller
+    public class PulseController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PulseController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public PulseController(ILogger<PulseController> logger)
         {
             _logger = logger;
         }

@@ -7,21 +7,24 @@ let time = [];
 let measurement = { values: values, time: time};
 
 google.charts.load("current", { packages: ["corechart"] }).then(function () {
+    document.querySelector(".container")
     options = {
-        title: "Data visualization",
+        title: "Data visualization chart",
         pointSize: 5,
         hAxis: {
             title: "Time",
         },
+        
         vAxis: {
-            title: "ADCcode",
+            title: "Pulse",
         },
+        
         explorer: {},
     };
 
     dataTable = new google.visualization.DataTable();
     dataTable.addColumn("number", "Time");
-    dataTable.addColumn("number", "ADCcode");
+    dataTable.addColumn("number", "Pulse");
 
     chart = new google.visualization.LineChart(
         document.getElementById("curve_chart")
