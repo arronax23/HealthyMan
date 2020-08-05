@@ -8,7 +8,7 @@ namespace HealthyMan.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public int? PatientId { get; set; }
+        public string PatientId { get; set; }
 
         public virtual Patient Patient { get; set; }
 

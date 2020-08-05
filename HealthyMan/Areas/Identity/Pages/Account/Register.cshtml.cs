@@ -75,7 +75,8 @@ namespace HealthyMan.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };        
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                user.PatientId = user.Id;
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 await _userManager.AddToRoleAsync(user, "Patient");
                 if (result.Succeeded)
