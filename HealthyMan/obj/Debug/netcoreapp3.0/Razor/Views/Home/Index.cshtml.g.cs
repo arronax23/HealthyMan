@@ -27,6 +27,13 @@ using HealthyMan.Models;
 #line hidden
 #nullable disable
 #nullable restore
+#line 2 "D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\Views\_ViewImports.cshtml"
+using HealthyMan.Areas.Identity;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 1 "D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\Views\Home\Index.cshtml"
 using Microsoft.AspNetCore.Identity;
 
@@ -35,6 +42,7 @@ using Microsoft.AspNetCore.Identity;
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"654c50c757dff93ba2bcb483eb34763a55c22ff8", @"/Views/Home/Index.cshtml")]
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"54faf4e500dfe311828d6855b6069a4255360141", @"/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"36c77508f3c55b69315759e9177be2ad1d3ea4a0", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_Index : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         #pragma warning disable 1998

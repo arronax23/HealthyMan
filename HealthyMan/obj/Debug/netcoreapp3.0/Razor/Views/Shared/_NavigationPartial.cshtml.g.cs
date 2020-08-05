@@ -27,6 +27,13 @@ using HealthyMan.Models;
 #line hidden
 #nullable disable
 #nullable restore
+#line 2 "D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\Views\_ViewImports.cshtml"
+using HealthyMan.Areas.Identity;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 1 "D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\Views\Shared\_NavigationPartial.cshtml"
 using Microsoft.AspNetCore.Identity;
 
@@ -42,6 +49,7 @@ using HealthyMan.Data;
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f50086a43cf655954210aca3b2d84c46ebacaf2f", @"/Views/Shared/_NavigationPartial.cshtml")]
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"54faf4e500dfe311828d6855b6069a4255360141", @"/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"36c77508f3c55b69315759e9177be2ad1d3ea4a0", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared__NavigationPartial : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("nav-link font-weight-bold"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -89,7 +97,7 @@ using HealthyMan.Data;
 #line hidden
 #nullable disable
             WriteLiteral("                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f6742", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f7099", async() => {
                 WriteLiteral("Patients");
             }
             );
@@ -110,7 +118,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f8476", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f8833", async() => {
                 WriteLiteral("Pulse");
             }
             );
@@ -131,7 +139,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f10207", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f10564", async() => {
                 WriteLiteral("GSR");
             }
             );
@@ -152,7 +160,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f11937", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f12294", async() => {
                 WriteLiteral("Respiratory rate");
             }
             );
@@ -173,7 +181,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f13680", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f14037", async() => {
                 WriteLiteral("Calendar");
             }
             );
@@ -204,7 +212,7 @@ using HealthyMan.Data;
 #line hidden
 #nullable disable
             WriteLiteral("                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f15697", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f16054", async() => {
                 WriteLiteral("Pulse");
             }
             );
@@ -225,7 +233,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f17429", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f17786", async() => {
                 WriteLiteral("GSR");
             }
             );
@@ -246,7 +254,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f19159", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f19516", async() => {
                 WriteLiteral("Respiratory rate");
             }
             );
@@ -267,7 +275,7 @@ using HealthyMan.Data;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f20902", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f50086a43cf655954210aca3b2d84c46ebacaf2f21259", async() => {
                 WriteLiteral("Calendar");
             }
             );
