@@ -16,7 +16,7 @@ google.charts.load("current", { packages: ["corechart"] }).then(function () {
         },
         
         vAxis: {
-            title: "Pulse",
+            title: "RespiratoryRate",
         },
         
         explorer: {},
@@ -24,7 +24,7 @@ google.charts.load("current", { packages: ["corechart"] }).then(function () {
 
     dataTable = new google.visualization.DataTable();
     dataTable.addColumn("number", "Time");
-    dataTable.addColumn("number", "Pulse");
+    dataTable.addColumn("number", "RespiratoryRate");
 
     chart = new google.visualization.LineChart(
         document.getElementById("curve_chart")
@@ -43,7 +43,7 @@ google.charts.load("current", { packages: ["corechart"] }).then(function () {
 
     function onConnect() {
         console.log("onConnect");
-        client.subscribe("HealthyMan/Pulse/Data");
+        client.subscribe("HealthyMan/RespiratoryRate/Data");
     }
 
     function onConnectionLost(responseObject) {
@@ -71,18 +71,18 @@ google.charts.load("current", { packages: ["corechart"] }).then(function () {
     btnStart.addEventListener("click", function () {
         dataTable = new google.visualization.DataTable();
         dataTable.addColumn("number", "Time");
-        dataTable.addColumn("number", "ADCcode");
+        dataTable.addColumn("number", "RespiratoryRate");
         values.length = 0;
         time.length = 0;
         message = new Paho.MQTT.Message("1");
-        message.destinationName = "HealthyMan/Pulse/Start";
+        message.destinationName = "HealthyMan/RespiratoryRate/Start";
         client.send(message);
     });
 
     let btnStop = document.querySelector("#btn-stop");
     btnStop.addEventListener("click", function () {
         message = new Paho.MQTT.Message("1");
-        message.destinationName = "HealthyMan/Pulse/Stop";
+        message.destinationName = "HealthyMan/RespiratoryRate/Stop";
         client.send(message);
     });
 
