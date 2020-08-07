@@ -165,3 +165,4 @@ D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Raz
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Views\_ViewStart.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\GSR\Index.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\RespiratoryRate\Index.cshtml.g.cs
+D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.csprojAssemblyReference.cache
