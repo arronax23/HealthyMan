@@ -4,7 +4,32 @@ let i = 0;
 let chart;
 let values = [];
 let time = [];
-let measurement = { values: values, time: time};
+let measurement = { values: values, time: time };
+// BPM Calc
+let BPM = {
+    value: 0,
+    measurement: measurement,
+    counter: 0,
+    enable1: false,
+    enable2: false,
+    calc: function () {
+        if (this.measurement.values[this.measurement.values.length - 1] > 800 && this.enable2 === true)
+            this.enable1 = true;
+        else if (this.measurement.values[this.measurement.values.length - 1] < 800)
+            this.enable2 = true;
+
+        if (this.enable1 === true) {
+            this.counter++;
+
+            this.value = 60 * this.counter / this.measurement.time[this.measurement.time.length - 1];
+
+            this.enable1 = false;
+            this.enable2 = false;
+        }
+    }
+}
+
+
 
 google.charts.load("current", { packages: ["corechart"] }).then(function () {
     document.querySelector(".container")
@@ -62,6 +87,11 @@ google.charts.load("current", { packages: ["corechart"] }).then(function () {
         values.push(value_tmp);
         dataTable.addRow([time_tmp, value_tmp]);
         chart.draw(dataTable, options);
+
+        BPM.calc();
+        let BPMp = document.querySelector("#BPM");
+        BPMp.innerHTML = BPM.value;
+
         i++;
     }
 
@@ -96,4 +126,5 @@ google.charts.load("current", { packages: ["corechart"] }).then(function () {
             body: JSON.stringify(measurement)
         });
     });
+
 });
