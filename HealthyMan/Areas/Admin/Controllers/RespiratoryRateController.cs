@@ -11,6 +11,7 @@ namespace HealthyMan.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class RespiratoryRateController : Controller
     {
+
         public IActionResult Index()
         {
             return View();

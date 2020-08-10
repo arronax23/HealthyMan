@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using HealthyMan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HealthyMan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200810152556_PulseMeasurementsColumnAdded")]
+    partial class PulseMeasurementsColumnAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +24,7 @@ namespace HealthyMan.Migrations
 
             modelBuilder.Entity("HealthyMan.Models.Patient", b =>
                 {
-                    b.Property<int?>("PatientId")
+                    b.Property<int>("PatientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -43,7 +45,7 @@ namespace HealthyMan.Migrations
 
             modelBuilder.Entity("HealthyMan.Models.PulseMeasurement", b =>
                 {
-                    b.Property<int?>("PulseMeasurementId")
+                    b.Property<int>("PulseMeasurementId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -270,10 +272,13 @@ namespace HealthyMan.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int?>("PatientId")
+                    b.Property<string>("PatientId")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PatientId1")
                         .HasColumnType("integer");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientId1");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -333,7 +338,7 @@ namespace HealthyMan.Migrations
                 {
                     b.HasOne("HealthyMan.Models.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientId");
+                        .HasForeignKey("PatientId1");
                 });
 #pragma warning restore 612, 618
         }

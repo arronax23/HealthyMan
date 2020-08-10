@@ -1,9 +1,9 @@
 ﻿let values = [];
 let time = [];
-let measurement = { values: values, time: time };
 let pulseSpan = document.querySelector("#pulse");
 let counter = document.querySelector("#counter");
-// BPM Calc
+let measurement = {pulse: 0, values: values, time: time };
+// Pulse Calc
 let pulse = {
     value: 0,
     measurement: measurement,
@@ -31,6 +31,9 @@ let pulse = {
         }
     },
 };
+
+
+
 
 /**********************************************Chart.js********************************************************/
 var ctx = document.getElementById("myChart").getContext("2d");
@@ -119,12 +122,12 @@ btnStop.addEventListener("click", function () {
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Pulse/Stop";
     client.send(message);
+    measurement.pulse = pulse.value;
 });
 
-/*
 let btnSend = document.querySelector("#btn-send");
 btnSend.addEventListener("click", function () {
-    fetch("http://localhost:50757/api/Measurement", {
+    fetch("http://localhost:50757/api/PulseMeasurement", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -132,4 +135,4 @@ btnSend.addEventListener("click", function () {
         body: JSON.stringify(measurement)
     });
 });
-*/
+

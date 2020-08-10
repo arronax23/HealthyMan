@@ -7,7 +7,7 @@ namespace HealthyMan.Models
 {
     public class Patient
     {
-        public int PatientId { get; set; }
+        public int? PatientId { get; set; }
         public string FirstName { get; set; }
         public int LastName { get; set; }
         public DateTime BirthDate { get; set; }
