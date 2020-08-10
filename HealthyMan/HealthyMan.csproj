@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20200810161817_Changed_PatientId_From_String_To_Int.Designer.cs" />
     <Compile Remove="Migrations\20200810162552_Changed_PatientId_From_String_To_Int_2.cs" />
     <Compile Remove="Migrations\20200810162552_Changed_PatientId_From_String_To_Int_2.Designer.cs" />
+    <Compile Remove="Migrations\20200810195934_Test3.cs" />
+    <Compile Remove="Migrations\20200810195934_Test3.Designer.cs" />
   </ItemGroup>
 
 

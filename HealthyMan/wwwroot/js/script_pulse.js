@@ -2,7 +2,16 @@
 let time = [];
 let pulseSpan = document.querySelector("#pulse");
 let counter = document.querySelector("#counter");
-let measurement = {pulse: 0, values: values, time: time };
+let measurement = {
+    pulse: 0,
+    values: values,
+    time: time,
+    patient: {
+        firstName : "Wiktor",
+        lastName: "Zielak",
+        //birthDate: new Date(1995, 8, 15)
+    }
+};
 // Pulse Calc
 let pulse = {
     value: 0,
