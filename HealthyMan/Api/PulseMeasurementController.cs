@@ -21,12 +21,28 @@ namespace HealthyMan
         }
         // POST: api/Measurement
         [HttpPost]
-        public IActionResult Post([FromBody] PulseMeasurement measurement)
+        public IActionResult Post([FromBody] PulseMeasurement pulseMeasurement)
         {
-            _context.Add(measurement);
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data");
+
+            if (_context.Patients.Any(p => p.FirstName == pulseMeasurement.Patient.FirstName &&
+                                           p.LastName == pulseMeasurement.Patient.LastName &&
+                                           p.BirthDate == pulseMeasurement.Patient.BirthDate)
+                )
+            {
+                Patient alreadyKnownPatient = _context.Patients.ToList().Find(p => p.FirstName == pulseMeasurement.Patient.FirstName &&
+                                     p.LastName == pulseMeasurement.Patient.LastName &&
+                                     p.BirthDate == pulseMeasurement.Patient.BirthDate);
+
+                pulseMeasurement.Patient = alreadyKnownPatient;
+            }
+
+
+            _context.Add(pulseMeasurement);
             _context.SaveChanges();
 
-            return Created("sasas",5);
+            return Ok();
         }
 
     }

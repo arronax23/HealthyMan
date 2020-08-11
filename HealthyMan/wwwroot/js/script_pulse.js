@@ -2,20 +2,21 @@
 let time = [];
 let pulseSpan = document.querySelector("#pulse");
 let counter = document.querySelector("#counter");
-let measurement = {
+let pulseMeasurement = {
     pulse: 0,
     values: values,
     time: time,
+    // Patient
     patient: {
-        firstName : "Wiktor",
-        lastName: "Zielak",
-        //birthDate: new Date(1995, 8, 15)
+        firstName: "",
+        lastName: "",
+        birthDate: new Date()
     }
 };
 // Pulse Calc
 let pulse = {
     value: 0,
-    measurement: measurement,
+    measurement: pulseMeasurement,
     counter: 0,
     enable1: false,
     enable2: false,
@@ -131,17 +132,28 @@ btnStop.addEventListener("click", function () {
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Pulse/Stop";
     client.send(message);
-    measurement.pulse = pulse.value;
+    pulseMeasurement.pulse = pulse.value;
 });
 
 let btnSend = document.querySelector("#btn-send");
 btnSend.addEventListener("click", function () {
+    pulseMeasurement.patient.firstName = document.querySelector("input#firstName").value;
+    pulseMeasurement.patient.lastName = document.querySelector("input#lastName").value;
+    pulseMeasurement.patient.birthDate = document.querySelector("input#birthDate").value;
     fetch("http://localhost:50757/api/PulseMeasurement", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(measurement)
+        body: JSON.stringify(pulseMeasurement)
+    }).then(function (response) {
+        console.log("Response:");
+        console.log(response);
+        if (response.status === 200) {
+            alert("Saved succesfully");
+            location.reload();
+        }
+        else alert(`Saving failed\nStatus: ${response.status}`);
     });
 });
 
