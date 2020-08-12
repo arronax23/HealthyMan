@@ -21,7 +21,7 @@ namespace HealthyMan
         }
         // POST: api/Measurement
         [HttpPost]
-        public IActionResult Post([FromBody] PulseMeasurement pulseMeasurement)
+        public async Task<IActionResult> Post([FromBody] PulseMeasurement pulseMeasurement)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data");
@@ -38,9 +38,8 @@ namespace HealthyMan
                 pulseMeasurement.Patient = alreadyKnownPatient;
             }
 
-
-            _context.Add(pulseMeasurement);
-            _context.SaveChanges();
+            await _context.AddAsync(pulseMeasurement);
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
