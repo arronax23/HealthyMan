@@ -35,6 +35,7 @@ namespace HealthyMan
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddAntiforgery(options => { options.Cookie. });
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
