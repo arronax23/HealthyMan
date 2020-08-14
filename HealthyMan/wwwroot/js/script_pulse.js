@@ -32,9 +32,8 @@ let pulse = {
         if (this.enable1 === true) {
             this.counter++;
 
-            this.value =
-                (60 * this.counter) /
-                this.measurement.time[this.measurement.time.length - 1];
+            this.value = Math.round((60 * this.counter) / this.measurement.time[this.measurement.time.length - 1]);
+
 
             this.enable1 = false;
             this.enable2 = false;
@@ -71,6 +70,19 @@ var myChart = new Chart(ctx, {
                 {
                     type: "linear",
                     position: "bottom",
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Time [s]",
+                    },
+                },
+            ],
+            yAxes: [
+                {
+                    type: "linear",
+                    scaleLabel: {
+                        display: true,
+                        labelString: "ADC code",
+                    },
                 },
             ],
         },
