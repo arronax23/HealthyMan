@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HealthyMan.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HealthyMan.Areas.Admin.Controllers
 {
@@ -19,9 +20,20 @@ namespace HealthyMan.Areas.Admin.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_context.Patients.ToList());
+            return View(await _context.Patients.ToListAsync());
         }
+
+        public async Task<IActionResult> Patient(int id)
+        {
+            return View(await _context.Patients.Include(p => p.PulseMeasurements).SingleOrDefaultAsync(p => p.PatientId == id));
+        }
+
+        public async Task<IActionResult> PulseMeasurement(int id)
+        {
+            return View(await _context.PulseMeasurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.PulseMeasurementId == id));
+        }
+
     }
 }

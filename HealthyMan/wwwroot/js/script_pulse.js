@@ -6,6 +6,7 @@ let pulseMeasurement = {
     pulse: 0,
     values: values,
     time: time,
+    timeStamp: new Date(),
     // Patient
     patient: {
         firstName: "",

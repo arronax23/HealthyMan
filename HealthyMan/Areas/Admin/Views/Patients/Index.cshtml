@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Patients";
 }
-
+<h1>Patients</h1>
 <table class="table">
     <thead>
         <tr>
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.BirthDate)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.PatientId" class="btn btn-primary btn-sm">Details</a>
+                <a asp-action="Patient" asp-route-id="@item.PatientId" class="btn btn-primary btn-sm">Measurements</a>
             </td>
         </tr>
         }

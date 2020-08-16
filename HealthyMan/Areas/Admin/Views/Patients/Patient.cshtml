@@ -1,0 +1,64 @@
+﻿@model Patient
+
+@{
+    ViewData["Title"] = "Patient";
+}
+
+<h1>Patient</h1>
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.PatientId)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.PatientId)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FirstName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.FirstName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.LastName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.LastName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.BirthDate)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.BirthDate)
+    </dd>
+</dl>
+<hr />
+<h2>Pulse measurements</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    PulseMeasurementId
+                </th>
+                <th>
+                    Time stamp
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PulseMeasurements)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PulseMeasurementId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStamp)
+                </td>
+                <td>
+                    <a asp-action="PulseMeasurement" asp-route-id="@item.PulseMeasurementId" class="btn btn-primary btn-sm">Details</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>

@@ -37,6 +37,7 @@ namespace HealthyMan
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             //services.AddAntiforgery(options => { options.Cookie. });
             services.AddControllersWithViews();
+
             services.AddRazorPages();
         }
 

@@ -1,0 +1,57 @@
+﻿@model PulseMeasurement
+
+@{
+    ViewData["Title"] = "PulseMeasurement";
+}
+
+<h1>Pulse Measurement</h1>
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Patient.PatientId)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Patient.PatientId)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Patient.FirstName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Patient.FirstName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Patient.LastName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Patient.LastName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Patient.BirthDate)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Patient.BirthDate)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.PulseMeasurementId)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.PulseMeasurementId)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.TimeStamp)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.TimeStamp)
+    </dd>
+</dl>
+<hr />
+<div id="line_chart"
+     style="width: 1110px; height: 500px; margin: auto;"></div>
+
+@section Scripts{
+    <script type="text/javascript"
+            src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/js/rednerPulseLineChart.js"></script>
+    <script>renderPulseLineChart(@Html.Raw(Json.Serialize(Model)))</script>
+}
+
