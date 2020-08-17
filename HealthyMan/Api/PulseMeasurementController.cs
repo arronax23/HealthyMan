@@ -31,7 +31,7 @@ namespace HealthyMan
                                            p.BirthDate == pulseMeasurement.Patient.BirthDate)
                 )
             {
-                Patient alreadyKnownPatient = _context.Patients.ToList().Find(p => p.FirstName == pulseMeasurement.Patient.FirstName &&
+                Patient alreadyKnownPatient = _context.Patients.SingleOrDefault(p => p.FirstName == pulseMeasurement.Patient.FirstName &&
                                      p.LastName == pulseMeasurement.Patient.LastName &&
                                      p.BirthDate == pulseMeasurement.Patient.BirthDate);
 

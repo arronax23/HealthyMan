@@ -5,6 +5,7 @@
 }
 
 <h1>Patient</h1>
+<h3>Are you sure you want to delete this?</h3>
 <hr />
 <dl class="row">
     <dt class="col-sm-2">
@@ -63,5 +64,5 @@
     </tbody>
 </table>
 <hr />
-<a asp-action="Index" class="btn btn-primary">Back</a> |
-<a asp-action="DeletePatient" asp-route-id="@Model.PatientId" class="btn btn-danger">Delete patient</a>
+<a asp-action="Patient" asp-route-id="@Model.PatientId" class="btn btn-primary">Cancel</a> |
+<a asp-action="DeletePatientConfirmed" asp-route-id="@Model.PatientId" class="btn btn-danger">Delete patient</a>
