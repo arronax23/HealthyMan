@@ -76,7 +76,6 @@ namespace HealthyMan
                 endpoints.MapRazorPages();
             });
             
-
             CreateRoles(serviceProvider).Wait();
             CreateAdmin(serviceProvider).Wait();
         }

@@ -37,6 +37,7 @@ namespace HealthyMan
 
                 pulseMeasurement.Patient = alreadyKnownPatient;
             }
+            pulseMeasurement.TimeStamp = DateTime.Now;
 
             await _context.AddAsync(pulseMeasurement);
             await _context.SaveChangesAsync();

@@ -14,6 +14,7 @@ let pulseMeasurement = {
         birthDate: new Date()
     }
 };
+console.log(pulseMeasurement.timeStamp);
 // Pulse Calc
 let pulse = {
     value: 0,
