@@ -2,41 +2,41 @@
     ViewData["Title"] = "Pulse";
 }
 
-    
-        <h1>Pulse</h1>
-        <hr />
-        <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
-            <canvas id="myChart" width="80"></canvas>
+<div class="text-center">
+    <h1>Pulse</h1>
+    <hr />
+    <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
+        <canvas id="myChart" width="80"></canvas>
+    </div>
+    <div class="form-group">
+        <div>
+            <span>Pulse: </span><span id="pulse"></span>
+        </div>
+        <div>
+            <span>Counter: </span><span id="counter"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <button id="btn-start" class="btn btn-success">Start</button>
+        <button id="btn-stop" class="btn btn-danger">Stop</button>
+    </div>
+    <hr />
+    <div id="form">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName">
         </div>
         <div class="form-group">
-            <div>
-                <span>Pulse: </span><span id="pulse"></span>
-            </div>
-            <div>
-                <span>Counter: </span><span id="counter"></span>
-            </div>
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName">
         </div>
         <div class="form-group">
-            <button id="btn-start" class="btn btn-success">Start</button>
-            <button id="btn-stop" class="btn btn-danger">Stop</button>
+            <label for="birthDate">Birth Date</label>
+            <input type="date" id="birthDate">
         </div>
-        <hr />
-        <div id="form">
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName">
-            </div>
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName">
-            </div>
-            <div class="form-group">
-                <label for="birthDate">Birth Date</label>
-                <input type="date" id="birthDate">
-            </div>
-            <button id="btn-send" class="btn btn-primary">Send</button>
-        </div>
-
+        <button id="btn-send" class="btn btn-primary">Send</button>
+    </div>
+</div>
 
         @section Scripts {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
