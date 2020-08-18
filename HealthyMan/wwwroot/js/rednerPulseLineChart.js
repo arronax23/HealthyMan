@@ -13,7 +13,8 @@
 
             explorer: {
                 maxZoomIn: 40.0,
-                maxZoomOut: 2.0
+                maxZoomOut: 2.0,
+                axis: "horizontal",
             },
         };
 
