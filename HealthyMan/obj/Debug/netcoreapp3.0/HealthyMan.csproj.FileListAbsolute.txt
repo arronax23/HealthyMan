@@ -136,8 +136,6 @@ D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Hea
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.TagHelpers.input.cache
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.TagHelpers.output.cache
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.RazorCoreGenerate.cache
-D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\GSR\Index.cshtml.g.cs
-D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Pulse\Index.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Identity\Pages\Account\Register.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Identity\Pages\Account\_ViewImports.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Identity\Pages\_ValidationScriptsPartial.cshtml.g.cs
@@ -170,3 +168,4 @@ D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Raz
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\DeletePulseMeasurement.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\DeletePatient.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.csprojAssemblyReference.cache
+D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Measurement\Index.cshtml.g.cs

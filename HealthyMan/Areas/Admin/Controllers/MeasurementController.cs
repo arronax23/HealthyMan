@@ -9,12 +9,12 @@ namespace HealthyMan.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class RespiratoryRateController : Controller
+    public class MeasurementController : Controller
     {
-
         public IActionResult Index()
         {
             return View();
         }
+
     }
 }

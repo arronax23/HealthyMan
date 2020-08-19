@@ -11,25 +11,14 @@
                     <a class="nav-link font-weight-bold" asp-area="Admin" asp-controller="Patients" asp-action="Index">Patients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold" asp-area="Admin" asp-controller="Pulse" asp-action="Index">Pulse</a>
+                    <a class="nav-link font-weight-bold" asp-area="Admin" asp-controller="Measurement" asp-action="Index">Measurement</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" asp-area="Admin" asp-controller="GSR" asp-action="Index">GSR</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" asp-area="Admin" asp-controller="RespiratoryRate" asp-action="Index">Respiratory rate</a>
-                </li>
+
             }
             else if (User.IsInRole("Patient"))
             {
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold" asp-area="Patient" asp-controller="Pulse" asp-action="Index">Pulse</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" asp-area="Patient" asp-controller="GSR" asp-action="Index">GSR</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" asp-area="Patient" asp-controller="RespiratoryRate" asp-action="Index">Respiratory rate</a>
+                    <a class="nav-link font-weight-bold" asp-area="Patient" asp-controller="Measurement" asp-action="Index">Measurement</a>
                 </li>
             }
         }
