@@ -1,7 +1,7 @@
 ﻿let pulseValues = [];
 let pulseTime = [];
-let GSRValues = [];
-let GSRTime = [];
+let gsrValues = [];
+let gsrTime = [];
 
 let measurement = {
     pulse: 0,
@@ -9,8 +9,8 @@ let measurement = {
     //variance: 0,
     pulseValues: pulseValues,
     pulseTime: pulseTime,
-    GSRValues: GSRValues,
-    GSRTime: GSRTime,
+    gsrValues: gsrValues,
+    gsrTime: gsrTime,
     timeStamp: new Date(),
     // Patient
     patient: {
@@ -63,8 +63,8 @@ let pulse = {
 
 
 /**********************************************Chart.js Pulse********************************************************/
-var ctx = document.getElementById("pulseChart").getContext("2d");
-var pulseChart = new Chart(ctx, {
+var pulseContext = document.getElementById("pulseChart").getContext("2d");
+var pulseChart = new Chart(pulseContext, {
     type: "line",
     data: {
         datasets: [
@@ -109,8 +109,8 @@ var pulseChart = new Chart(ctx, {
 
 /***********************************************Chart.js GSR*******************************************************/
 
-var ctx2 = document.getElementById("GSRChart").getContext("2d");
-var GSRChart = new Chart(ctx2, {
+var gsrContext = document.getElementById("GSRChart").getContext("2d");
+var gsrChart = new Chart(gsrContext, {
     type: "line",
     data: {
         datasets: [
@@ -198,11 +198,11 @@ function onMessageArrived(message) {
         //console.log(splitText);
         let time_tmp = Number(splitText[0]);
         let value_tmp = Number(splitText[1]);
-        GSRTime.push(time_tmp);
-        GSRValues.push(value_tmp);
-        GSRChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
-        if (time_tmp > 7) GSRChart.data.datasets[0].data.shift();
-        GSRChart.update(0);
+        gsrTime.push(time_tmp);
+        gsrValues.push(value_tmp);
+        gsrChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
+        if (time_tmp > 7) gsrChart.data.datasets[0].data.shift();
+        gsrChart.update(0);
     }
 
 }
@@ -212,11 +212,11 @@ function onMessageArrived(message) {
 let btnStart = document.querySelector("#btn-start");
 btnStart.addEventListener("click", function () {
     pulseChart.data.datasets[0].data.length = 0;
-    GSRChart.data.datasets[0].data.length = 0;
+    gsrChart.data.datasets[0].data.length = 0;
     pulseTime.length = 0;
     pulseValues.length = 0;
-    GSRTime.length = 0;
-    GSRValues.length = 0;
+    gsrTime.length = 0;
+    gsrValues.length = 0;
     //pulseMeasurement.peaksCounter = 0;
     //pulse.enable1 = false;
     //pulse.enable2 = false;

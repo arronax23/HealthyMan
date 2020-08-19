@@ -28,10 +28,19 @@
         gsrDataTable.addColumn("number", "Time");
         gsrDataTable.addColumn("number", "Resistance [Ω]");
 
+        diffDataTable = new google.visualization.DataTable();
+        diffDataTable.addColumn("number", "Number");
+        diffDataTable.addColumn("number", "Time difference");
+
         for (let i = 0; i < model.pulseTime.length; i++) {
             pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i]]);
             gsrDataTable.addRow([model.gsrTime[i], model.gsrValues[i]]);
+            diffDataTable.addRow([i, model.pulseTime[i] - model.gsrTime[i]]);
         }
+
+        let diff = Math.abs(model.pulseTime[model.pulseTime.length - 1] - model.gsrTime[model.pulseTime.length - 1]);
+
+        console.log(diff / model.pulseTime.length);
 
         pulseChart = new google.visualization.LineChart(
             document.getElementById("pulse_chart")
@@ -44,5 +53,10 @@
         );
         gsrChart.draw(gsrDataTable, options);
 
+        options.vAxis.title = "Time difference"
+        diffChart = new google.visualization.LineChart(
+            document.getElementById("diff_chart")
+        );
+        diffChart.draw(diffDataTable, options);
     });
 }
