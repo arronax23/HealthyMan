@@ -1,9 +1,11 @@
 ﻿let values = [];
 let time = [];
-let pulseSpan = document.querySelector("#pulse");
-let counter = document.querySelector("#counter");
+let amplitude = 0;
+
 let pulseMeasurement = {
     pulse: 0,
+    peaksCounter: 0,
+    variance: 0,
     values: values,
     time: time,
     timeStamp: new Date(),
@@ -14,33 +16,44 @@ let pulseMeasurement = {
         birthDate: new Date()
     }
 };
-console.log(pulseMeasurement.timeStamp);
+
 // Pulse Calc
 let pulse = {
-    value: 0,
-    measurement: pulseMeasurement,
-    counter: 0,
+    pulseMeasurement: pulseMeasurement,
     enable1: false,
     enable2: false,
-    calc: function () {
+    mean: 0,
+    calcPulse: function () {
         if (
-            this.measurement.values[this.measurement.values.length - 1] > 800 &&
+            this.pulseMeasurement.values[this.pulseMeasurement.values.length - 1] > 800 &&
             this.enable2 === true
         )
             this.enable1 = true;
-        else if (this.measurement.values[this.measurement.values.length - 1] < 800)
+        else if (this.pulseMeasurement.values[this.pulseMeasurement.values.length - 1] < 800)
             this.enable2 = true;
 
         if (this.enable1 === true) {
-            this.counter++;
+            this.pulseMeasurement.peaksCounter++;
 
-            this.value = Math.round((60 * this.counter) / this.measurement.time[this.measurement.time.length - 1]);
-
+            this.pulseMeasurement.pulse = Math.round((60 * this.pulseMeasurement.peaksCounter) / this.pulseMeasurement.time[this.pulseMeasurement.time.length - 1]);
 
             this.enable1 = false;
             this.enable2 = false;
         }
     },
+    calcVariance: function() {
+        let tmp = 0;
+        for (let i = 0; i < this.pulseMeasurement.values.length; i++)
+            tmp += this.pulseMeasurement.values[i];
+
+        this.mean = tmp / this.pulseMeasurement.values.length
+        tmp = 0;
+
+        for (let i = 0; i < this.pulseMeasurement.values.length; i++)
+            tmp += (this.pulseMeasurement.values[i] - this.mean) ** 2;
+
+        this.pulseMeasurement.variance = tmp / this.pulseMeasurement.values.length;
+    }
 };
 
 
@@ -120,9 +133,12 @@ function onMessageArrived(message) {
     myChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
     if (time_tmp > 7) myChart.data.datasets[0].data.shift();
     myChart.update(0);
-    pulse.calc();
-    pulseSpan.innerHTML = pulse.value;
-    counter.innerHTML = pulse.counter;
+    pulse.calcPulse();
+    pulse.calcVariance();
+    document.querySelector("#pulse").innerHTML = pulseMeasurement.pulse;
+    document.querySelector("#peaks-counter").innerHTML = pulseMeasurement.peaksCounter;
+    document.querySelector("#amplitude").innerHTML = value_tmp;
+    document.querySelector("#variance").innerHTML = pulseMeasurement.variance;
 }
 
 /********************************************Buttons handling**********************************************************/
@@ -132,7 +148,7 @@ btnStart.addEventListener("click", function () {
     myChart.data.datasets[0].data.length = 0;
     time.length = 0;
     values.length = 0;
-    pulse.counter = 0;
+    pulseMeasurement.peaksCounter = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
 
@@ -146,7 +162,6 @@ btnStop.addEventListener("click", function () {
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Pulse/Stop";
     client.send(message);
-    pulseMeasurement.pulse = pulse.value;
 });
 
 let btnSend = document.querySelector("#btn-send");
