@@ -18,7 +18,7 @@ namespace HealthyMan.Models
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         [JsonIgnore]
-        public List<PulseMeasurement> PulseMeasurements { get; set; }
+        public List<Measurement> Measurements { get; set; }
 
     }
 }

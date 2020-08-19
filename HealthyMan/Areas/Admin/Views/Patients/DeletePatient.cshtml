@@ -47,17 +47,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.PulseMeasurements)
+        @foreach (var item in Model.Measurements)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PulseMeasurementId)
+                    @Html.DisplayFor(modelItem => item.MeasurementId)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TimeStamp)
                 </td>
                 <td>
-                    <a asp-action="PulseMeasurement" asp-route-id="@item.PulseMeasurementId" class="btn btn-primary btn-sm">Details</a>
+                    <a asp-action="PulseMeasurement" asp-route-id="@item.MeasurementId" class="btn btn-primary btn-sm">Details</a>
                 </td>
             </tr>
         }

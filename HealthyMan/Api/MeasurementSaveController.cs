@@ -11,17 +11,17 @@ namespace HealthyMan
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MeasurementApiController : ControllerBase
+    public class MeasurementSaveController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public MeasurementApiController(ApplicationDbContext context)
+        public MeasurementSaveController(ApplicationDbContext context)
         {
             _context = context;
         }
         // POST: api/Measurement
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] PulseMeasurement pulseMeasurement)
+        public async Task<IActionResult> Post([FromBody] Measurement pulseMeasurement)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data");

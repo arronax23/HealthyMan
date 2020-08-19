@@ -1,4 +1,4 @@
-﻿@model PulseMeasurement
+﻿@model Measurement
 
 @{
     ViewData["Title"] = "PulseMeasurement";
@@ -33,10 +33,10 @@
         @Html.DisplayFor(model => model.Patient.BirthDate)
     </dd>
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.PulseMeasurementId)
+        @Html.DisplayNameFor(model => model.MeasurementId)
     </dt>
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.PulseMeasurementId)
+        @Html.DisplayFor(model => model.MeasurementId)
     </dd>
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Pulse)
@@ -55,8 +55,8 @@
 <div id="line_chart"
      style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
-<a asp-action="PulseMeasurement" asp-route-id="@Model.PulseMeasurementId" class="btn btn-primary">Cancel</a> |
-<a asp-action="DeletePulseMeasurementConfirmed" asp-route-PulseMeasurementId="@Model.PulseMeasurementId" asp-route-PatientId="@Model.Patient.PatientId" class="btn btn-danger">Delete measurement</a>
+<a asp-action="PulseMeasurement" asp-route-id="@Model.MeasurementId" class="btn btn-primary">Cancel</a> |
+<a asp-action="DeletePulseMeasurementConfirmed" asp-route-PulseMeasurementId="@Model.MeasurementId" asp-route-PatientId="@Model.Patient.PatientId" class="btn btn-danger">Delete measurement</a>
 @section Scripts{
     <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>

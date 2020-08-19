@@ -1,10 +1,10 @@
-﻿@model PulseMeasurement
+﻿@model Measurement
 
 @{
     ViewData["Title"] = "PulseMeasurement";
 }
 
-<h1>Pulse Measurement</h1>
+<h1>Measurement</h1>
 <hr />
 <dl class="row">
     <dt class="col-sm-2">
@@ -32,16 +32,22 @@
         @Html.DisplayFor(model => model.Patient.BirthDate)
     </dd>
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.PulseMeasurementId)
+        @Html.DisplayNameFor(model => model.MeasurementId)
     </dt>
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.PulseMeasurementId)
+        @Html.DisplayFor(model => model.MeasurementId)
     </dd>
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Pulse)
     </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.Pulse)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.PeaksCounter)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.PeaksCounter)
     </dd>
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.TimeStamp)
@@ -51,15 +57,17 @@
     </dd>
 </dl>
 <hr />
-<div id="line_chart"
+<div id="pulse_chart"
+     style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="gsr_chart"
      style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <a asp-action="Patient" asp-route-id="@Model.Patient.PatientId" class="btn btn-primary">Back</a> |
-<a asp-action="DeletePulseMeasurement"  asp-route-id="@Model.PulseMeasurementId" class="btn btn-danger">Delete measurement</a>
+<a asp-action="DeletePulseMeasurement"  asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
 @section Scripts{
     <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="~/js/rednerPulseLineChart.js"></script>
-    <script>renderPulseLineChart(@Html.Raw(Json.Serialize(Model)))</script>
+    <script src="~/js/rednerLineCharts.js"></script>
+    <script>renderLineCharts(@Html.Raw(Json.Serialize(Model)))</script>
 }
 

@@ -28,19 +28,19 @@ namespace HealthyMan.Areas.Admin.Controllers
 
         public async Task<IActionResult> Patient(int id)
         {
-            return View(await _context.Patients.Include(p => p.PulseMeasurements).SingleOrDefaultAsync(p => p.PatientId == id));
+            return View(await _context.Patients.Include(p => p.Measurements).SingleOrDefaultAsync(p => p.PatientId == id));
         }
         public async Task<IActionResult> DeletePatient(int id)
         {
-            return View(await _context.Patients.Include(p => p.PulseMeasurements).SingleOrDefaultAsync(p => p.PatientId == id));
+            return View(await _context.Patients.Include(p => p.Measurements).SingleOrDefaultAsync(p => p.PatientId == id));
         }
 
         public async Task<IActionResult> DeletePatientConfirmed(int id)
         {
             Patient patient = await _context.Patients.SingleOrDefaultAsync(p => p.PatientId == id);
-            List<PulseMeasurement> pulseMeasurements = _context.PulseMeasurements.Where(pM => pM.Patient.PatientId == id).ToList();
+            List<Measurement> pulseMeasurements = _context.Measurements.Where(pM => pM.Patient.PatientId == id).ToList();
             
-            _context.PulseMeasurements.RemoveRange(pulseMeasurements);
+            _context.Measurements.RemoveRange(pulseMeasurements);
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
 
@@ -49,18 +49,18 @@ namespace HealthyMan.Areas.Admin.Controllers
 
         public async Task<IActionResult> PulseMeasurement(int id)
         {
-            return View(await _context.PulseMeasurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.PulseMeasurementId == id));
+            return View(await _context.Measurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.MeasurementId == id));
         }
 
         public async Task<IActionResult> DeletePulseMeasurement(int id)
         {
-            return View(await _context.PulseMeasurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.PulseMeasurementId == id));
+            return View(await _context.Measurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.MeasurementId == id));
         }
 
         public async Task<IActionResult> DeletePulseMeasurementConfirmed(int PulseMeasurementId, int PatientId)
         {
-            PulseMeasurement pulseMeasurement = await _context.PulseMeasurements.SingleOrDefaultAsync(pM => pM.PulseMeasurementId == PulseMeasurementId);
-            _context.PulseMeasurements.Remove(pulseMeasurement);
+            Measurement pulseMeasurement = await _context.Measurements.SingleOrDefaultAsync(pM => pM.MeasurementId == PulseMeasurementId);
+            _context.Measurements.Remove(pulseMeasurement);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Patient),new { id = PatientId });

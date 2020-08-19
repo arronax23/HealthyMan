@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace HealthyMan.Models
 {
-    public class PulseMeasurement
+    public class Measurement
     {
-        public int? PulseMeasurementId { get; set; }
+        public int? MeasurementId { get; set; }
         public int Pulse { get; set; }
-        public List<float> Values { get; set; }
-        public List<float> Time { get; set; }
+        public int PeaksCounter { get; set; }
+        public List<float> PulseValues { get; set; }
+        public List<float> PulseTime { get; set; }
+        public List<float> GSRValues { get; set; }
+        public List<float> GSRTime { get; set; }
         [Display(Name = "Time stamp")]
         public DateTime TimeStamp { get; set; }
         public Patient Patient { get; set; }

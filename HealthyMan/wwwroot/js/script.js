@@ -235,10 +235,10 @@ btnStop.addEventListener("click", function () {
 
 let btnSend = document.querySelector("#btn-send");
 btnSend.addEventListener("click", function () {
-    pulseMeasurement.patient.firstName = document.querySelector("input#firstName").value;
-    pulseMeasurement.patient.lastName = document.querySelector("input#lastName").value;
-    pulseMeasurement.patient.birthDate = document.querySelector("input#birthDate").value;
-    fetch("http://localhost:50757/api/PulseMeasurement", {
+    measurement.patient.firstName = document.querySelector("input#firstName").value;
+    measurement.patient.lastName = document.querySelector("input#lastName").value;
+    measurement.patient.birthDate = document.querySelector("input#birthDate").value;
+    fetch("http://localhost:50757/api/MeasurementSave", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
