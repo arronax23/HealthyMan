@@ -164,8 +164,8 @@ D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Hea
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.genruntimeconfig.cache
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\Index.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\Patient.cshtml.g.cs
-D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\PulseMeasurement.cshtml.g.cs
-D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\DeletePulseMeasurement.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\DeletePatient.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.csprojAssemblyReference.cache
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Measurement\Index.cshtml.g.cs
+D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\DeleteMeasurement.cshtml.g.cs
+D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Patients\Measurement.cshtml.g.cs

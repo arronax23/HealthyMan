@@ -47,17 +47,17 @@ namespace HealthyMan.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> PulseMeasurement(int id)
+        public async Task<IActionResult> Measurement(int id)
         {
             return View(await _context.Measurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.MeasurementId == id));
         }
 
-        public async Task<IActionResult> DeletePulseMeasurement(int id)
+        public async Task<IActionResult> DeleteMeasurement(int id)
         {
             return View(await _context.Measurements.Include(pM => pM.Patient).SingleOrDefaultAsync(pM => pM.MeasurementId == id));
         }
 
-        public async Task<IActionResult> DeletePulseMeasurementConfirmed(int PulseMeasurementId, int PatientId)
+        public async Task<IActionResult> DeleteMeasurementConfirmed(int PulseMeasurementId, int PatientId)
         {
             Measurement pulseMeasurement = await _context.Measurements.SingleOrDefaultAsync(pM => pM.MeasurementId == PulseMeasurementId);
             _context.Measurements.Remove(pulseMeasurement);
