@@ -8,9 +8,6 @@
     <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
         <canvas id="pulseChart" width="80"></canvas>
     </div>
-    <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
-        <canvas id="GSRChart" width="80"></canvas>
-    </div>
     <div class="form-group">
         <div>
             <span>Pulse: </span><span id="pulse"></span>
@@ -18,12 +15,17 @@
         <div>
             <span>Peaks counter: </span><span id="peaks-counter"></span>
         </div>
+        @*
         <div>
             <span>Amplitude: </span><span id="amplitude"></span>
         </div>
         <div>
             <span>Variance: </span><span id="variance"></span>
         </div>
+        *@
+    </div>
+    <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
+        <canvas id="GSRChart" width="80"></canvas>
     </div>
     <div class="form-group">
         <button id="btn-start" class="btn btn-success">Start</button>

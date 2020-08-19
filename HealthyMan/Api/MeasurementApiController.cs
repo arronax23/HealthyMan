@@ -11,11 +11,11 @@ namespace HealthyMan
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PulseMeasurementController : ControllerBase
+    public class MeasurementApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PulseMeasurementController(ApplicationDbContext context)
+        public MeasurementApiController(ApplicationDbContext context)
         {
             _context = context;
         }

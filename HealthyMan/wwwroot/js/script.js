@@ -162,7 +162,7 @@ client.onMessageArrived = onMessageArrived;
 client.connect({ onSuccess: onConnect });
 
 function onConnect() {
-    console.log("onConnect");
+    console.log("Connected to MQTT Broker");
     client.subscribe("HealthyMan/Pulse/Data");
     client.subscribe("HealthyMan/GSR/Data");
 }
@@ -185,10 +185,10 @@ function onMessageArrived(message) {
         pulseChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
         if (time_tmp > 7) pulseChart.data.datasets[0].data.shift();
         pulseChart.update(0);
-        //pulse.calcPulse();
-        //pulse.calcVariance();
-        //document.querySelector("#pulse").innerHTML = pulseMeasurement.pulse;
-        //document.querySelector("#peaks-counter").innerHTML = pulseMeasurement.peaksCounter;
+        pulse.calcPulse();
+        pulse.calcVariance();
+        document.querySelector("#pulse").innerHTML = measurement.pulse;
+        document.querySelector("#peaks-counter").innerHTML = measurement.peaksCounter;
         //document.querySelector("#amplitude").innerHTML = value_tmp;
         //document.querySelector("#variance").innerHTML = pulseMeasurement.variance;
     }
