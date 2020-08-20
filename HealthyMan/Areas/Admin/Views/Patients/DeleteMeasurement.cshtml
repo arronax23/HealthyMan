@@ -66,7 +66,7 @@
      style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <a asp-action="Measurement" asp-route-id="@Model.MeasurementId" class="btn btn-primary">Cancel</a> |
-<a asp-action="DeleteMeasurementConfirmed" asp-route-PulseMeasurementId="@Model.MeasurementId" asp-route-PatientId="@Model.Patient.PatientId" class="btn btn-danger">Delete measurement</a>
+<a asp-action="DeleteMeasurementConfirmed" asp-route-measurementId="@Model.MeasurementId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-danger">Delete measurement</a>
 
 @section Scripts{
     <script type="text/javascript"

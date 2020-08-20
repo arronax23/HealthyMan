@@ -31,7 +31,15 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.BirthDate)
     </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.AccessKey.Key)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.AccessKey.Key)
+    </dd>
 </dl>
+<a asp-action="GenerateAccessKey" asp-route-id="@Model.PatientId" class="btn btn-warning">Generate access key</a>
+<a asp-action="DeleteAccessKey" asp-route-id="@Model.PatientId" class="btn btn-danger">Delete access key</a>
 <hr />
 <h2>Patient's measurements</h2>
 <table class="table">

@@ -19,6 +19,7 @@ namespace HealthyMan.Models
         public DateTime BirthDate { get; set; }
         [JsonIgnore]
         public List<Measurement> Measurements { get; set; }
+        public AccessKey AccessKey { get; set; }
 
     }
 }
