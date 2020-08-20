@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using HealthyMan.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace HealthyMan.Controllers
 {
@@ -22,7 +23,6 @@ namespace HealthyMan.Controllers
         {
             return View();
         }
-
 
         public IActionResult Privacy()
         {

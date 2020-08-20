@@ -37,7 +37,7 @@ namespace HealthyMan.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeletePatientConfirmed(int id)
         {
-            Patient patient = await _context.Patients.SingleOrDefaultAsync(p => p.PatientId == id);
+            HealthyMan.Models.Patient patient = await _context.Patients.SingleOrDefaultAsync(p => p.PatientId == id);
             List<Measurement> measurements = _context.Measurements.Where(m => m.Patient.PatientId == id).ToList();
             
             _context.Measurements.RemoveRange(measurements);

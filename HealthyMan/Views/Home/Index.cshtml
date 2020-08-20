@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
+@*@inject SignInManager<ApplicationUser> SignInManager*@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
@@ -17,7 +17,6 @@
 
 @if (role == "Admin")
 {
-
     <div class="text-center">
         <h1>You are an Admin</h1>
     </div>

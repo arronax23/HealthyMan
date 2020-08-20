@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HealthyMan.Areas.Admin.Controllers
 {
     [Area("Patient")]
-    //[Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Patient")]
     public class MyMeasurementsController : Controller
     {
         public IActionResult Index()
