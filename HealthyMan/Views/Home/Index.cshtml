@@ -5,28 +5,29 @@
 @{
     ViewData["Title"] = "Home Page";
     var user = await UserManager.GetUserAsync(User);
-    string text = "";
+    string role = "";
     if (user != null)
     {
-        IList<string> roles =  await UserManager.GetRolesAsync(user);
-        string role = roles[0];
-
-        text = "";
-        if (role == "Admin")
-            text = "an Admin";
-        else
-            text = "a Patient";
+        IList<string> roles = await UserManager.GetRolesAsync(user);
+        if(roles.Count > 0)
+            role = roles[0];
     }
 
 }
 
-@if (SignInManager.IsSignedIn(User))
+@if (role == "Admin")
 {
 
     <div class="text-center">
-        <h1>You are an @text</h1>
+        <h1>You are an Admin</h1>
     </div>
 
+}
+else if (role == "Patient")
+{
+    <div class="text-center">
+        <h1>You are a Patient</h1>
+    </div>
 }
 else
 {
