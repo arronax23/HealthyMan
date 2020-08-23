@@ -167,6 +167,8 @@ var gsrChart = new Chart(gsrContext, {
     },
 });
 
+/***********************************************Chart.js RespiratoryRate*******************************************************/
+
 var respiratoryRateContext = document.getElementById("RespiratoryRateChart").getContext("2d");
 var respiratoryRateChart = new Chart(respiratoryRateContext, {
     type: "line",
@@ -291,9 +293,9 @@ btnStart.addEventListener("click", function () {
     gsrValues.length = 0;
     respiratoryRateTime.length = 0;
     respiratoryRateValues.length = 0;
-    //pulseMeasurement.peaksCounter = 0;
-    //pulse.enable1 = false;
-    //pulse.enable2 = false;
+    measurement.peaksCounter = 0;
+    pulse.enable1 = false;
+    pulse.enable2 = false;
 
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Start";
