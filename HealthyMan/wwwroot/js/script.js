@@ -2,6 +2,9 @@
 let pulseTime = [];
 let gsrValues = [];
 let gsrTime = [];
+let respiratoryRateValues = [];
+let respiratoryRateTime = [];
+let amplitude = 0;
 
 let measurement = {
     pulse: 0,
@@ -11,6 +14,8 @@ let measurement = {
     pulseTime: pulseTime,
     gsrValues: gsrValues,
     gsrTime: gsrTime,
+    respiratoryRateValues: respiratoryRateValues,
+    respiratoryRateTime: respiratoryRateTime,
     timeStamp: new Date(),
     // Patient
     patient: {
@@ -26,6 +31,8 @@ let pulse = {
     enable1: false,
     enable2: false,
     mean: 0,
+    max: 0,
+    min: 0,
     calcPulse: function () {
         if (
             this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > 800 &&
@@ -56,11 +63,18 @@ let pulse = {
             tmp += (this.pulseMeasurement.pulseValues[i] - this.mean) ** 2;
 
         this.pulseMeasurement.variance = tmp / this.pulseMeasurement.pulseValues.length;
+    },
+    calcAmplitude: function () {
+        if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 2]) {
+            max = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
+            amplitude = max - min;
+        }
+        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 2]) {
+            min = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
+            amplitude = max - min;
+        }
     }
 };
-
-
-
 
 /**********************************************Chart.js Pulse********************************************************/
 var pulseContext = document.getElementById("pulseChart").getContext("2d");
@@ -153,6 +167,50 @@ var gsrChart = new Chart(gsrContext, {
     },
 });
 
+var respiratoryRateContext = document.getElementById("RespiratoryRateChart").getContext("2d");
+var respiratoryRateChart = new Chart(respiratoryRateContext, {
+    type: "line",
+    data: {
+        datasets: [
+            {
+                label: "Respiratory Rate",
+                lineTension: 0,
+                data: [
+                    {
+                        x: 0,
+                        y: 0,
+                    },
+                ],
+            },
+        ],
+    },
+    options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            xAxes: [
+                {
+                    type: "linear",
+                    position: "bottom",
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Time [s]",
+                    },
+                },
+            ],
+            yAxes: [
+                {
+                    type: "linear",
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Chest circumference change",
+                    },
+                },
+            ],
+        },
+    },
+});
+
 /***********************************************Paho.MQTT.Client*******************************************************/
 let client = new Paho.MQTT.Client("192.168.8.100", 9001, "browserId");
 
@@ -165,6 +223,7 @@ function onConnect() {
     console.log("Connected to MQTT Broker");
     client.subscribe("HealthyMan/Pulse/Data");
     client.subscribe("HealthyMan/GSR/Data");
+    client.subscribe("HealthyMan/RespiratoryRate/Data");
 }
 
 function onConnectionLost(responseObject) {
@@ -204,6 +263,18 @@ function onMessageArrived(message) {
         if (time_tmp > 7) gsrChart.data.datasets[0].data.shift();
         gsrChart.update(0);
     }
+    else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
+        //console.log(message.payloadString);
+        let splitText = message.payloadString.split(":");
+        //console.log(splitText);
+        let time_tmp = Number(splitText[0]);
+        let value_tmp = Number(splitText[1]);
+        respiratoryRateTime.push(time_tmp);
+        respiratoryRateValues.push(value_tmp);
+        respiratoryRateChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
+        if (time_tmp > 7) respiratoryRateChart.data.datasets[0].data.shift();
+        respiratoryRateChart.update(0);
+    }
 
 }
 
@@ -213,10 +284,13 @@ let btnStart = document.querySelector("#btn-start");
 btnStart.addEventListener("click", function () {
     pulseChart.data.datasets[0].data.length = 0;
     gsrChart.data.datasets[0].data.length = 0;
+    respiratoryRateChart.data.datasets[0].data.length = 0;
     pulseTime.length = 0;
     pulseValues.length = 0;
     gsrTime.length = 0;
     gsrValues.length = 0;
+    respiratoryRateTime.length = 0;
+    respiratoryRateValues.length = 0;
     //pulseMeasurement.peaksCounter = 0;
     //pulse.enable1 = false;
     //pulse.enable2 = false;

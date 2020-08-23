@@ -2,52 +2,58 @@
     ViewData["Title"] = "Pulse";
 }
 
-<div class="text-center">
-    <h1>Measurement</h1>
-    <hr />
-    <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
-        <canvas id="pulseChart" width="80"></canvas>
-    </div>
-    <div class="form-group">
-        <div>
-            <span><b>Pulse: </b></span><span id="pulse"></span>
+    <div class="text-center">
+        <h1>Measurement</h1>
+        <hr />
+        <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
+            <canvas id="pulseChart" width="80"></canvas>
         </div>
-        <div>
-            <span><b>Peaks counter: </b></span><span id="peaks-counter"></span>
-        </div>
-        @*
+        <div class="form-group">
+            <div>
+                <span><b>Pulse: </b></span><span id="pulse"></span>
+            </div>
+            <div>
+                <span><b>Peaks counter: </b></span><span id="peaks-counter"></span>
+            </div>
+            <div>
+                <span><b>Amplitude: </b></span><span id="amplitude"></span>
+            </div>
+            @*
         <div>
             <span>Amplitude: </span><span id="amplitude"></span>
         </div>
         <div>
             <span>Variance: </span><span id="variance"></span>
         </div>
-        *@
-    </div>
-    <div class="chart-container" style="position: relative; height:40vh; width:69.4vw">
-        <canvas id="GSRChart" width="80"></canvas>
-    </div>
-    <div class="form-group">
-        <button id="btn-start" class="btn btn-success">Start</button>
-        <button id="btn-stop" class="btn btn-danger">Stop</button>
-    </div>
-    <hr />
-    <div id="form">
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input type="text" id="firstName">
+            *@
+        </div>
+        <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
+            <canvas id="GSRChart" width="80"></canvas>
+        </div>
+        <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
+            <canvas id="RespiratoryRateChart" width="80"></canvas>
         </div>
         <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input type="text" id="lastName">
+            <button id="btn-start" class="btn btn-success">Start</button>
+            <button id="btn-stop" class="btn btn-danger">Stop</button>
         </div>
-        <div class="form-group">
-            <label for="birthDate">Birth Date</label>
-            <input type="date" id="birthDate">
+        <hr />
+        <div id="form">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName">
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Birth Date</label>
+                <input type="date" id="birthDate">
+            </div>
+            <button id="btn-send" class="btn btn-primary">Send</button>
         </div>
-        <button id="btn-send" class="btn btn-primary">Send</button>
     </div>
-</div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
