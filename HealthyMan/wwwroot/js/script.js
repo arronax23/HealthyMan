@@ -33,6 +33,7 @@ let pulse = {
     mean: 0,
     max: 0,
     min: 0,
+    calcAmplitudePeaksCounter: 0,
     calcPulse: function () {
         if (
             this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > 800 &&
@@ -44,8 +45,10 @@ let pulse = {
 
         if (this.enable1 === true) {
             this.pulseMeasurement.peaksCounter++;
+            document.querySelector("#peaks-counter").innerHTML = this.pulseMeasurement.peaksCounter;
 
             this.pulseMeasurement.pulse = Math.round((60 * this.pulseMeasurement.peaksCounter) / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1]);
+            document.querySelector("#pulse").innerHTML = this.pulseMeasurement.pulse;
 
             this.enable1 = false;
             this.enable2 = false;
@@ -65,13 +68,19 @@ let pulse = {
         this.pulseMeasurement.variance = tmp / this.pulseMeasurement.pulseValues.length;
     },
     calcAmplitude: function () {
-        if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 2]) {
-            max = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
-            amplitude = max - min;
+        if (this.calcAmplitudePeaksCounter != this.pulseMeasurement.peaksCounter) {
+            this.calcAmplitudePeaksCounter = this.pulseMeasurement.peaksCounter;
+            amplitude = this.max - this.min;
+            document.querySelector("#amplitude").innerHTML = amplitude;
+            this.min = 1000;
+            this.max = 0;
         }
-        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 2]) {
-            min = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
-            amplitude = max - min;
+
+        if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > this.max) {
+            this.max = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]      
+        }
+        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.min) {
+            this.min = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
         }
     }
 };
@@ -248,10 +257,8 @@ function onMessageArrived(message) {
         pulseChart.update(0);
         pulse.calcPulse();
         pulse.calcVariance();
-        document.querySelector("#pulse").innerHTML = measurement.pulse;
-        document.querySelector("#peaks-counter").innerHTML = measurement.peaksCounter;
-        //document.querySelector("#amplitude").innerHTML = value_tmp;
-        //document.querySelector("#variance").innerHTML = pulseMeasurement.variance;
+        pulse.calcAmplitude();
+
     }
     else if (message.destinationName === "HealthyMan/GSR/Data"){
         //console.log(message.payloadString);
