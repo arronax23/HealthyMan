@@ -1,7 +1,7 @@
 ﻿function renderLineCharts(model) {
     google.charts.load("current", { packages: ["corechart"] }).then(function () {
         options = {
-            title: "Data visualization chart",
+            //title: "Data visualization chart",
             pointSize: 5,
             hAxis: {
                 title: "Time [s]",
@@ -28,15 +28,27 @@
         gsrDataTable.addColumn("number", "Time");
         gsrDataTable.addColumn("number", "Resistance [Ω]");
 
+        respiratoryRateDataTable = new google.visualization.DataTable();
+        respiratoryRateDataTable.addColumn("number", "Time");
+        respiratoryRateDataTable.addColumn("number", "Chest circumference change");
+
         diffDataTable = new google.visualization.DataTable();
         diffDataTable.addColumn("number", "Number");
         diffDataTable.addColumn("number", "Time difference");
 
         for (let i = 0; i < model.pulseTime.length; i++) {
             pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i]]);
-            gsrDataTable.addRow([model.gsrTime[i], model.gsrValues[i]]);
+
             diffDataTable.addRow([i, model.pulseTime[i] - model.gsrTime[i]]);
         }
+
+        for (let i = 0; i < model.gsrTime.length; i++) 
+            gsrDataTable.addRow([model.gsrTime[i], model.gsrValues[i]]);
+
+
+        for (let i = 0; i < model.respiratoryRateTime.length; i++) 
+            respiratoryRateDataTable.addRow([model.respiratoryRateTime[i], model.respiratoryRateValues[i]]);
+
 
         let diff = Math.abs(model.pulseTime[model.pulseTime.length - 1] - model.gsrTime[model.pulseTime.length - 1]);
 
@@ -52,6 +64,12 @@
             document.getElementById("gsr_chart")
         );
         gsrChart.draw(gsrDataTable, options);
+
+        options.vAxis.title = "Chest circumference change"
+        respiratoryRateChart = new google.visualization.LineChart(
+            document.getElementById("respiratoryRate_chart")
+        );
+        respiratoryRateChart.draw(respiratoryRateDataTable, options);
 
         options.vAxis.title = "Time difference"
         diffChart = new google.visualization.LineChart(
