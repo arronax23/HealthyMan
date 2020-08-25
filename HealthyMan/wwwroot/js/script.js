@@ -72,7 +72,7 @@ let pulse = {
             this.calcAmplitudePeaksCounter = this.pulseMeasurement.peaksCounter;
             amplitude = this.max - this.min;
             document.querySelector("#amplitude").innerHTML = amplitude;
-            this.min = 1000;
+            this.min = 1024;
             this.max = 0;
         }
 

@@ -70,7 +70,7 @@
 <a asp-action="DeleteMeasurement"  asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
 @section Scripts{
     <script type="text/javascript"
-            src="https://www.gstatic.com/charts/loader.js"></script>
+            src="~/lib/google-charts/loader.js"></script>
     <script src="~/js/rednerLineCharts.js"></script>
     <script>renderLineCharts(@Html.Raw(Json.Serialize(Model)))</script>
 }
