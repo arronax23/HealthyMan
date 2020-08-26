@@ -1,11 +1,16 @@
 ﻿let pulseValues = [];
 let pulseTime = [];
+
+let pulseAmplitude = [];
+let pulseAmplitudeVariance = [];
+let pulseFrequency = [];
+let pulseFrequencyVariance = [];
+
 let gsrValues = [];
 let gsrTime = [];
+
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
-let amplitude = 0;
-let frequency = 0;
 
 let measurement = {
     pulse: 0,
@@ -13,6 +18,10 @@ let measurement = {
     //variance: 0,
     pulseValues: pulseValues,
     pulseTime: pulseTime,
+    pulseAmplitude: pulseAmplitude,
+    pulseAmplitudeVariance: pulseAmplitudeVariance,
+    pulseFrequency: pulseFrequency,
+    pulseFrequencyVariance: pulseFrequencyVariance,
     gsrValues: gsrValues,
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
@@ -31,7 +40,8 @@ let pulse = {
     pulseMeasurement: measurement,
     enable1: false,
     enable2: false,
-    mean: 0,
+    meanPulseAmplitude: 0,
+    meanPulseFrequency: 0,
     max: 0,
     min: 0,
     calcAmplitudePeaksCounter: 0,
@@ -48,33 +58,29 @@ let pulse = {
             this.pulseMeasurement.peaksCounter++;
             document.querySelector("#peaks-counter").innerHTML = this.pulseMeasurement.peaksCounter;
 
-            frequency = Math.round(this.pulseMeasurement.peaksCounter / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1] * 100) / 100;
+            let frequency = Math.round(this.pulseMeasurement.peaksCounter / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1] * 100) / 100;
+            this.pulseMeasurement.pulseFrequency.push(frequency);
             this.pulseMeasurement.pulse = Math.round(60 * frequency);
             document.querySelector("#frequency").innerHTML = frequency+" Hz";
             document.querySelector("#pulse").innerHTML = this.pulseMeasurement.pulse;
+            this.calcPulseFrequencyVariance();
 
             this.enable1 = false;
             this.enable2 = false;
         }
     },
-    calcVariance: function() {
-        let tmp = 0;
-        for (let i = 0; i < this.pulseMeasurement.pulseValues.length; i++)
-            tmp += this.pulseMeasurement.pulseValues[i];
-
-        this.mean = tmp / this.pulseMeasurement.pulseValues.length
-        tmp = 0;
-
-        for (let i = 0; i < this.pulseMeasurement.pulseValues.length; i++)
-            tmp += (this.pulseMeasurement.pulseValues[i] - this.mean) ** 2;
-
-        this.pulseMeasurement.variance = tmp / this.pulseMeasurement.pulseValues.length;
-    },
     calcAmplitude: function () {
         if (this.calcAmplitudePeaksCounter != this.pulseMeasurement.peaksCounter) {
             this.calcAmplitudePeaksCounter = this.pulseMeasurement.peaksCounter;
-            amplitude = this.max - this.min;
+            let amplitude = this.max - this.min;
+            this.pulseMeasurement.pulseAmplitude.push(amplitude);
             document.querySelector("#amplitude").innerHTML = amplitude;
+            this.calcPulseAmplitudeVariance();
+            if (this.calcAmplitudePeaksCounter < 2) {
+                this.pulseMeasurement.pulseAmplitude.shift();
+                this.pulseMeasurement.pulseAmplitudeVariance.shift();
+            }
+      
             this.min = 1024;
             this.max = 0;
         }
@@ -85,7 +91,37 @@ let pulse = {
         else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.min) {
             this.min = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
         }
-    }
+    },
+    calcPulseAmplitudeVariance: function () {
+        let tmp = 0;
+        for (let i = 0; i < this.pulseMeasurement.pulseAmplitude.length; i++)
+            tmp += this.pulseMeasurement.pulseAmplitude[i];
+
+        this.meanPulseAmplitude = tmp / this.pulseMeasurement.pulseAmplitude.length
+        tmp = 0;
+
+        for (let i = 0; i < this.pulseMeasurement.pulseAmplitude.length; i++)
+            tmp += (this.pulseMeasurement.pulseAmplitude[i] - this.meanPulseAmplitude) ** 2;
+
+        let pulseAmplitudeVariance = Math.round(100 * tmp / this.pulseMeasurement.pulseAmplitude.length) / 100;
+        this.pulseMeasurement.pulseAmplitudeVariance.push(pulseAmplitudeVariance);
+        document.querySelector("#pulse-amplitude-variance").innerHTML = pulseAmplitudeVariance;
+    },
+    calcPulseFrequencyVariance: function () {
+        let tmp = 0;
+        for (let i = 0; i < this.pulseMeasurement.pulseFrequency.length; i++)
+            tmp += this.pulseMeasurement.pulseFrequency[i];
+
+        this.meanPulseFrequency = tmp / this.pulseMeasurement.pulseFrequency.length
+        tmp = 0;
+
+        for (let i = 0; i < this.pulseMeasurement.pulseFrequency.length; i++)
+            tmp += (this.pulseMeasurement.pulseFrequency[i] - this.meanPulseFrequency) ** 2;
+
+        let pulseFrequencyVariance = Math.round(100 * tmp / this.pulseMeasurement.pulseAmplitude.length) / 100;
+        this.pulseMeasurement.pulseFrequencyVariance.push(pulseFrequencyVariance);
+        document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance;
+    },
 };
 
 /**********************************************Chart.js Pulse********************************************************/
@@ -259,7 +295,6 @@ function onMessageArrived(message) {
         if (time_tmp > 7) pulseChart.data.datasets[0].data.shift();
         pulseChart.update(0);
         pulse.calcPulse();
-        pulse.calcVariance();
         pulse.calcAmplitude();
 
     }
@@ -304,6 +339,8 @@ btnStart.addEventListener("click", function () {
     respiratoryRateTime.length = 0;
     respiratoryRateValues.length = 0;
     measurement.peaksCounter = 0;
+    pulseAmplitude.length = 0;
+    pulseAmplitudeVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
 
