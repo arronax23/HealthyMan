@@ -5,6 +5,7 @@ let gsrTime = [];
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
 let amplitude = 0;
+let frequency = 0;
 
 let measurement = {
     pulse: 0,
@@ -47,7 +48,9 @@ let pulse = {
             this.pulseMeasurement.peaksCounter++;
             document.querySelector("#peaks-counter").innerHTML = this.pulseMeasurement.peaksCounter;
 
-            this.pulseMeasurement.pulse = Math.round((60 * this.pulseMeasurement.peaksCounter) / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1]);
+            frequency = Math.round(this.pulseMeasurement.peaksCounter / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1] * 100) / 100;
+            this.pulseMeasurement.pulse = Math.round(60 * frequency);
+            document.querySelector("#frequency").innerHTML = frequency+" Hz";
             document.querySelector("#pulse").innerHTML = this.pulseMeasurement.pulse;
 
             this.enable1 = false;
