@@ -2,8 +2,10 @@
 let pulseTime = [];
 
 let pulseAmplitude = [];
+let pulseAmplitudeTime = [];
 let pulseAmplitudeVariance = [];
 let pulseFrequency = [];
+let pulseFrequencyTime = [];
 let pulseFrequencyVariance = [];
 
 let gsrValues = [];
@@ -19,8 +21,10 @@ let measurement = {
     pulseValues: pulseValues,
     pulseTime: pulseTime,
     pulseAmplitude: pulseAmplitude,
+    pulseAmplitudeTime: pulseAmplitudeTime,
     pulseAmplitudeVariance: pulseAmplitudeVariance,
     pulseFrequency: pulseFrequency,
+    pulseFrequencyTime: pulseFrequencyTime,
     pulseFrequencyVariance: pulseFrequencyVariance,
     gsrValues: gsrValues,
     gsrTime: gsrTime,
@@ -45,7 +49,7 @@ let pulse = {
     max: 0,
     min: 0,
     calcAmplitudePeaksCounter: 0,
-    calcPulse: function () {
+    calcPulse: function (time) {
         if (
             this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > 800 &&
             this.enable2 === true
@@ -60,6 +64,7 @@ let pulse = {
 
             let frequency = Math.round(this.pulseMeasurement.peaksCounter / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1] * 100) / 100;
             this.pulseMeasurement.pulseFrequency.push(frequency);
+            this.pulseMeasurement.pulseFrequencyTime.push(time);
             this.pulseMeasurement.pulse = Math.round(60 * frequency);
             document.querySelector("#frequency").innerHTML = frequency+" Hz";
             document.querySelector("#pulse").innerHTML = this.pulseMeasurement.pulse;
@@ -67,17 +72,29 @@ let pulse = {
 
             this.enable1 = false;
             this.enable2 = false;
+
+            if (this.pulseMeasurement.peaksCounter < 3) {
+                this.pulseMeasurement.pulseFrequency.shift();
+                this.pulseMeasurement.pulseFrequencyTime.shift();
+                this.pulseMeasurement.pulseFrequencyVariance.shift();
+            }
         }
+
+
+
+        this.calcAmplitude(time);
     },
-    calcAmplitude: function () {
+    calcAmplitude: function (time) {
         if (this.calcAmplitudePeaksCounter != this.pulseMeasurement.peaksCounter) {
             this.calcAmplitudePeaksCounter = this.pulseMeasurement.peaksCounter;
             let amplitude = this.max - this.min;
             this.pulseMeasurement.pulseAmplitude.push(amplitude);
+            this.pulseMeasurement.pulseAmplitudeTime.push(time);
             document.querySelector("#amplitude").innerHTML = amplitude;
             this.calcPulseAmplitudeVariance();
             if (this.calcAmplitudePeaksCounter < 2) {
                 this.pulseMeasurement.pulseAmplitude.shift();
+                this.pulseMeasurement.pulseAmplitudeTime.shift();
                 this.pulseMeasurement.pulseAmplitudeVariance.shift();
             }
       
@@ -118,11 +135,64 @@ let pulse = {
         for (let i = 0; i < this.pulseMeasurement.pulseFrequency.length; i++)
             tmp += (this.pulseMeasurement.pulseFrequency[i] - this.meanPulseFrequency) ** 2;
 
-        let pulseFrequencyVariance = Math.round(100 * tmp / this.pulseMeasurement.pulseAmplitude.length) / 100;
+        let pulseFrequencyVariance = Math.round(10000 * tmp / this.pulseMeasurement.pulseAmplitude.length) / 10000;
         this.pulseMeasurement.pulseFrequencyVariance.push(pulseFrequencyVariance);
         document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance;
     },
 };
+
+let gsrTrend = {
+    gsrTimeArray: [],
+    gsrValuesArray: [],
+    meanValue: 0,
+    meanTime: 0,
+    a: 0,
+    b: 0,
+    startPoint: {
+        x: 0,
+        y: 0,
+    },
+    endPoint: {
+        x: 0,
+        y: 0,
+    },
+    calc: function (gsrStartTime, gsrTime, gsrValue,shiftBool) {
+        this.gsrTimeArray.push(gsrTime);
+        this.gsrValuesArray.push(gsrValue);
+
+        if (shiftBool) {
+            this.gsrTimeArray.shift();
+            this.gsrValuesArray.shift();
+        }
+
+        let tmp1 = 0;
+        let tmp2 = 0;
+
+        for (let i = 0; i < this.gsrValuesArray.length; i++) {
+            tmp1 += this.gsrValuesArray[i];
+            tmp2 += this.gsrTimeArray[i];
+        }
+
+        this.meanValue = tmp1 / this.gsrValuesArray.length;
+        this.meanTime = tmp2 / this.gsrValuesArray.length;
+        tmp1 = 0;
+        tmp2 = 0;
+
+        for (let i = 0; i < this.gsrValuesArray.length; i++) {
+            tmp1 += (this.gsrTimeArray[i] - this.meanTime) * (this.gsrValuesArray[i] - this.meanValue);
+            tmp2 += (this.gsrTimeArray[i] - this.meanTime) ** 2;
+        }
+
+        this.a = tmp1 / tmp2;
+        this.b = this.meanValue - this.a * this.meanTime;
+
+        this.endPoint.x = gsrTime;
+        this.endPoint.y = Math.round(this.a * gsrTime + this.b);
+
+        this.startPoint.x = gsrStartTime;
+        this.startPoint.y = Math.round(this.a * gsrStartTime + this.b);
+    }
+}
 
 /**********************************************Chart.js Pulse********************************************************/
 var pulseContext = document.getElementById("pulseChart").getContext("2d");
@@ -161,7 +231,7 @@ var pulseChart = new Chart(pulseContext, {
                     type: "linear",
                     scaleLabel: {
                         display: true,
-                        labelString: "ADC code",
+                        labelString: "Blood pressure",
                     },
                 },
             ],
@@ -185,6 +255,17 @@ var gsrChart = new Chart(gsrContext, {
                         y: 0,
                     },
                 ],
+            },
+            {
+                label: "Linear trend",
+                lineTension: 0,
+                data: [
+                    {
+                        x: 0,
+                        y: 0,
+                    },
+                ],
+                backgroundColor: "rgba(0, 0, 255, 0.5)",
             },
         ],
     },
@@ -253,7 +334,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
                     type: "linear",
                     scaleLabel: {
                         display: true,
-                        labelString: "Chest circumference change",
+                        labelString: "Chest circumference",
                     },
                 },
             ],
@@ -294,9 +375,7 @@ function onMessageArrived(message) {
         pulseChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
         if (time_tmp > 7) pulseChart.data.datasets[0].data.shift();
         pulseChart.update(0);
-        pulse.calcPulse();
-        pulse.calcAmplitude();
-
+        pulse.calcPulse(time_tmp);
     }
     else if (message.destinationName === "HealthyMan/GSR/Data"){
         //console.log(message.payloadString);
@@ -308,8 +387,12 @@ function onMessageArrived(message) {
         gsrValues.push(value_tmp);
         gsrChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
         if (time_tmp > 7) gsrChart.data.datasets[0].data.shift();
+        gsrTrend.calc(gsrChart.data.datasets[0].data[0].x, time_tmp, value_tmp, time_tmp > 7);
+        gsrChart.data.datasets[1].data.length = 0;
+        gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
+        gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
         gsrChart.update(0);
-        document.querySelector("#resistance").innerHTML = value_tmp;
+        document.querySelector("#resistance").innerHTML = value_tmp +" Ω";
     }
     else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
         //console.log(message.payloadString);
@@ -323,7 +406,6 @@ function onMessageArrived(message) {
         if (time_tmp > 7) respiratoryRateChart.data.datasets[0].data.shift();
         respiratoryRateChart.update(0);
     }
-
 }
 
 /********************************************Buttons handling**********************************************************/
@@ -341,9 +423,15 @@ btnStart.addEventListener("click", function () {
     respiratoryRateValues.length = 0;
     measurement.peaksCounter = 0;
     pulseAmplitude.length = 0;
+    pulseAmplitudeTime.length = 0;
     pulseAmplitudeVariance.length = 0;
+    pulseFrequency.length = 0;
+    pulseFrequencyTime.length = 0;
+    pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
+    gsrTrend.gsrTimeArray.length = 0;
+    gsrTrend.gsrValuesArray.length = 0;
 
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Start";

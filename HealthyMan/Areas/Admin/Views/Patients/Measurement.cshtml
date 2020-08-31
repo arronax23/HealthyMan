@@ -38,6 +38,16 @@
         @Html.DisplayFor(model => model.MeasurementId)
     </dd>
     <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.TimeStamp)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.TimeStamp)
+    </dd>
+</dl>
+<hr />
+<h4 class="text-center">Pulse</h4>
+<dl class="row">
+    <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Pulse)
     </dt>
     <dd class="col-sm-10">
@@ -49,32 +59,28 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.PeaksCounter)
     </dd>
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.TimeStamp)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.TimeStamp)
-    </dd>
 </dl>
-<hr />
-<h4 class="text-center">Pulse</h4>
 <div id="pulse_chart"
+        style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_amplitude_chart"
+     style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_frequency_chart"
      style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">GSR</h4>
 <div id="gsr_chart"
-     style="width: 1110px; height: 500px; margin: auto;"></div>
+        style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">Respiratory rate</h4>
 <div id="respiratoryRate_chart"
-     style="width: 1110px; height: 500px; margin: auto;"></div>
+        style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">Time difference</h4>
 <div id="diff_chart"
-     style="width: 1110px; height: 500px; margin: auto;"></div>
+        style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <a asp-action="Patient" asp-route-id="@Model.Patient.PatientId" class="btn btn-primary">Back</a> |
-<a asp-action="DeleteMeasurement"  asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
+<a asp-action="DeleteMeasurement" asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
 @section Scripts{
     <script type="text/javascript"
             src="~/lib/google-charts/loader.js"></script>

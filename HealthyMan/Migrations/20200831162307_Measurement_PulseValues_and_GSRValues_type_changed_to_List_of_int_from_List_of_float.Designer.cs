@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using HealthyMan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HealthyMan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200831162307_Measurement_PulseValues_and_GSRValues_type_changed_to_List_of_int_from_List_of_float")]
+    partial class Measurement_PulseValues_and_GSRValues_type_changed_to_List_of_int_from_List_of_float
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,24 +67,6 @@ namespace HealthyMan.Migrations
 
                     b.Property<int>("Pulse")
                         .HasColumnType("integer");
-
-                    b.Property<List<int>>("PulseAmplitude")
-                        .HasColumnType("integer[]");
-
-                    b.Property<List<float>>("PulseAmplitudeTime")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("PulseAmplitudeVariance")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("PulseFrequency")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("PulseFrequencyTime")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("PulseFrequencyVariance")
-                        .HasColumnType("real[]");
 
                     b.Property<List<float>>("PulseTime")
                         .HasColumnType("real[]");

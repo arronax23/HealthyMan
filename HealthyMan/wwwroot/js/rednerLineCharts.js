@@ -6,11 +6,9 @@
             hAxis: {
                 title: "Time [s]",
             },
-
             vAxis: {
-                title: "Blood pressure",
+                title: null,
             },
-
             explorer: {
                 maxZoomIn: 40.0,
                 maxZoomOut: 2.0,
@@ -20,19 +18,29 @@
 
         console.log(model);
 
-        pulseDataTable = new google.visualization.DataTable();
+        let pulseDataTable = new google.visualization.DataTable();
         pulseDataTable.addColumn("number", "Time");
         pulseDataTable.addColumn("number", "Blood pressure");
 
-        gsrDataTable = new google.visualization.DataTable();
+        let pulseAmplitudeDataTable = new google.visualization.DataTable();
+        pulseAmplitudeDataTable.addColumn("number", "Time");
+        pulseAmplitudeDataTable.addColumn("number", "Amplitude");
+        pulseAmplitudeDataTable.addColumn("number", "Amplitude variance");
+
+        let pulseFrequencyDataTable = new google.visualization.DataTable();
+        pulseFrequencyDataTable.addColumn("number", "Time");
+        pulseFrequencyDataTable.addColumn("number", "Frequency [Hz]");
+        pulseFrequencyDataTable.addColumn("number", "Frequency variance");
+
+        let gsrDataTable = new google.visualization.DataTable();
         gsrDataTable.addColumn("number", "Time");
         gsrDataTable.addColumn("number", "Resistance [Ω]");
 
-        respiratoryRateDataTable = new google.visualization.DataTable();
+        let respiratoryRateDataTable = new google.visualization.DataTable();
         respiratoryRateDataTable.addColumn("number", "Time");
-        respiratoryRateDataTable.addColumn("number", "Chest circumference change");
+        respiratoryRateDataTable.addColumn("number", "Chest circumference");
 
-        diffDataTable = new google.visualization.DataTable();
+        let diffDataTable = new google.visualization.DataTable();
         diffDataTable.addColumn("number", "Number");
         diffDataTable.addColumn("number", "Time difference");
 
@@ -49,30 +57,42 @@
         for (let i = 0; i < model.respiratoryRateTime.length; i++) 
             respiratoryRateDataTable.addRow([model.respiratoryRateTime[i], model.respiratoryRateValues[i]]);
 
+        for (let i = 0; i < model.pulseAmplitudeTime.length; i++) 
+            pulseAmplitudeDataTable.addRow([model.pulseAmplitudeTime[i], model.pulseAmplitude[i], model.pulseAmplitudeVariance[i]]);
+
+        for (let i = 0; i < model.pulseFrequencyTime.length; i++)
+            pulseFrequencyDataTable.addRow([model.pulseFrequencyTime[i], model.pulseFrequency[i], model.pulseFrequencyVariance[i]]);
 
         let diff = Math.abs(model.pulseTime[model.pulseTime.length - 1] - model.gsrTime[model.pulseTime.length - 1]);
 
         console.log(diff / model.pulseTime.length);
 
-        pulseChart = new google.visualization.LineChart(
+        let pulseChart = new google.visualization.LineChart(
             document.getElementById("pulse_chart")
         );
         pulseChart.draw(pulseDataTable, options);
 
-        options.vAxis.title = "Resistance [Ω]"
-        gsrChart = new google.visualization.LineChart(
+        let pulseAmplitudeChart = new google.visualization.LineChart(
+            document.getElementById("pulse_amplitude_chart")
+        );
+        pulseAmplitudeChart.draw(pulseAmplitudeDataTable, options);
+
+        let pulseFrequencyChart = new google.visualization.LineChart(
+            document.getElementById("pulse_frequency_chart")
+        );
+        pulseFrequencyChart.draw(pulseFrequencyDataTable, options);
+
+        let gsrChart = new google.visualization.LineChart(
             document.getElementById("gsr_chart")
         );
         gsrChart.draw(gsrDataTable, options);
 
-        options.vAxis.title = "Chest circumference change"
-        respiratoryRateChart = new google.visualization.LineChart(
+        let respiratoryRateChart = new google.visualization.LineChart(
             document.getElementById("respiratoryRate_chart")
         );
         respiratoryRateChart.draw(respiratoryRateDataTable, options);
 
-        options.vAxis.title = "Time difference"
-        diffChart = new google.visualization.LineChart(
+        let diffChart = new google.visualization.LineChart(
             document.getElementById("diff_chart")
         );
         diffChart.draw(diffDataTable, options);
