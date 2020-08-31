@@ -9,6 +9,7 @@ namespace HealthyMan.Models
 {
     public class Measurement
     {
+        [Display(Name = "Measurement Id")]
         public int? MeasurementId { get; set; }
         public int Pulse { get; set; }
         [Display(Name = "Peaks counter")]

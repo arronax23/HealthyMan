@@ -9,6 +9,7 @@ namespace HealthyMan.Models
 {
     public class Patient
     {
+        [Display(Name = "Patient Id")]
         public int? PatientId { get; set; }
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

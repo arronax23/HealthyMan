@@ -24,13 +24,13 @@
 
         let pulseAmplitudeDataTable = new google.visualization.DataTable();
         pulseAmplitudeDataTable.addColumn("number", "Time");
-        pulseAmplitudeDataTable.addColumn("number", "Amplitude");
-        pulseAmplitudeDataTable.addColumn("number", "Amplitude variance");
+        pulseAmplitudeDataTable.addColumn("number", "Pulse amplitude");
+        pulseAmplitudeDataTable.addColumn("number", "Pulse amplitude variance");
 
         let pulseFrequencyDataTable = new google.visualization.DataTable();
         pulseFrequencyDataTable.addColumn("number", "Time");
-        pulseFrequencyDataTable.addColumn("number", "Frequency [Hz]");
-        pulseFrequencyDataTable.addColumn("number", "Frequency variance");
+        pulseFrequencyDataTable.addColumn("number", "Pulse frequency [Hz]");
+        pulseFrequencyDataTable.addColumn("number", "Pulse frequency variance");
 
         let gsrDataTable = new google.visualization.DataTable();
         gsrDataTable.addColumn("number", "Time");
