@@ -303,12 +303,13 @@ function onMessageArrived(message) {
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
         let time_tmp = Number(splitText[0]);
-        let value_tmp = Number(splitText[1]);
+        let value_tmp = Math.round(Number(splitText[1]));
         gsrTime.push(time_tmp);
         gsrValues.push(value_tmp);
         gsrChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
         if (time_tmp > 7) gsrChart.data.datasets[0].data.shift();
         gsrChart.update(0);
+        document.querySelector("#resistance").innerHTML = value_tmp;
     }
     else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
         //console.log(message.payloadString);
