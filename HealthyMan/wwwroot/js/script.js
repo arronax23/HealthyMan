@@ -343,7 +343,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
 });
 
 /***********************************************Paho.MQTT.Client*******************************************************/
-let client = new Paho.MQTT.Client("192.168.8.100", 9001, "browserId");
+let client = new Paho.MQTT.Client("localhost", 9001, "browserId");
 
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
