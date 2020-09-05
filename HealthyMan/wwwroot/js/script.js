@@ -377,7 +377,7 @@ function onMessageArrived(message) {
         pulseChart.update(0);
         pulse.calcPulse(time_tmp);
     }
-    else if (message.destinationName === "HealthyMan/GSR/Data"){
+    else if (message.destinationName === "HealthyMan/GSR/Data") {
         //console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
@@ -392,10 +392,10 @@ function onMessageArrived(message) {
         gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
         gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
         gsrChart.update(0);
-        document.querySelector("#resistance").innerHTML = value_tmp +" Ω";
+        document.querySelector("#resistance").innerHTML = value_tmp + " Ω";
     }
     else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
-        //console.log(message.payloadString);
+        console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
         let time_tmp = Number(splitText[0]);
