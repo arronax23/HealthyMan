@@ -22,7 +22,7 @@ namespace HealthyMan.Models
         public List<float> PulseFrequency { get; set; }
         public List<float> PulseFrequencyTime { get; set; }
         public List<float> PulseFrequencyVariance { get; set; }
-        public List<int> GSRValues { get; set; }
+        public List<float> GSRValues { get; set; }
         public List<float> GSRTime { get; set; }
         public List<float> RespiratoryRateValues { get; set; }
         public List<float> RespiratoryRateTime { get; set; }
