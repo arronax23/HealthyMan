@@ -92,8 +92,8 @@
         );
         pulseAmplitudeChart.draw(pulseAmplitudeDataTable, options);
 
-        options.series[0].color = "#33ccff";
-        options.series[1].color = "#ff66ff";
+        options.series[0].color = "#f0fc03";
+        options.series[1].color = "#33ccff";
         let pulseFrequencyChart = new google.visualization.LineChart(
             document.getElementById("pulse_frequency_chart")
         );

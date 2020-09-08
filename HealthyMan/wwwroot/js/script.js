@@ -513,7 +513,7 @@ radioButtons.addEventListener("change", function (e) {
         if (gsrChart.data.datasets[0].data.length > 1) {
             document.querySelector("#gsr-value").innerHTML = conductanceValues[conductanceValues.length - 1] + " uS";
             for (let i = 0; i < gsrChart.data.datasets[0].data.length; i++) {
-                gsrChart.data.datasets[0].data[i].y = conductanceValues[i]; 
+                gsrChart.data.datasets[0].data[i].y = Math.round(1000 * 1000 / gsrChart.data.datasets[0].data[i].y) / 1000;
             }
             gsrTrend.calc();
             gsrChart.data.datasets[1].data.length = 0;
@@ -527,7 +527,7 @@ radioButtons.addEventListener("change", function (e) {
         if (gsrChart.data.datasets[0].data.length > 1) {
             document.querySelector("#gsr-value").innerHTML = resistanceValues[resistanceValues.length - 1] + " kΩ";
             for (let i = 0; i < gsrChart.data.datasets[0].data.length; i++) {
-                gsrChart.data.datasets[0].data[i].y = resistanceValues[i];
+                gsrChart.data.datasets[0].data[i].y = Math.round(1000 * 1000 / gsrChart.data.datasets[0].data[i].y) / 1000;
             }
             gsrTrend.calc();
             gsrChart.data.datasets[1].data.length = 0;

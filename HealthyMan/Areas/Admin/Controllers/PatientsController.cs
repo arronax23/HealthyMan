@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HealthyMan.Data;
 using HealthyMan.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,10 +16,12 @@ namespace HealthyMan.Areas.Admin.Controllers
     public class PatientsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PatientsController(ApplicationDbContext context)
+        public PatientsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -38,8 +41,18 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> DeletePatientConfirmed(int id)
         {
             HealthyMan.Models.Patient patient = await _context.Patients.SingleOrDefaultAsync(p => p.PatientId == id);
-            List<Measurement> measurements = _context.Measurements.Where(m => m.Patient.PatientId == id).ToList();
             
+            List<Measurement> measurements = _context.Measurements.Where(m => m.Patient.PatientId == id).ToList();
+            AccessKey accessKey = await _context.AccessKeys.SingleOrDefaultAsync(aK => aK.Patient.PatientId == id);
+            ApplicationUser applicationUser = await _context.ApplicationUsers.SingleOrDefaultAsync(aU => aU.Patient.PatientId == id);
+            if (applicationUser != null)
+            {
+                applicationUser.Patient = null;
+                await _userManager.RemoveFromRoleAsync(applicationUser, "Patient");
+            }
+
+            if (accessKey != null) 
+                _context.AccessKeys.Remove(accessKey);
             _context.Measurements.RemoveRange(measurements);
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
