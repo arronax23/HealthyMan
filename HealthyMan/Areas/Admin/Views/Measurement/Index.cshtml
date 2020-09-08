@@ -25,7 +25,13 @@
             <canvas id="GSRChart" width="80"></canvas>
         </div>
         <div class="form-group">
-            <span><b>Resistance: </b></span><span id="resistance">0</span>&nbsp;
+            <div class="radio-buttons">
+                <input type="radio" id="om" name="gsr" value="om" checked>
+                <label for="om">kΩ</label>
+                <input type="radio" id="siemens" name="gsr" value="siemens">
+                <label for="siemens">uS</label>
+            </div>
+            <span id="gsr-name"><b>Resistance: </b></span><span id="gsr-value">0</span>
         </div>
         <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
             <canvas id="RespiratoryRateChart" width="80"></canvas>

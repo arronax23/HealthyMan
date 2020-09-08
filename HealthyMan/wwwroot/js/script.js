@@ -8,8 +8,10 @@ let pulseFrequency = [];
 let pulseFrequencyTime = [];
 let pulseFrequencyVariance = [];
 
-let gsrValues = [];
+let gsrValues = []; //Ω
 let gsrTime = [];
+let resistanceValues = []; //kΩ
+let conductanceValues = []; //uS
 
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
@@ -139,6 +141,7 @@ let pulse = {
     },
 };
 
+/*
 let gsrTrend = {
     gsrTimeArray: [],
     gsrValuesArray: [],
@@ -189,6 +192,49 @@ let gsrTrend = {
 
         this.startPoint.x = gsrStartTime;
         this.startPoint.y = Math.round(this.a * gsrStartTime + this.b);
+    }
+}
+*/
+let gsrTrend = {
+    meanValue: 0,
+    meanTime: 0,
+    a: 0,
+    b: 0,
+    startPoint: {
+        x: 0,
+        y: 0,
+    },
+    endPoint: {
+        x: 0,
+        y: 0,
+    },
+    calc: function () {
+        let tmp1 = 0;
+        let tmp2 = 0;
+
+        for (let i = 0; i < gsrChart.data.datasets[0].data.length; i++) {
+            tmp1 += gsrChart.data.datasets[0].data[i].y;
+            tmp2 += gsrChart.data.datasets[0].data[i].x;
+        }
+
+        this.meanValue = tmp1 / gsrChart.data.datasets[0].data.length;
+        this.meanTime = tmp2 / gsrChart.data.datasets[0].data.length;
+        tmp1 = 0;
+        tmp2 = 0;
+
+        for (let i = 0; i < gsrChart.data.datasets[0].data.length; i++) {
+            tmp1 += (gsrChart.data.datasets[0].data[i].x - this.meanTime) * (gsrChart.data.datasets[0].data[i].y - this.meanValue);
+            tmp2 += (gsrChart.data.datasets[0].data[i].x - this.meanTime) ** 2;
+        }
+
+        this.a = tmp1 / tmp2;
+        this.b = this.meanValue - this.a * this.meanTime;
+
+        this.endPoint.x = gsrChart.data.datasets[0].data[gsrChart.data.datasets[0].data.length - 1].x;
+        this.endPoint.y = Math.round(1000 * (this.a * gsrChart.data.datasets[0].data[gsrChart.data.datasets[0].data.length - 1].x + this.b)) /  1000;
+
+        this.startPoint.x = gsrChart.data.datasets[0].data[0].x;
+        this.startPoint.y = Math.round(1000 * (this.a * gsrChart.data.datasets[0].data[0].x + this.b)) / 1000;
     }
 }
 
@@ -265,6 +311,7 @@ var gsrChart = new Chart(gsrContext, {
                 ],
                 backgroundColor: "rgba(0, 0, 255, 0.5)",
             },
+            
         ],
     },
     options: {
@@ -381,16 +428,31 @@ function onMessageArrived(message) {
         //console.log(splitText);
         let time_tmp = Number(splitText[0]);
         let value_tmp = Number(splitText[1]);
+        let resistance_tmp = value_tmp / 1000;
+        let conductance_tmp = Math.round(1000 * 1000000 / value_tmp) / 1000;
         gsrTime.push(time_tmp);
         gsrValues.push(value_tmp);
-        gsrChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
+        resistanceValues.push(resistance_tmp);
+        conductanceValues.push(conductance_tmp);
+        
         if (time_tmp > 7) gsrChart.data.datasets[0].data.shift();
-        gsrTrend.calc(gsrChart.data.datasets[0].data[0].x, time_tmp, value_tmp, time_tmp > 7);
+ 
+        if (document.querySelector("input#om").checked) {
+            gsrChart.data.datasets[0].data.push({ x: time_tmp, y: resistance_tmp });
+            document.querySelector("#gsr-value").innerHTML = resistance_tmp + " kΩ";
+        }
+        else {
+            gsrChart.data.datasets[0].data.push({ x: time_tmp, y: conductance_tmp });
+            document.querySelector("#gsr-value").innerHTML = conductance_tmp + " uS";
+        }
+
+        gsrTrend.calc();
         gsrChart.data.datasets[1].data.length = 0;
         gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
         gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
+
         gsrChart.update(0);
-        document.querySelector("#resistance").innerHTML = value_tmp + " Ω";
+            
     }
     else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
         console.log(message.payloadString);
@@ -417,6 +479,8 @@ btnStart.addEventListener("click", function () {
     pulseValues.length = 0;
     gsrTime.length = 0;
     gsrValues.length = 0;
+    resistanceValues.length = 0;
+    conductanceValues.length = 0;
     respiratoryRateTime.length = 0;
     respiratoryRateValues.length = 0;
     measurement.peaksCounter = 0;
@@ -428,8 +492,6 @@ btnStart.addEventListener("click", function () {
     pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
-    gsrTrend.gsrTimeArray.length = 0;
-    gsrTrend.gsrValuesArray.length = 0;
 
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Start";
@@ -441,6 +503,40 @@ btnStop.addEventListener("click", function () {
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/Stop";
     client.send(message);
+});
+
+let radioButtons = document.querySelector(".radio-buttons");
+radioButtons.addEventListener("change", function (e) {
+    //console.log(e);
+    if (e.target.id == "siemens") {
+        document.querySelector("#gsr-name").innerHTML = "<b>Conductance: </b>";
+        if (gsrChart.data.datasets[0].data.length > 1) {
+            document.querySelector("#gsr-value").innerHTML = conductanceValues[conductanceValues.length - 1] + " uS";
+            for (let i = 0; i < gsrChart.data.datasets[0].data.length; i++) {
+                gsrChart.data.datasets[0].data[i].y = conductanceValues[i]; 
+            }
+            gsrTrend.calc();
+            gsrChart.data.datasets[1].data.length = 0;
+            gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
+            gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
+            gsrChart.update(0);
+        }
+    } 
+    else if (e.target.id == "om"){
+        document.querySelector("#gsr-name").innerHTML = "<b>Resistance: </b>";
+        if (gsrChart.data.datasets[0].data.length > 1) {
+            document.querySelector("#gsr-value").innerHTML = resistanceValues[resistanceValues.length - 1] + " kΩ";
+            for (let i = 0; i < gsrChart.data.datasets[0].data.length; i++) {
+                gsrChart.data.datasets[0].data[i].y = resistanceValues[i];
+            }
+            gsrTrend.calc();
+            gsrChart.data.datasets[1].data.length = 0;
+            gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
+            gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
+            gsrChart.update(0);
+        }
+    }
+        
 });
 
 let btnSend = document.querySelector("#btn-send");
@@ -464,4 +560,3 @@ btnSend.addEventListener("click", function () {
         else alert(`Saving failed\nStatus: ${response.status}`);
     });
 });
-

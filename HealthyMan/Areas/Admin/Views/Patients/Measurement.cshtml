@@ -60,24 +60,19 @@
         @Html.DisplayFor(model => model.PeaksCounter)
     </dd>
 </dl>
-<div id="pulse_chart"
-        style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="pulse_amplitude_chart"
-     style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="pulse_frequency_chart"
-     style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_amplitude_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_frequency_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">GSR</h4>
-<div id="gsr_chart"
-        style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="resistance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="conductance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">Respiratory rate</h4>
-<div id="respiratoryRate_chart"
-        style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="respiratoryRate_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">Time difference</h4>
-<div id="diff_chart"
-        style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="diff_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <a asp-action="Patient" asp-route-id="@Model.Patient.PatientId" class="btn btn-primary">Back</a> |
 <a asp-action="DeleteMeasurement" asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
