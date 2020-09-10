@@ -53,11 +53,11 @@ let pulse = {
     calcAmplitudePeaksCounter: 0,
     calcPulse: function (time) {
         if (
-            this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > 800 &&
+            this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > 2200 &&
             this.enable2 === true
         )
             this.enable1 = true;
-        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < 800)
+        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < 2200)
             this.enable2 = true;
 
         if (this.enable1 === true) {
@@ -90,7 +90,7 @@ let pulse = {
             let amplitude = this.max - this.min;
             this.pulseMeasurement.pulseAmplitude.push(amplitude);
             this.pulseMeasurement.pulseAmplitudeTime.push(time);
-            document.querySelector("#amplitude").innerHTML = amplitude;
+            document.querySelector("#amplitude").innerHTML = amplitude  + "mV";
             this.calcPulseAmplitudeVariance();
             if (this.calcAmplitudePeaksCounter < 2) {
                 this.pulseMeasurement.pulseAmplitude.shift();
@@ -141,60 +141,6 @@ let pulse = {
     },
 };
 
-/*
-let gsrTrend = {
-    gsrTimeArray: [],
-    gsrValuesArray: [],
-    meanValue: 0,
-    meanTime: 0,
-    a: 0,
-    b: 0,
-    startPoint: {
-        x: 0,
-        y: 0,
-    },
-    endPoint: {
-        x: 0,
-        y: 0,
-    },
-    calc: function (gsrStartTime, gsrTime, gsrValue,shiftBool) {
-        this.gsrTimeArray.push(gsrTime);
-        this.gsrValuesArray.push(gsrValue);
-
-        if (shiftBool) {
-            this.gsrTimeArray.shift();
-            this.gsrValuesArray.shift();
-        }
-
-        let tmp1 = 0;
-        let tmp2 = 0;
-
-        for (let i = 0; i < this.gsrValuesArray.length; i++) {
-            tmp1 += this.gsrValuesArray[i];
-            tmp2 += this.gsrTimeArray[i];
-        }
-
-        this.meanValue = tmp1 / this.gsrValuesArray.length;
-        this.meanTime = tmp2 / this.gsrValuesArray.length;
-        tmp1 = 0;
-        tmp2 = 0;
-
-        for (let i = 0; i < this.gsrValuesArray.length; i++) {
-            tmp1 += (this.gsrTimeArray[i] - this.meanTime) * (this.gsrValuesArray[i] - this.meanValue);
-            tmp2 += (this.gsrTimeArray[i] - this.meanTime) ** 2;
-        }
-
-        this.a = tmp1 / tmp2;
-        this.b = this.meanValue - this.a * this.meanTime;
-
-        this.endPoint.x = gsrTime;
-        this.endPoint.y = Math.round(this.a * gsrTime + this.b);
-
-        this.startPoint.x = gsrStartTime;
-        this.startPoint.y = Math.round(this.a * gsrStartTime + this.b);
-    }
-}
-*/
 let gsrTrend = {
     meanValue: 0,
     meanTime: 0,
@@ -275,7 +221,7 @@ var pulseChart = new Chart(pulseContext, {
                     type: "linear",
                     scaleLabel: {
                         display: true,
-                        labelString: "Blood pressure",
+                        labelString: "Voltage [mV]",
                     },
                 },
             ],
@@ -333,7 +279,7 @@ var gsrChart = new Chart(gsrContext, {
                     type: "linear",
                     scaleLabel: {
                         display: true,
-                        labelString: "Resistance [Ω]",
+                        labelString: "Resistance [kΩ]/Conductance [uS]",
                     },
                 },
             ],
@@ -379,7 +325,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
                     type: "linear",
                     scaleLabel: {
                         display: true,
-                        labelString: "Chest circumference",
+                        labelString: "Voltage [mV]",
                     },
                 },
             ],

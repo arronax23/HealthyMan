@@ -24,11 +24,11 @@
 
         let pulseDataTable = new google.visualization.DataTable();
         pulseDataTable.addColumn("number", "Time");
-        pulseDataTable.addColumn("number", "Blood pressure");
+        pulseDataTable.addColumn("number", "Voltage [mV]");
 
         let pulseAmplitudeDataTable = new google.visualization.DataTable();
         pulseAmplitudeDataTable.addColumn("number", "Time");
-        pulseAmplitudeDataTable.addColumn("number", "Pulse amplitude");
+        pulseAmplitudeDataTable.addColumn("number", "Pulse amplitude [mV]");
         pulseAmplitudeDataTable.addColumn("number", "Pulse amplitude variance");
 
         let pulseFrequencyDataTable = new google.visualization.DataTable();
@@ -47,7 +47,7 @@
 
         let respiratoryRateDataTable = new google.visualization.DataTable();
         respiratoryRateDataTable.addColumn("number", "Time");
-        respiratoryRateDataTable.addColumn("number", "Chest circumference");
+        respiratoryRateDataTable.addColumn("number", "Voltage [mV]");
 
         let diffDataTable = new google.visualization.DataTable();
         diffDataTable.addColumn("number", "Number");
