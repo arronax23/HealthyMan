@@ -1,0 +1,66 @@
+﻿@model ESP8266ConnectionData
+
+@{
+    ViewData["Title"] = "Configuration";
+}
+
+<h1>Configuration</h1>
+<dl class="row">
+    <dt class="col-sm-3">
+        Download mosquitto broker:
+    </dt>
+    <dd class="col-sm-9">
+        <a href="https://mosquitto.org/">https://mosquitto.org/</a>
+    </dd>
+    <dt class="col-sm-3">
+        Download mosquitto.conf file:
+    </dt>
+    <dd class="col-sm-9">
+        <a asp-area="Admin" asp-controller="Configuration" asp-action="MosquittoConfFile">mosquitto.conf</a>
+    </dd>
+    <dt class="col-sm-3">
+        Download PostgreSQL:
+    </dt>
+    <dd class="col-sm-9">
+        <a href="https://www.postgresql.org/">https://www.postgresql.org/</a>
+    </dd>
+    <dt class="col-sm-3">
+        Run package manager console command in Visual Studio:
+    </dt>
+    <dd class="col-sm-9">
+        Update-Database
+    </dd>
+    <dt class="col-sm-3">
+        Enter WiFi SSID and Password:
+    </dt>
+    <dd class="col-sm-3">
+        <form asp-area="Admin" asp-controller="Configuration" asp-action="SendConnectionDataToESP8266">
+            <div class="form-group">
+                <label asp-for="SSID" class="control-label"></label>
+                <input asp-for="SSID" class="form-control" />
+                <span asp-validation-for="SSID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MqttServerIpAdress" class="control-label"></label>
+                <input asp-for="MqttServerIpAdress" class="form-control" />
+                <span asp-validation-for="MqttServerIpAdress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PortName" class="control-label"></label>
+                <select asp-for="PortName" asp-items="ViewBag.PortNames" class="form-control">
+                    <option>Please select one</option>
+                </select>
+                <span asp-validation-for="PortName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-success" />
+            </div>
+        </form>
+    </dd>
+
+</dl>

@@ -401,7 +401,7 @@ function onMessageArrived(message) {
             
     }
     else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
-        console.log(message.payloadString);
+        //console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
         let time_tmp = Number(splitText[0]);
