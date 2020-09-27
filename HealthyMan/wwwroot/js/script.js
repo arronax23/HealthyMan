@@ -15,6 +15,7 @@ let conductanceValues = []; //uS
 
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
+let movMeanRespiraotryRate = [];
 
 let measurement = {
     pulse: 0,
@@ -141,6 +142,7 @@ let pulse = {
     },
 };
 
+// GSR Trend Calc
 let gsrTrend = {
     meanValue: 0,
     meanTime: 0,
@@ -183,6 +185,8 @@ let gsrTrend = {
         this.startPoint.y = Math.round(1000 * (this.a * gsrChart.data.datasets[0].data[0].x + this.b)) / 1000;
     }
 }
+
+
 
 /**********************************************Chart.js Pulse********************************************************/
 var pulseContext = document.getElementById("pulseChart").getContext("2d");
@@ -304,6 +308,17 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
                     },
                 ],
             },
+            {
+                label: "Moving average",
+                lineTension: 0,
+                data: [
+                    {
+                        x: 0,
+                        y: 0,
+                    },
+                ],
+                backgroundColor: "rgba(0, 0, 0, 0)",
+            },
         ],
     },
     options: {
@@ -334,7 +349,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
 });
 
 /***********************************************Paho.MQTT.Client*******************************************************/
-let client = new Paho.MQTT.Client("localhost", 9001, "browserId");
+let client = new Paho.MQTT.Client("localhost", 9001, "browser");
 
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
@@ -408,8 +423,20 @@ function onMessageArrived(message) {
         let value_tmp = Number(splitText[1]);
         respiratoryRateTime.push(time_tmp);
         respiratoryRateValues.push(value_tmp);
+
         respiratoryRateChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
-        if (time_tmp > 7) respiratoryRateChart.data.datasets[0].data.shift();
+
+        let length = respiratoryRateTime.length;
+        let index = length - 41 + 20;
+        if (length >= 41) {
+            movMeanRespiraotryRate[index] = mean(respiratoryRateValues.slice(length - 41, length));
+            respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[index], y: movMeanRespiraotryRate[index] });
+        } 
+
+        if (time_tmp > 7) {
+            respiratoryRateChart.data.datasets[0].data.shift();
+            respiratoryRateChart.data.datasets[1].data.shift();
+        }
         respiratoryRateChart.update(0);
     }
 }

@@ -25,6 +25,7 @@
         let pulseDataTable = new google.visualization.DataTable();
         pulseDataTable.addColumn("number", "Time");
         pulseDataTable.addColumn("number", "Voltage [mV]");
+        pulseDataTable.addColumn("number", "Moving average [mV]");
 
         let pulseAmplitudeDataTable = new google.visualization.DataTable();
         pulseAmplitudeDataTable.addColumn("number", "Time");
@@ -53,8 +54,10 @@
         diffDataTable.addColumn("number", "Number");
         diffDataTable.addColumn("number", "Time difference");
 
+        let pulseMovMean = calcMovMean(model.pulseValues, 5);
+
         for (let i = 0; i < model.pulseTime.length; i++) {
-            pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i]]);
+            pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i], pulseMovMean[i]]);
 
             diffDataTable.addRow([i, model.pulseTime[i] - model.gsrTime[i]]);
         }

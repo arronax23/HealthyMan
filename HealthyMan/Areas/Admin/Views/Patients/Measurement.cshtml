@@ -79,6 +79,8 @@
 @section Scripts{
     <script type="text/javascript"
             src="~/lib/google-charts/loader.js"></script>
+    <script src="~/js/mean.js"></script>
+    <script src="~/js/calcMovMean.js"></script>
     <script src="~/js/rednerLineCharts.js"></script>
     <script>renderLineCharts(@Html.Raw(Json.Serialize(Model)))</script>
 }
