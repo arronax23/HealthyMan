@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HealthyMan.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HealthyMan.Areas.Admin.Controllers
 {
@@ -11,9 +13,14 @@ namespace HealthyMan.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class MeasurementController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+        public MeasurementController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1));
         }
 
     }

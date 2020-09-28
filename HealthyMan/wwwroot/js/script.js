@@ -1,6 +1,9 @@
 ﻿let pulseValues = [];
 let pulseTime = [];
 
+let pulseThreshold = [model.initialThreshold];
+let pulseThresholdTime = [0];
+
 let pulseAmplitude = [];
 let pulseAmplitudeTime = [];
 let pulseAmplitudeVariance = [];
@@ -17,12 +20,15 @@ let respiratoryRateValues = [];
 let respiratoryRateTime = [];
 let movMeanRespiraotryRate = [];
 
+
 let measurement = {
     pulse: 0,
     peaksCounter: 0,
     //variance: 0,
     pulseValues: pulseValues,
     pulseTime: pulseTime,
+    pulseThreshold: pulseThreshold,
+    pulseThresholdTime: pulseThresholdTime,
     pulseAmplitude: pulseAmplitude,
     pulseAmplitudeTime: pulseAmplitudeTime,
     pulseAmplitudeVariance: pulseAmplitudeVariance,
@@ -50,15 +56,16 @@ let pulse = {
     meanPulseAmplitude: 0,
     meanPulseFrequency: 0,
     max: 0,
-    min: 0,
+    min: 3300,
     calcAmplitudePeaksCounter: 0,
+    threshold: model.initialThreshold,
     calcPulse: function (time) {
         if (
-            this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > 2200 &&
+            this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > this.threshold &&
             this.enable2 === true
         )
             this.enable1 = true;
-        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < 2200)
+        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.threshold)
             this.enable2 = true;
 
         if (this.enable1 === true) {
@@ -86,20 +93,19 @@ let pulse = {
         this.calcAmplitude(time);
     },
     calcAmplitude: function (time) {
-        if (this.calcAmplitudePeaksCounter != this.pulseMeasurement.peaksCounter) {
+        if (this.pulseMeasurement.peaksCounter > 1 && this.calcAmplitudePeaksCounter != this.pulseMeasurement.peaksCounter) {
             this.calcAmplitudePeaksCounter = this.pulseMeasurement.peaksCounter;
             let amplitude = this.max - this.min;
+            this.threshold = this.min + amplitude * model.thresholdAmplitudePercentage / 100;
+            this.pulseMeasurement.pulseThreshold.push(this.threshold);
+            this.pulseMeasurement.pulseThresholdTime.push(time);
             this.pulseMeasurement.pulseAmplitude.push(amplitude);
             this.pulseMeasurement.pulseAmplitudeTime.push(time);
-            document.querySelector("#amplitude").innerHTML = amplitude  + "mV";
+            document.querySelector("#amplitude").innerHTML = amplitude + "mV";
+
             this.calcPulseAmplitudeVariance();
-            if (this.calcAmplitudePeaksCounter < 2) {
-                this.pulseMeasurement.pulseAmplitude.shift();
-                this.pulseMeasurement.pulseAmplitudeTime.shift();
-                this.pulseMeasurement.pulseAmplitudeVariance.shift();
-            }
-      
-            this.min = 1024;
+
+            this.min = 3300;
             this.max = 0;
         }
 
@@ -450,6 +456,10 @@ btnStart.addEventListener("click", function () {
     respiratoryRateChart.data.datasets[0].data.length = 0;
     pulseTime.length = 0;
     pulseValues.length = 0;
+    pulseThreshold.length = 0;
+    pulseThreshold.push(model.initialThreshold);
+    pulseThresholdTime.length = 0;
+    pulseThresholdTime.push(0);
     gsrTime.length = 0;
     gsrValues.length = 0;
     resistanceValues.length = 0;

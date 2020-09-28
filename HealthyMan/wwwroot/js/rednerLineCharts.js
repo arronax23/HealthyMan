@@ -25,7 +25,13 @@
         let pulseDataTable = new google.visualization.DataTable();
         pulseDataTable.addColumn("number", "Time");
         pulseDataTable.addColumn("number", "Voltage [mV]");
-        pulseDataTable.addColumn("number", "Moving average [mV]");
+        //pulseDataTable.addColumn({ type: 'number', role: 'interval' });
+        //pulseDataTable.addColumn("number", "Threshold [mV]");
+        
+
+        let pulseThresholdDataTable = new google.visualization.DataTable();
+        pulseThresholdDataTable.addColumn("number", "Time");
+        pulseThresholdDataTable.addColumn("number", "Threshold [mV]");
 
         let pulseAmplitudeDataTable = new google.visualization.DataTable();
         pulseAmplitudeDataTable.addColumn("number", "Time");
@@ -54,13 +60,24 @@
         diffDataTable.addColumn("number", "Number");
         diffDataTable.addColumn("number", "Time difference");
 
+        /*
         let pulseMovMean = calcMovMean(model.pulseValues, 5);
 
+        threshold.pulseValues = model.pulseValues;
+        threshold.pulseTime = model.pulseTime;
+        threshold.calcThreshold();
+        */
+
         for (let i = 0; i < model.pulseTime.length; i++) {
-            pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i], pulseMovMean[i]]);
+            pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i]]);
 
             diffDataTable.addRow([i, model.pulseTime[i] - model.gsrTime[i]]);
         }
+
+        for (let i = 0; i < model.pulseThreshold.length; i++)
+            pulseThresholdDataTable.addRow([model.pulseThresholdTime[i], model.pulseThreshold[i]]);
+
+        let joinedData = google.visualization.data.join(pulseDataTable, pulseThresholdDataTable, 'full', [[0, 0]], [1], [1]);
 
         for (let i = 0; i < model.pulseAmplitudeTime.length; i++)
             pulseAmplitudeDataTable.addRow([model.pulseAmplitudeTime[i], model.pulseAmplitude[i], model.pulseAmplitudeVariance[i]]);
@@ -86,7 +103,7 @@
         let pulseChart = new google.visualization.LineChart(
             document.getElementById("pulse_chart")
         );
-        pulseChart.draw(pulseDataTable, options);
+        pulseChart.draw(joinedData, options);
 
         options.series[0].color = "#ff3399";
         options.series[1].color = "#ff9900";

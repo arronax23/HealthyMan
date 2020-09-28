@@ -16,6 +16,8 @@ namespace HealthyMan.Models
         public int PeaksCounter { get; set; }
         public List<int> PulseValues { get; set; }
         public List<float> PulseTime { get; set; }
+        public List<float> PulseThreshold { get; set; }
+        public List<float> PulseThresholdTime { get; set; }
         public List<int> PulseAmplitude { get; set; }
         public List<float> PulseAmplitudeTime { get; set; }
         public List<float> PulseAmplitudeVariance { get; set; }
