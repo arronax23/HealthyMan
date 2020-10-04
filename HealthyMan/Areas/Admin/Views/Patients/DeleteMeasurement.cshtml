@@ -39,10 +39,10 @@
         @Html.DisplayFor(model => model.MeasurementId)
     </dd>
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Pulse)
+        @Html.DisplayNameFor(model => model.HeartRateAverage)
     </dt>
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Pulse)
+        @Html.DisplayFor(model => model.HeartRateAverage)
     </dd>
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.PeaksCounter)
@@ -70,8 +70,11 @@
 
 @section Scripts{
     <script type="text/javascript"
-            src="https://www.gstatic.com/charts/loader.js"></script>
+            src="~/lib/google-charts/loader.js"></script>
+    <script src="~/js/mean.js"></script>
+    <script src="~/js/calcMovMean.js"></script>
+    <script>
+        let model = @Html.Raw(Json.Serialize(Model));
+    </script>
     <script src="~/js/rednerLineCharts.js"></script>
-    <script>renderLineCharts(@Html.Raw(Json.Serialize(Model)))</script>
 }
-

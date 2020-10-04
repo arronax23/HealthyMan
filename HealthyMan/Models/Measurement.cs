@@ -11,11 +11,19 @@ namespace HealthyMan.Models
     {
         [Display(Name = "Measurement Id")]
         public int? MeasurementId { get; set; }
-        public int Pulse { get; set; }
+        [Display(Name = "Average heart rate")]
+        public int HeartRateAverage { get; set; }
         [Display(Name = "Peaks counter")]
         public int PeaksCounter { get; set; }
         public List<int> PulseValues { get; set; }
         public List<float> PulseTime { get; set; }
+
+        [Display(Name = "Initial static threshold")]
+        public int InitialThreshold { get; set; }
+        [Display(Name = "Percentage of amplitude for dynamic threshold")]
+        public int ThresholdAmplitudePercentage { get; set; }
+        public List<int> HeartBeatsValues { get; set; }
+        public List<float> HeartBeatsTime { get; set; }
         public List<float> PulseThreshold { get; set; }
         public List<float> PulseThresholdTime { get; set; }
         public List<int> PulseAmplitude { get; set; }
@@ -26,8 +34,9 @@ namespace HealthyMan.Models
         public List<float> PulseFrequencyVariance { get; set; }
         public List<float> GSRValues { get; set; }
         public List<float> GSRTime { get; set; }
-        public List<float> RespiratoryRateValues { get; set; }
+        public List<int> RespiratoryRateValues { get; set; }
         public List<float> RespiratoryRateTime { get; set; }
+        public List<int> MovMeanRespiratoryRate { get; set; }
         [Display(Name = "Time stamp")]
         public DateTime TimeStamp { get; set; }
         public Patient Patient { get; set; }

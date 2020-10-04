@@ -30,6 +30,7 @@ namespace HealthyMan.Areas.Admin.Controllers
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
             currentSettigns.InitialThreshold = 1650;
             currentSettigns.ThresholdAmplitudePercentage = 50;
+            currentSettigns.MovMeanRespiratoryRateWindowLength = 41;
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -40,6 +41,7 @@ namespace HealthyMan.Areas.Admin.Controllers
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
             currentSettigns.InitialThreshold = settings.InitialThreshold;
             currentSettigns.ThresholdAmplitudePercentage = settings.ThresholdAmplitudePercentage;
+            currentSettigns.MovMeanRespiratoryRateWindowLength = settings.MovMeanRespiratoryRateWindowLength;
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

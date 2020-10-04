@@ -4,6 +4,9 @@ let pulseTime = [];
 let pulseThreshold = [model.initialThreshold];
 let pulseThresholdTime = [0];
 
+let heartBeatsValues = [];
+let heartBeatsTime = [];
+
 let pulseAmplitude = [];
 let pulseAmplitudeTime = [];
 let pulseAmplitudeVariance = [];
@@ -18,15 +21,21 @@ let conductanceValues = []; //uS
 
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
-let movMeanRespiraotryRate = [];
+let movMeanRespiratoryRate = [];
 
+for (let i = 0; i < (model.movMeanRespiratoryRateWindowLength - 1 / 2); i++)
+    movMeanRespiratoryRate[i] = -1;
 
 let measurement = {
-    pulse: 0,
+    heartRateAverage: 0,
     peaksCounter: 0,
     //variance: 0,
     pulseValues: pulseValues,
     pulseTime: pulseTime,
+    initialThreshold: model.initialThreshold,
+    thresholdAmplitudePercentage: model.thresholdAmplitudePercentage,
+    heartBeatsValues: heartBeatsValues,
+    heartBeatsTime: heartBeatsTime,
     pulseThreshold: pulseThreshold,
     pulseThresholdTime: pulseThresholdTime,
     pulseAmplitude: pulseAmplitude,
@@ -39,6 +48,7 @@ let measurement = {
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
     respiratoryRateTime: respiratoryRateTime,
+    movMeanRespiratoryRate: movMeanRespiratoryRate,
     timeStamp: new Date(),
     // Patient
     patient: {
@@ -48,9 +58,24 @@ let measurement = {
     }
 };
 
+let movMeanRespiratoryRateCalc = {
+    length: 0,
+    index: 0,
+    movMeanRespiratoryRateWindowLength: model.movMeanRespiratoryRateWindowLength,
+    calc: function () {
+        this.length = respiratoryRateTime.length;
+        if (this.length >= this.movMeanRespiratoryRateWindowLength) {
+            this.index = this.length - this.movMeanRespiratoryRateWindowLength + (this.movMeanRespiratoryRateWindowLength - 1) / 2;
+            movMeanRespiratoryRate[this.index] = Math.round(mean(respiratoryRateValues.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length)));
+        }
+        
+    }
+}
+
+
 // Pulse Calc
 let pulse = {
-    pulseMeasurement: measurement,
+    measurement: measurement,
     enable1: false,
     enable2: false,
     meanPulseAmplitude: 0,
@@ -59,48 +84,47 @@ let pulse = {
     min: 3300,
     calcAmplitudePeaksCounter: 0,
     threshold: model.initialThreshold,
-    calcPulse: function (time) {
-        if (
-            this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > this.threshold &&
-            this.enable2 === true
-        )
+    calcPulse: function (time, value) {
+        if (value > this.threshold && this.enable2 === true)
             this.enable1 = true;
-        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.threshold)
+        else if (value < this.threshold)
             this.enable2 = true;
 
         if (this.enable1 === true) {
-            this.pulseMeasurement.peaksCounter++;
-            document.querySelector("#peaks-counter").innerHTML = this.pulseMeasurement.peaksCounter;
+            this.measurement.peaksCounter++;
+            document.querySelector("#peaks-counter").innerHTML = this.measurement.peaksCounter;
 
-            let frequency = Math.round(this.pulseMeasurement.peaksCounter / this.pulseMeasurement.pulseTime[this.pulseMeasurement.pulseTime.length - 1] * 100) / 100;
-            this.pulseMeasurement.pulseFrequency.push(frequency);
-            this.pulseMeasurement.pulseFrequencyTime.push(time);
-            this.pulseMeasurement.pulse = Math.round(60 * frequency);
+            this.measurement.heartBeatsValues.push(value);
+            this.measurement.heartBeatsTime.push(time);
+            let frequency = Math.round(this.measurement.peaksCounter / time * 100) / 100;
+            this.measurement.pulseFrequency.push(frequency);
+            this.measurement.pulseFrequencyTime.push(time);
+            this.measurement.heartRateAverage = Math.round(60 * frequency);
             document.querySelector("#frequency").innerHTML = frequency+" Hz";
-            document.querySelector("#pulse").innerHTML = this.pulseMeasurement.pulse;
+            document.querySelector("#heart-rate-average").innerHTML = this.measurement.heartRateAverage;
             this.calcPulseFrequencyVariance();
 
             this.enable1 = false;
             this.enable2 = false;
 
-            if (this.pulseMeasurement.peaksCounter < 3) {
-                this.pulseMeasurement.pulseFrequency.shift();
-                this.pulseMeasurement.pulseFrequencyTime.shift();
-                this.pulseMeasurement.pulseFrequencyVariance.shift();
+            if (this.measurement.peaksCounter < 3) {
+                this.measurement.pulseFrequency.shift();
+                this.measurement.pulseFrequencyTime.shift();
+                this.measurement.pulseFrequencyVariance.shift();
             }
         }
 
-        this.calcAmplitude(time);
+        this.calcAmplitude(time, value);
     },
-    calcAmplitude: function (time) {
-        if (this.pulseMeasurement.peaksCounter > 1 && this.calcAmplitudePeaksCounter != this.pulseMeasurement.peaksCounter) {
-            this.calcAmplitudePeaksCounter = this.pulseMeasurement.peaksCounter;
+    calcAmplitude: function (time, value) {
+        if (this.measurement.peaksCounter > 1 && this.calcAmplitudePeaksCounter != this.measurement.peaksCounter) {
+            this.calcAmplitudePeaksCounter = this.measurement.peaksCounter;
             let amplitude = this.max - this.min;
             this.threshold = this.min + amplitude * model.thresholdAmplitudePercentage / 100;
-            this.pulseMeasurement.pulseThreshold.push(this.threshold);
-            this.pulseMeasurement.pulseThresholdTime.push(time);
-            this.pulseMeasurement.pulseAmplitude.push(amplitude);
-            this.pulseMeasurement.pulseAmplitudeTime.push(time);
+            this.measurement.pulseThreshold.push(this.threshold);
+            this.measurement.pulseThresholdTime.push(time);
+            this.measurement.pulseAmplitude.push(amplitude);
+            this.measurement.pulseAmplitudeTime.push(time);
             document.querySelector("#amplitude").innerHTML = amplitude + "mV";
 
             this.calcPulseAmplitudeVariance();
@@ -109,41 +133,41 @@ let pulse = {
             this.max = 0;
         }
 
-        if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] > this.max) {
-            this.max = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]      
+        if (this.measurement.peaksCounter > 1 && value > this.max) {
+            this.max = value     
         }
-        else if (this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1] < this.min) {
-            this.min = this.pulseMeasurement.pulseValues[this.pulseMeasurement.pulseValues.length - 1]
+        if (this.measurement.peaksCounter > 1 && value < this.min) {
+            this.min = value
         }
     },
     calcPulseAmplitudeVariance: function () {
         let tmp = 0;
-        for (let i = 0; i < this.pulseMeasurement.pulseAmplitude.length; i++)
-            tmp += this.pulseMeasurement.pulseAmplitude[i];
+        for (let i = 0; i < this.measurement.pulseAmplitude.length; i++)
+            tmp += this.measurement.pulseAmplitude[i];
 
-        this.meanPulseAmplitude = tmp / this.pulseMeasurement.pulseAmplitude.length
+        this.meanPulseAmplitude = tmp / this.measurement.pulseAmplitude.length
         tmp = 0;
 
-        for (let i = 0; i < this.pulseMeasurement.pulseAmplitude.length; i++)
-            tmp += (this.pulseMeasurement.pulseAmplitude[i] - this.meanPulseAmplitude) ** 2;
+        for (let i = 0; i < this.measurement.pulseAmplitude.length; i++)
+            tmp += (this.measurement.pulseAmplitude[i] - this.meanPulseAmplitude) ** 2;
 
-        let pulseAmplitudeVariance = Math.round(100 * tmp / this.pulseMeasurement.pulseAmplitude.length) / 100;
-        this.pulseMeasurement.pulseAmplitudeVariance.push(pulseAmplitudeVariance);
+        let pulseAmplitudeVariance = Math.round(100 * tmp / this.measurement.pulseAmplitude.length) / 100;
+        this.measurement.pulseAmplitudeVariance.push(pulseAmplitudeVariance);
         document.querySelector("#pulse-amplitude-variance").innerHTML = pulseAmplitudeVariance;
     },
     calcPulseFrequencyVariance: function () {
         let tmp = 0;
-        for (let i = 0; i < this.pulseMeasurement.pulseFrequency.length; i++)
-            tmp += this.pulseMeasurement.pulseFrequency[i];
+        for (let i = 0; i < this.measurement.pulseFrequency.length; i++)
+            tmp += this.measurement.pulseFrequency[i];
 
-        this.meanPulseFrequency = tmp / this.pulseMeasurement.pulseFrequency.length
+        this.meanPulseFrequency = tmp / this.measurement.pulseFrequency.length
         tmp = 0;
 
-        for (let i = 0; i < this.pulseMeasurement.pulseFrequency.length; i++)
-            tmp += (this.pulseMeasurement.pulseFrequency[i] - this.meanPulseFrequency) ** 2;
+        for (let i = 0; i < this.measurement.pulseFrequency.length; i++)
+            tmp += (this.measurement.pulseFrequency[i] - this.meanPulseFrequency) ** 2;
 
-        let pulseFrequencyVariance = Math.round(10000 * tmp / this.pulseMeasurement.pulseAmplitude.length) / 10000;
-        this.pulseMeasurement.pulseFrequencyVariance.push(pulseFrequencyVariance);
+        let pulseFrequencyVariance = Math.round(10000 * tmp / this.measurement.pulseAmplitude.length) / 10000;
+        this.measurement.pulseFrequencyVariance.push(pulseFrequencyVariance);
         document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance;
     },
 };
@@ -213,6 +237,7 @@ var pulseChart = new Chart(pulseContext, {
         ],
     },
     options: {
+        animation: false,
         maintainAspectRatio: false,
         responsive: true,
         scales: {
@@ -271,6 +296,7 @@ var gsrChart = new Chart(gsrContext, {
         ],
     },
     options: {
+        animation: false,
         maintainAspectRatio: false,
         responsive: true,
         scales: {
@@ -328,6 +354,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
         ],
     },
     options: {
+        animation: false,
         maintainAspectRatio: false,
         responsive: true,
         scales: {
@@ -360,13 +387,22 @@ let client = new Paho.MQTT.Client("localhost", 9001, "browser");
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
 
-client.connect({ onSuccess: onConnect });
+/*
+let options = {
+    useSSL: true,
+    onSuccess: onConnect,
+}
+*/
+
+client.connect({ onSuccess: onConnect});
+//client.connect(options);
 
 function onConnect() {
     console.log("Connected to MQTT Broker");
-    client.subscribe("HealthyMan/Pulse/Data");
-    client.subscribe("HealthyMan/GSR/Data");
-    client.subscribe("HealthyMan/RespiratoryRate/Data");
+    client.subscribe("HealthyMan/Data");
+    //client.subscribe("HealthyMan/Pulse/Data");
+    //client.subscribe("HealthyMan/GSR/Data");
+    //client.subscribe("HealthyMan/RespiratoryRate/Data");
 }
 
 function onConnectionLost(responseObject) {
@@ -375,9 +411,10 @@ function onConnectionLost(responseObject) {
     }
 }
 
+/*
 function onMessageArrived(message) {
     if (message.destinationName === "HealthyMan/Pulse/Data") {
-        //console.log(message.payloadString);
+        console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
         let time_tmp = Number(splitText[0]);
@@ -387,7 +424,7 @@ function onMessageArrived(message) {
         pulseChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
         if (time_tmp > 7) pulseChart.data.datasets[0].data.shift();
         pulseChart.update(0);
-        pulse.calcPulse(time_tmp);
+        //pulse.calcPulse(time_tmp, value_tmp);
     }
     else if (message.destinationName === "HealthyMan/GSR/Data") {
         //console.log(message.payloadString);
@@ -413,7 +450,7 @@ function onMessageArrived(message) {
             document.querySelector("#gsr-value").innerHTML = conductance_tmp + " uS";
         }
 
-        gsrTrend.calc();
+        //gsrTrend.calc();
         gsrChart.data.datasets[1].data.length = 0;
         gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
         gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
@@ -446,6 +483,78 @@ function onMessageArrived(message) {
         respiratoryRateChart.update(0);
     }
 }
+*/
+
+function onMessageArrived(message) {
+    if (message.destinationName === "HealthyMan/Data") {
+        console.log(message.payloadString);
+        let splitText = message.payloadString.split(":");
+        //console.log(splitText);
+        let pulseTime_tmp = Number(splitText[0]);
+        let pulseValue_tmp = Number(splitText[1]);
+        pulseTime.push(pulseTime_tmp);
+        pulseValues.push(pulseValue_tmp);
+        pulseChart.data.datasets[0].data.push({ x: pulseTime_tmp, y: pulseValue_tmp });
+        if (pulseTime_tmp > 7) pulseChart.data.datasets[0].data.shift();
+        pulseChart.update(0);
+        pulse.calcPulse(pulseTime_tmp, pulseValue_tmp);
+
+        ////
+
+        let GSRTime_tmp = Number(splitText[2]);
+        let GSRValue_tmp = Number(splitText[3]);
+        let resistance_tmp = GSRValue_tmp / 1000;
+        let conductance_tmp = Math.round(1000 * 1000000 / GSRValue_tmp) / 1000;
+        gsrTime.push(GSRTime_tmp);
+        gsrValues.push(GSRValue_tmp);
+        resistanceValues.push(resistance_tmp);
+        conductanceValues.push(conductance_tmp);
+
+        if (GSRTime_tmp > 7) gsrChart.data.datasets[0].data.shift();
+
+        if (document.querySelector("input#om").checked) {
+            gsrChart.data.datasets[0].data.push({ x: GSRTime_tmp, y: resistance_tmp });
+            document.querySelector("#gsr-value").innerHTML = resistance_tmp + " kΩ";
+        }
+        else {
+            gsrChart.data.datasets[0].data.push({ x: GSRTime_tmp, y: conductance_tmp });
+            document.querySelector("#gsr-value").innerHTML = conductance_tmp + " uS";
+        }
+
+        gsrTrend.calc();
+        gsrChart.data.datasets[1].data.length = 0;
+        gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
+        gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
+
+        gsrChart.update(0);
+
+
+        ////
+        let respiratoryRateTime_tmp = Number(splitText[4]);
+        let respiratoryRateValue_tmp = Number(splitText[5]);
+        respiratoryRateTime.push(respiratoryRateTime_tmp);
+        respiratoryRateValues.push(respiratoryRateValue_tmp);
+
+        respiratoryRateChart.data.datasets[0].data.push({ x: respiratoryRateTime_tmp, y: respiratoryRateValue_tmp });
+
+        movMeanRespiratoryRateCalc.calc();
+        respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[movMeanRespiratoryRateCalc.index], y: movMeanRespiratoryRate[movMeanRespiratoryRateCalc.index] });
+        /*
+        let length = respiratoryRateTime.length;
+        let index = length - 41 + 20;
+        if (length >= 41) {
+            movMeanRespiratoryRate[index] = Math.round(mean(respiratoryRateValues.slice(length - 41, length)));
+            respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[index], y: movMeanRespiratoryRate[index] });
+        }
+        */
+
+        if (respiratoryRateTime_tmp > 7) {
+            respiratoryRateChart.data.datasets[0].data.shift();
+            respiratoryRateChart.data.datasets[1].data.shift();
+        }
+        respiratoryRateChart.update(0);
+    }
+}
 
 /********************************************Buttons handling**********************************************************/
 
@@ -454,8 +563,11 @@ btnStart.addEventListener("click", function () {
     pulseChart.data.datasets[0].data.length = 0;
     gsrChart.data.datasets[0].data.length = 0;
     respiratoryRateChart.data.datasets[0].data.length = 0;
+    respiratoryRateChart.data.datasets[1].data.length = 0;
     pulseTime.length = 0;
     pulseValues.length = 0;
+    heartBeatsValues.length = 0;
+    heartBeatsTime.length = 0;
     pulseThreshold.length = 0;
     pulseThreshold.push(model.initialThreshold);
     pulseThresholdTime.length = 0;
@@ -466,6 +578,7 @@ btnStart.addEventListener("click", function () {
     conductanceValues.length = 0;
     respiratoryRateTime.length = 0;
     respiratoryRateValues.length = 0;
+    movMeanRespiratoryRate.length = 0;
     measurement.peaksCounter = 0;
     pulseAmplitude.length = 0;
     pulseAmplitudeTime.length = 0;
@@ -504,8 +617,8 @@ radioButtons.addEventListener("change", function (e) {
             gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
             gsrChart.update(0);
         }
-    } 
-    else if (e.target.id == "om"){
+    }
+    else if (e.target.id == "om") {
         document.querySelector("#gsr-name").innerHTML = "<b>Resistance: </b>";
         if (gsrChart.data.datasets[0].data.length > 1) {
             document.querySelector("#gsr-value").innerHTML = resistanceValues[resistanceValues.length - 1] + " kΩ";
@@ -519,7 +632,7 @@ radioButtons.addEventListener("change", function (e) {
             gsrChart.update(0);
         }
     }
-        
+
 });
 
 let btnSend = document.querySelector("#btn-send");

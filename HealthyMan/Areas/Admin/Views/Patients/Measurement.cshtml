@@ -48,10 +48,22 @@
 <h4 class="text-center">Pulse</h4>
 <dl class="row">
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Pulse)
+        @Html.DisplayNameFor(model => model.InitialThreshold)
     </dt>
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Pulse)
+        @Html.DisplayFor(model => model.InitialThreshold)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.ThresholdAmplitudePercentage)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.ThresholdAmplitudePercentage)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.HeartRateAverage)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.HeartRateAverage)
     </dd>
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.PeaksCounter)
@@ -62,7 +74,9 @@
 </dl>
 <div id="pulse_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <div id="pulse_amplitude_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_amplitude_variance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <div id="pulse_frequency_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_frequency_variance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <hr />
 <h4 class="text-center">GSR</h4>
 <div id="resistance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
@@ -81,7 +95,9 @@
             src="~/lib/google-charts/loader.js"></script>
     <script src="~/js/mean.js"></script>
     <script src="~/js/calcMovMean.js"></script>
+    <script>
+        let model = @Html.Raw(Json.Serialize(Model));
+    </script>
     <script src="~/js/rednerLineCharts.js"></script>
-    <script>renderLineCharts(@Html.Raw(Json.Serialize(Model)))</script>
 }
 

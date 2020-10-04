@@ -13,5 +13,7 @@ namespace HealthyMan.Models
         public int InitialThreshold { get; set; }
         [Display(Name = "Percentage of amplitude for dynamic threshold")]
         public int ThresholdAmplitudePercentage { get; set; }
+        [Display(Name = "Moving mean resiratory rate window length")]
+        public int MovMeanRespiratoryRateWindowLength { get; set; }
     }
 }

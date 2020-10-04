@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using HealthyMan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HealthyMan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201003160440_Added_MovMeanRespiraotryRate_Property_to_Measurement_and_changed_RespiratoryRateValues_type_to_list_int")]
+    partial class Added_MovMeanRespiraotryRate_Property_to_Measurement_and_changed_RespiratoryRateValues_type_to_list_int
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,9 +158,6 @@ namespace HealthyMan.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<int>("InitialThreshold")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MovMeanRespiratoryRateWindowLength")
                         .HasColumnType("integer");
 
                     b.Property<int>("ThresholdAmplitudePercentage")
