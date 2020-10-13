@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200810195934_Test3.Designer.cs" />
     <Compile Remove="Migrations\20200816123528_test.cs" />
     <Compile Remove="Migrations\20200816123528_test.Designer.cs" />
+    <Compile Remove="Migrations\20201005130238_BreathPeaks_added-to_Measurement.cs" />
+    <Compile Remove="Migrations\20201005130238_BreathPeaks_added-to_Measurement.Designer.cs" />
   </ItemGroup>
 
 

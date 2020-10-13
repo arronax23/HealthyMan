@@ -26,11 +26,10 @@
     let pulseDataTable = new google.visualization.DataTable();
     pulseDataTable.addColumn("number", "Time");
     pulseDataTable.addColumn("number", "Voltage [mV]");
-    //pulseDataTable.addColumn("number", "Threshold [mV]");
-    //pulseDataTable.addColumn({ type: 'number', role: 'interval' });
-    //pulseDataTable.addColumn("number", "Threshold [mV]");
+    pulseDataTable.addColumn("number", "Threshold [mV]");
+    pulseDataTable.addColumn("number", "Heart beat [mV]");
 
-
+    /*
     let pulseThresholdDataTable = new google.visualization.DataTable();
     pulseThresholdDataTable.addColumn("number", "Time");
     pulseThresholdDataTable.addColumn("number", "Threshold [mV]");
@@ -38,12 +37,12 @@
     let heartBeatsDataTable = new google.visualization.DataTable();
     heartBeatsDataTable.addColumn("number", "Time");
     heartBeatsDataTable.addColumn("number", "Heart beat [mV]");
+    */
 
     let pulseAmplitudeDataTable = new google.visualization.DataTable();
     pulseAmplitudeDataTable.addColumn("number", "Time");
     pulseAmplitudeDataTable.addColumn("number", "Pulse amplitude [mV]");
         
-
     let pulseAmplitudeVarianceDataTable = new google.visualization.DataTable();
     pulseAmplitudeVarianceDataTable.addColumn("number", "Time");
     pulseAmplitudeVarianceDataTable.addColumn("number", "Pulse amplitude variance");
@@ -56,7 +55,6 @@
     pulseFrequencyVarianceDataTable.addColumn("number", "Time");
     pulseFrequencyVarianceDataTable.addColumn("number", "Pulse frequency variance");
 
-
     let resistanceDataTable = new google.visualization.DataTable();
     resistanceDataTable.addColumn("number", "Time");
     resistanceDataTable.addColumn("number", "Resistance [kΩ]");
@@ -65,15 +63,15 @@
     conductanceDataTable.addColumn("number", "Time");
     conductanceDataTable.addColumn("number", "Conductance [uS]");
 
-
     let respiratoryRateDataTable = new google.visualization.DataTable();
     respiratoryRateDataTable.addColumn("number", "Time");
     respiratoryRateDataTable.addColumn("number", "Voltage [mV]");
+    respiratoryRateDataTable.addColumn("number", "Moving average [mV]");
+    respiratoryRateDataTable.addColumn("number", "Breath peaks [mV]");
 
-    
-    let movMeanRespiratoryRateDataTable = new google.visualization.DataTable();
-    movMeanRespiratoryRateDataTable.addColumn("number", "Time");
-    movMeanRespiratoryRateDataTable.addColumn("number", "Moving average [mV]");
+    let InstantaneousRespiratoryRateDataTable = new google.visualization.DataTable();
+    InstantaneousRespiratoryRateDataTable.addColumn("number", "Time");
+    InstantaneousRespiratoryRateDataTable.addColumn("number", "Respiratory Rate [bpm]");
 
     let diffDataTable = new google.visualization.DataTable();
     diffDataTable.addColumn("number", "Number");
@@ -82,22 +80,26 @@
     let sum = 0;
     let meanPulse = [];
     for (let i = 0; i < model.pulseTime.length; i++) {
-        sum += model.pulseValues[i];
-        meanPulse[i] = Math.round(sum / (i + 1));
-        console.log("time: " + model.pulseTime[i] + " mean: " + Math.round(sum / (i + 1)));
-        pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i]]);
+        //sum += model.pulseValues[i];
+        //meanPulse[i] = Math.round(sum / (i + 1));
+        //console.log("time: " + model.pulseTime[i] + " mean: " + Math.round(sum / (i + 1)));
+        pulseDataTable.addRow([model.pulseTime[i], model.pulseValues[i], null, null]);
     }
-        
+
     if (model.pulseThreshold != null)
-    for (let i = 0; i < model.pulseThreshold.length; i++)
-        pulseThresholdDataTable.addRow([model.pulseThresholdTime[i], model.pulseThreshold[i]]);
+        for (let i = 0; i < model.pulseThreshold.length; i++) {
+            pulseDataTable.addRow([model.pulseThresholdTime[i], null, model.pulseThreshold[i], null]);
+            pulseDataTable.addRow([null, null, null, null]);
+        }
+        
 
     if (model.heartBeatsValues != null)
-        for (let i = 0; i < model.heartBeatsValues.length; i++)
-            heartBeatsDataTable.addRow([model.heartBeatsTime[i], model.heartBeatsValues[i]]);
+        for (let i = 0; i < model.heartBeatsValues.length; i++) {
+            pulseDataTable.addRow([model.heartBeatsTime[i], null, null, model.heartBeatsValues[i]]);
+            pulseDataTable.addRow([null, null, null, null]);
+        }
+           
 
-    let joinedData = google.visualization.data.join(pulseDataTable, pulseThresholdDataTable, 'full', [[0, 0]], [1], [1]);
-    let joinedData2 = google.visualization.data.join(joinedData, heartBeatsDataTable, 'full', [[0, 0]], [1, 2], [1]);
 
     for (let i = 0; i < model.pulseAmplitudeTime.length; i++) {
         pulseAmplitudeDataTable.addRow([model.pulseAmplitudeTime[i], model.pulseAmplitude[i]]);
@@ -112,14 +114,36 @@
     for (let i = 0; i < model.gsrTime.length; i++)
         resistanceDataTable.addRow([model.gsrTime[i], model.gsrValues[i] / 1000]);
 
+
     for (let i = 0; i < model.gsrTime.length; i++)
         conductanceDataTable.addRow([model.gsrTime[i], Math.round(1000 * 1000000 / model.gsrValues[i]) / 1000]);
 
-    for (let i = 0; i < model.respiratoryRateTime.length; i++) {
-        respiratoryRateDataTable.addRow([model.respiratoryRateTime[i], model.respiratoryRateValues[i]]);
-    }
-        
 
+    for (let i = 0; i < model.respiratoryRateTime.length; i++) {
+        respiratoryRateDataTable.addRow([model.respiratoryRateTime[i], model.respiratoryRateValues[i], null, null]);
+    }
+
+    if (model.movMean1RespiratoryRate != null) {
+        for (let i = 0; i < model.movMean1RespiratoryRate.length; i++) {
+            respiratoryRateDataTable.addRow([model.respiratoryRateTime[i], null, model.movMean1RespiratoryRate[i], null]);
+        }
+    }
+
+    if (model.breathPeaksTime != null) {
+        for (let i = 0; i < model.breathPeaksTime.length; i++) {
+            respiratoryRateDataTable.addRow([model.breathPeaksTime[i], null, null, model.breathPeaksValues[i]]);
+            respiratoryRateDataTable.addRow([null, null, null, null]);
+        }
+    }
+
+    if (model.instantaneousRespiratoryRateTime != null) {
+        for (let i = 0; i < model.instantaneousRespiratoryRateTime.length; i++) {
+            InstantaneousRespiratoryRateDataTable.addRow([model.instantaneousRespiratoryRateTime[i], model.instantaneousRespiratoryRate[i]]);
+        }
+    }
+    for (let i = 0; i < model.pulseTime.length; i++) {
+        diffDataTable.addRow([i, model.gsrTime[i] - model.pulseTime[i]]);
+    }
 
     let diff = Math.abs(model.pulseTime[model.pulseTime.length - 1] - model.gsrTime[model.pulseTime.length - 1]);
 
@@ -130,14 +154,10 @@
         sum += model.pulseTime[i + 1] - model.pulseTime[i]
     console.log(sum / (model.pulseTime.length - 1));
 
-
     let pulseChart = new google.visualization.LineChart(
         document.getElementById("pulse_chart")
     );
-    if (model.heartBeatsValues == null)
-        pulseChart.draw(joinedData, options);
-    else
-        pulseChart.draw(joinedData2, options);
+        pulseChart.draw(pulseDataTable, options);
 
     options.series[0].color = "#ff3399";  
     let pulseAmplitudeChart = new google.visualization.LineChart(
@@ -180,12 +200,20 @@
     let respiratoryRateChart = new google.visualization.LineChart(
         document.getElementById("respiratoryRate_chart")
     );
-    respiratoryRateChart.draw(respiratoryRateDataTable, options);
+        respiratoryRateChart.draw(respiratoryRateDataTable, options);
+
+    options.series[0].color = "#0000cc";
+    let InstantaneousRespiratoryRateChart = new google.visualization.SteppedAreaChart(
+        document.getElementById("instantaneous_respiratory_rate_chart")
+    );
+    InstantaneousRespiratoryRateChart.draw(InstantaneousRespiratoryRateDataTable, options);
+
 
     options.series[0].color = "#000000";
     let diffChart = new google.visualization.LineChart(
         document.getElementById("diff_chart")
     );
     diffChart.draw(diffDataTable, options);
+
 });
 

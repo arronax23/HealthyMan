@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using HealthyMan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HealthyMan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201005132651_MovMean2RespiratoryRate_Removed")]
+    partial class MovMean2RespiratoryRate_Removed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,12 +76,6 @@ namespace HealthyMan.Migrations
 
                     b.Property<int>("InitialThreshold")
                         .HasColumnType("integer");
-
-                    b.Property<List<float>>("InstantaneousRespiratoryRate")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("InstantaneousRespiratoryRateTime")
-                        .HasColumnType("real[]");
 
                     b.Property<List<int>>("MovMean1RespiratoryRate")
                         .HasColumnType("integer[]");

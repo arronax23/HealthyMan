@@ -2,7 +2,7 @@
 let pulseTime = [];
 
 let pulseThreshold = [model.initialThreshold];
-let pulseThresholdTime = [0];
+let pulseThresholdTime = [];
 
 let heartBeatsValues = [];
 let heartBeatsTime = [];
@@ -21,10 +21,14 @@ let conductanceValues = []; //uS
 
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
-let movMeanRespiratoryRate = [];
+let movMean1RespiratoryRate = [];
+let signValues = [];
+let signTime = [];
+let breathPeaksValues = [];
+let breathPeaksTime = [];
+let instantaneousRespiratoryRate = [];
+let instantaneousRespiratoryRateTime = [];
 
-for (let i = 0; i < (model.movMeanRespiratoryRateWindowLength - 1 / 2); i++)
-    movMeanRespiratoryRate[i] = -1;
 
 let measurement = {
     heartRateAverage: 0,
@@ -48,7 +52,11 @@ let measurement = {
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
     respiratoryRateTime: respiratoryRateTime,
-    movMeanRespiratoryRate: movMeanRespiratoryRate,
+    movMean1RespiratoryRate: movMean1RespiratoryRate,
+    breathPeaksValues: breathPeaksValues,
+    breathPeaksTime: breathPeaksTime,
+    instantaneousRespiratoryRate: instantaneousRespiratoryRate,
+    instantaneousRespiratoryRateTime: instantaneousRespiratoryRateTime,
     timeStamp: new Date(),
     // Patient
     patient: {
@@ -58,19 +66,110 @@ let measurement = {
     }
 };
 
-let movMeanRespiratoryRateCalc = {
+let movMean1RespiratoryRateCalc = {
     length: 0,
     index: 0,
     movMeanRespiratoryRateWindowLength: model.movMeanRespiratoryRateWindowLength,
     calc: function () {
         this.length = respiratoryRateTime.length;
+        if (movMean1RespiratoryRate[0] == undefined && this.length >= this.movMeanRespiratoryRateWindowLength) {
+            for (let i = 0; i < (this.movMeanRespiratoryRateWindowLength - 1) / 2; i++) {
+                movMean1RespiratoryRate[i] = respiratoryRateValues[i];
+                //
+                if (respiratoryRateValues[i + 1] > respiratoryRateValues[i]) {
+                    signValues.push(1);
+                    signTime.push(respiratoryRateTime[i]);
+                }
+                else if (respiratoryRateValues[i + 1] < respiratoryRateValues[i]) {
+                    signValues.push(-1);
+                    signTime.push(respiratoryRateTime[i]);
+                }
+            }
+                
+        } 
+
         if (this.length >= this.movMeanRespiratoryRateWindowLength) {
             this.index = this.length - this.movMeanRespiratoryRateWindowLength + (this.movMeanRespiratoryRateWindowLength - 1) / 2;
-            movMeanRespiratoryRate[this.index] = Math.round(mean(respiratoryRateValues.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length)));
+            movMean1RespiratoryRate[this.index] = Math.round(mean(respiratoryRateValues.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length)));
+            respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[movMean1RespiratoryRateCalc.index], y: movMean1RespiratoryRate[movMean1RespiratoryRateCalc.index] });
         }
         
     }
 }
+
+let respiratoryRateDerivativeSign = {
+    enable: false,
+    calc: function () {   
+        if (movMean1RespiratoryRate.length > (model.movMeanRespiratoryRateWindowLength - 1) / 2) {
+            if (movMean1RespiratoryRate[movMean1RespiratoryRate.length - 1] > movMean1RespiratoryRate[movMean1RespiratoryRate.length - 2]) {
+                signValues.push(1);
+                signTime.push(respiratoryRateTime[movMean1RespiratoryRate.length - 2]);
+                this.enable = true;
+            }
+            else if (movMean1RespiratoryRate[movMean1RespiratoryRate.length - 1] < movMean1RespiratoryRate[movMean1RespiratoryRate.length - 2]) {
+                signValues.push(-1);
+                signTime.push(respiratoryRateTime[movMean1RespiratoryRate.length - 2]);
+                this.enable = true;
+            }
+
+        }
+
+        if (signValues[signValues.length - 1] == -1 &&
+            signValues[signValues.length - 2] == -1 &&
+            signValues[signValues.length - 3] == -1 &&
+            signValues[signValues.length - 4] == -1 &&
+            signValues[signValues.length - 5] == -1 &&
+            signValues[signValues.length - 6] == -1 &&
+            signValues[signValues.length - 7] == -1 &&
+            signValues[signValues.length - 8] == 1 &&
+            signValues[signValues.length - 9] == 1 &&
+            signValues[signValues.length - 10] == 1 &&
+            signValues[signValues.length - 11] == 1 &&
+            signValues[signValues.length - 12] == 1 &&
+            signValues[signValues.length - 13] == 1 &&
+            signValues[signValues.length - 14] == 1 &&
+            this.enable == true
+        ) {
+            breathPeaksTime.push(Math.round(1000 * (signTime[signTime.length - 7] + signTime[signTime.length - 8]) / 2) / 1000);
+            let index1 = respiratoryRateTime.findIndex(r => r == signTime[signTime.length - 8]);
+            let index2 = respiratoryRateTime.findIndex(r => r == signTime[signTime.length - 7]);
+
+            breathPeaksValues.push((movMean1RespiratoryRate[index2] + movMean1RespiratoryRate[index1]) / 2);
+            respiratoryRateChart.data.datasets[2].data.push({ x: breathPeaksTime[breathPeaksTime.length - 1], y: breathPeaksValues[breathPeaksTime.length - 1] });
+
+            if (breathPeaksTime.length >= 2) {
+                respiratoryRate_tmp = Math.round(100 * 60 / (breathPeaksTime[breathPeaksTime.length - 1] - breathPeaksTime[breathPeaksTime.length - 2])) / 100;
+                instantaneousRespiratoryRateTime.push(breathPeaksTime[breathPeaksTime.length - 1]);
+                instantaneousRespiratoryRate.push(respiratoryRate_tmp);
+                document.querySelector("#respiratory-rate").innerHTML = instantaneousRespiratoryRate[instantaneousRespiratoryRate.length - 1];
+            }
+
+            this.enable = false;
+        }
+    }
+}
+
+
+/*
+let movMean2RespiratoryRateCalc = {
+    length: 0,
+    index: 0,
+    movMeanRespiratoryRateWindowLength: model.movMeanRespiratoryRateWindowLength,
+    calc: function () {
+        this.length = movMean1RespiratoryRate.length;
+        if (movMean2RespiratoryRate[0] == undefined && this.length >= this.movMeanRespiratoryRateWindowLength) {
+            for (let i = 0; i < (this.movMeanRespiratoryRateWindowLength - 1 / 2); i++)
+                movMean2RespiratoryRate[i] = respiratoryRateValues[i];
+        }
+
+        if (this.length >= this.movMeanRespiratoryRateWindowLength) {
+            this.index = this.length - this.movMeanRespiratoryRateWindowLength + (this.movMeanRespiratoryRateWindowLength - 1) / 2;
+            movMean2RespiratoryRate[this.index] = Math.round(mean(movMean1RespiratoryRate.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length)));
+        }
+
+    }
+}
+*/
 
 
 // Pulse Calc
@@ -341,7 +440,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
                 ],
             },
             {
-                label: "Moving average",
+                label: "Moving average 1",
                 lineTension: 0,
                 data: [
                     {
@@ -349,7 +448,18 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
                         y: 0,
                     },
                 ],
-                backgroundColor: "rgba(0, 0, 0, 0)",
+                backgroundColor: "rgba(0, 0, 255, 0.5)",
+            },
+            {
+                label: "Breath peaks",
+                lineTension: 0,
+                data: [
+                    {
+                        x: 0,
+                        y: 0,
+                    },
+                ],
+                backgroundColor: "rgba(255, 0, 0, 0.5)",
             },
         ],
     },
@@ -487,7 +597,7 @@ function onMessageArrived(message) {
 
 function onMessageArrived(message) {
     if (message.destinationName === "HealthyMan/Data") {
-        console.log(message.payloadString);
+        //console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
         let pulseTime_tmp = Number(splitText[0]);
@@ -537,21 +647,16 @@ function onMessageArrived(message) {
 
         respiratoryRateChart.data.datasets[0].data.push({ x: respiratoryRateTime_tmp, y: respiratoryRateValue_tmp });
 
-        movMeanRespiratoryRateCalc.calc();
-        respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[movMeanRespiratoryRateCalc.index], y: movMeanRespiratoryRate[movMeanRespiratoryRateCalc.index] });
-        /*
-        let length = respiratoryRateTime.length;
-        let index = length - 41 + 20;
-        if (length >= 41) {
-            movMeanRespiratoryRate[index] = Math.round(mean(respiratoryRateValues.slice(length - 41, length)));
-            respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[index], y: movMeanRespiratoryRate[index] });
-        }
-        */
+        movMean1RespiratoryRateCalc.calc();
+        respiratoryRateDerivativeSign.calc();
 
         if (respiratoryRateTime_tmp > 7) {
             respiratoryRateChart.data.datasets[0].data.shift();
             respiratoryRateChart.data.datasets[1].data.shift();
         }
+        if (respiratoryRateChart.data.datasets[2].data[0] != undefined && respiratoryRateTime_tmp > respiratoryRateChart.data.datasets[2].data[0].x + 7)
+            respiratoryRateChart.data.datasets[2].data.shift();
+
         respiratoryRateChart.update(0);
     }
 }
@@ -562,8 +667,6 @@ let btnStart = document.querySelector("#btn-start");
 btnStart.addEventListener("click", function () {
     pulseChart.data.datasets[0].data.length = 0;
     gsrChart.data.datasets[0].data.length = 0;
-    respiratoryRateChart.data.datasets[0].data.length = 0;
-    respiratoryRateChart.data.datasets[1].data.length = 0;
     pulseTime.length = 0;
     pulseValues.length = 0;
     heartBeatsValues.length = 0;
@@ -578,7 +681,16 @@ btnStart.addEventListener("click", function () {
     conductanceValues.length = 0;
     respiratoryRateTime.length = 0;
     respiratoryRateValues.length = 0;
-    movMeanRespiratoryRate.length = 0;
+    movMean1RespiratoryRate.length = 0;
+    respiratoryRateChart.data.datasets[0].data.length = 0;
+    respiratoryRateChart.data.datasets[1].data.length = 0;
+    respiratoryRateChart.data.datasets[2].data.length = 0;
+    instantaneousRespiratoryRate.length = 0;
+    instantaneousRespiratoryRateTime.length = 0;
+    signValues.length = 0;
+    signTime.length = 0;
+    breathPeaksTime.length = 0;
+    breathPeaksValues.length = 0;
     measurement.peaksCounter = 0;
     pulseAmplitude.length = 0;
     pulseAmplitudeTime.length = 0;

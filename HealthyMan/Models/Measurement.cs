@@ -36,7 +36,12 @@ namespace HealthyMan.Models
         public List<float> GSRTime { get; set; }
         public List<int> RespiratoryRateValues { get; set; }
         public List<float> RespiratoryRateTime { get; set; }
-        public List<int> MovMeanRespiratoryRate { get; set; }
+        public List<int> MovMean1RespiratoryRate { get; set; }
+        public List<float> BreathPeaksValues { get; set; }
+        public List<float> BreathPeaksTime { get; set; }
+        public List<float> InstantaneousRespiratoryRate { get; set; }
+        public List<float> InstantaneousRespiratoryRateTime { get; set; }
+
         [Display(Name = "Time stamp")]
         public DateTime TimeStamp { get; set; }
         public Patient Patient { get; set; }
