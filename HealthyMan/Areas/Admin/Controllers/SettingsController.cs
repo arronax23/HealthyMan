@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 namespace HealthyMan.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
     public class SettingsController : Controller
     {
         private readonly ApplicationDbContext _context;

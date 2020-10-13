@@ -16,7 +16,6 @@ namespace HealthyMan.Data
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Measurement> Measurements { get; set; }
-        public DbSet<AccessKey> AccessKeys { get; set; }
         public DbSet<Settings> Settings { get; set; }
 
     }
