@@ -44,12 +44,14 @@ namespace HealthyMan.Areas.Admin.Controllers
             
             List<Measurement> measurements = _context.Measurements.Where(m => m.Patient.PatientId == id).ToList();
             AccessKey accessKey = await _context.AccessKeys.SingleOrDefaultAsync(aK => aK.Patient.PatientId == id);
+            /*
             ApplicationUser applicationUser = await _context.ApplicationUsers.SingleOrDefaultAsync(aU => aU.Patient.PatientId == id);
             if (applicationUser != null)
             {
                 applicationUser.Patient = null;
                 await _userManager.RemoveFromRoleAsync(applicationUser, "Patient");
             }
+            */
 
             if (accessKey != null) 
                 _context.AccessKeys.Remove(accessKey);

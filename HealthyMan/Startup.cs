@@ -32,9 +32,11 @@ namespace HealthyMan
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("HealthyManDbConnection")));
+            /*
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            */
             //services.AddAntiforgery(options => { options.Cookie. });
             services.AddControllersWithViews();
 
@@ -76,47 +78,7 @@ namespace HealthyMan
                 endpoints.MapRazorPages();
             });
             
-            CreateRoles(serviceProvider).Wait();
-            CreateAdmin(serviceProvider).Wait();
         }
 
-        private async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            string[] roleNames = { "Admin", "Patient"};
-
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            foreach (var roleName in roleNames)
-            {
-                var role = await roleManager.FindByNameAsync(roleName);
-
-                if (role == null)
-                {
-                    role = new IdentityRole();
-                    role.Name = roleName;
-                    await roleManager.CreateAsync(role);
-                }
-            }
-        }
-        private async Task CreateAdmin(IServiceProvider serviceProvider)
-        {
-            string adminName = "admin@healthyman.com";
-            string adminEmail = "admin@healthyman.com";
-            string adminDefaultPassword = "zaq1@WSX";
-
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-            var user = await userManager.FindByEmailAsync(adminEmail);
-
-            if (user == null)
-            {
-                user = new ApplicationUser();
-                user.UserName = adminName;
-                user.Email = adminEmail;
-                user.EmailConfirmed = true;
-                await userManager.CreateAsync(user, adminDefaultPassword);
-                await userManager.AddToRoleAsync(user, "Admin");
-            }
-        }
     }
 }

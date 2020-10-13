@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HealthyMan.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Measurement> Measurements { get; set; }
         public DbSet<AccessKey> AccessKeys { get; set; }
