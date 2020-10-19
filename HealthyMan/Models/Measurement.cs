@@ -15,18 +15,18 @@ namespace HealthyMan.Models
         public int HeartRateAverage { get; set; }
         [Display(Name = "Peaks counter")]
         public int PeaksCounter { get; set; }
-        public List<int> PulseValues { get; set; }
+        public List<float> PulseValues { get; set; }
         public List<float> PulseTime { get; set; }
 
         [Display(Name = "Initial static threshold")]
         public int InitialThreshold { get; set; }
         [Display(Name = "Percentage of amplitude for dynamic threshold")]
         public int ThresholdAmplitudePercentage { get; set; }
-        public List<int> HeartBeatsValues { get; set; }
+        public List<float> HeartBeatsValues { get; set; }
         public List<float> HeartBeatsTime { get; set; }
         public List<float> PulseThreshold { get; set; }
         public List<float> PulseThresholdTime { get; set; }
-        public List<int> PulseAmplitude { get; set; }
+        public List<float> PulseAmplitude { get; set; }
         public List<float> PulseAmplitudeTime { get; set; }
         public List<float> PulseAmplitudeVariance { get; set; }
         public List<float> PulseFrequency { get; set; }
@@ -34,9 +34,9 @@ namespace HealthyMan.Models
         public List<float> PulseFrequencyVariance { get; set; }
         public List<float> GSRValues { get; set; }
         public List<float> GSRTime { get; set; }
-        public List<int> RespiratoryRateValues { get; set; }
+        public List<float> RespiratoryRateValues { get; set; }
         public List<float> RespiratoryRateTime { get; set; }
-        public List<int> MovMean1RespiratoryRate { get; set; }
+        public List<float> MovMean1RespiratoryRate { get; set; }
         public List<float> BreathPeaksValues { get; set; }
         public List<float> BreathPeaksTime { get; set; }
         public List<float> InstantaneousRespiratoryRate { get; set; }

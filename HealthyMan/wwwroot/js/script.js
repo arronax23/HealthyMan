@@ -150,27 +150,6 @@ let respiratoryRateDerivativeSign = {
 }
 
 
-/*
-let movMean2RespiratoryRateCalc = {
-    length: 0,
-    index: 0,
-    movMeanRespiratoryRateWindowLength: model.movMeanRespiratoryRateWindowLength,
-    calc: function () {
-        this.length = movMean1RespiratoryRate.length;
-        if (movMean2RespiratoryRate[0] == undefined && this.length >= this.movMeanRespiratoryRateWindowLength) {
-            for (let i = 0; i < (this.movMeanRespiratoryRateWindowLength - 1 / 2); i++)
-                movMean2RespiratoryRate[i] = respiratoryRateValues[i];
-        }
-
-        if (this.length >= this.movMeanRespiratoryRateWindowLength) {
-            this.index = this.length - this.movMeanRespiratoryRateWindowLength + (this.movMeanRespiratoryRateWindowLength - 1) / 2;
-            movMean2RespiratoryRate[this.index] = Math.round(mean(movMean1RespiratoryRate.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length)));
-        }
-
-    }
-}
-*/
-
 
 // Pulse Calc
 let pulse = {
@@ -521,79 +500,6 @@ function onConnectionLost(responseObject) {
     }
 }
 
-/*
-function onMessageArrived(message) {
-    if (message.destinationName === "HealthyMan/Pulse/Data") {
-        console.log(message.payloadString);
-        let splitText = message.payloadString.split(":");
-        //console.log(splitText);
-        let time_tmp = Number(splitText[0]);
-        let value_tmp = Number(splitText[1]);
-        pulseTime.push(time_tmp);
-        pulseValues.push(value_tmp);
-        pulseChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
-        if (time_tmp > 7) pulseChart.data.datasets[0].data.shift();
-        pulseChart.update(0);
-        //pulse.calcPulse(time_tmp, value_tmp);
-    }
-    else if (message.destinationName === "HealthyMan/GSR/Data") {
-        //console.log(message.payloadString);
-        let splitText = message.payloadString.split(":");
-        //console.log(splitText);
-        let time_tmp = Number(splitText[0]);
-        let value_tmp = Number(splitText[1]);
-        let resistance_tmp = value_tmp / 1000;
-        let conductance_tmp = Math.round(1000 * 1000000 / value_tmp) / 1000;
-        gsrTime.push(time_tmp);
-        gsrValues.push(value_tmp);
-        resistanceValues.push(resistance_tmp);
-        conductanceValues.push(conductance_tmp);
-        
-        if (time_tmp > 7) gsrChart.data.datasets[0].data.shift();
- 
-        if (document.querySelector("input#om").checked) {
-            gsrChart.data.datasets[0].data.push({ x: time_tmp, y: resistance_tmp });
-            document.querySelector("#gsr-value").innerHTML = resistance_tmp + " kΩ";
-        }
-        else {
-            gsrChart.data.datasets[0].data.push({ x: time_tmp, y: conductance_tmp });
-            document.querySelector("#gsr-value").innerHTML = conductance_tmp + " uS";
-        }
-
-        //gsrTrend.calc();
-        gsrChart.data.datasets[1].data.length = 0;
-        gsrChart.data.datasets[1].data.push(gsrTrend.startPoint);
-        gsrChart.data.datasets[1].data.push(gsrTrend.endPoint);
-
-        gsrChart.update(0);
-            
-    }
-    else if (message.destinationName === "HealthyMan/RespiratoryRate/Data") {
-        //console.log(message.payloadString);
-        let splitText = message.payloadString.split(":");
-        //console.log(splitText);
-        let time_tmp = Number(splitText[0]);
-        let value_tmp = Number(splitText[1]);
-        respiratoryRateTime.push(time_tmp);
-        respiratoryRateValues.push(value_tmp);
-
-        respiratoryRateChart.data.datasets[0].data.push({ x: time_tmp, y: value_tmp });
-
-        let length = respiratoryRateTime.length;
-        let index = length - 41 + 20;
-        if (length >= 41) {
-            movMeanRespiraotryRate[index] = mean(respiratoryRateValues.slice(length - 41, length));
-            respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[index], y: movMeanRespiraotryRate[index] });
-        } 
-
-        if (time_tmp > 7) {
-            respiratoryRateChart.data.datasets[0].data.shift();
-            respiratoryRateChart.data.datasets[1].data.shift();
-        }
-        respiratoryRateChart.update(0);
-    }
-}
-*/
 
 function onMessageArrived(message) {
     if (message.destinationName === "HealthyMan/Data") {
