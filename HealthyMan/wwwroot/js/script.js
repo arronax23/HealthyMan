@@ -162,61 +162,8 @@ let pulse = {
     min: 3300,
     calcAmplitudePeaksCounter: 0,
     threshold: model.initialThreshold,
-    calcPulse: function (time, value) {
-        if (value > this.threshold && this.enable2 === true)
-            this.enable1 = true;
-        else if (value < this.threshold)
-            this.enable2 = true;
+    calcAmplitudeAndFrequency: function (time, value) {
 
-        if (this.enable1 === true) {
-            this.measurement.peaksCounter++;
-            document.querySelector("#peaks-counter").innerHTML = this.measurement.peaksCounter;
-
-            this.measurement.heartBeatsValues.push(value);
-            this.measurement.heartBeatsTime.push(time);
-            let frequency = Math.round(this.measurement.peaksCounter / time * 100) / 100;
-            this.measurement.pulseFrequency.push(frequency);
-            this.measurement.pulseFrequencyTime.push(time);
-            this.measurement.heartRateAverage = Math.round(60 * frequency);
-            document.querySelector("#frequency").innerHTML = frequency+" Hz";
-            document.querySelector("#heart-rate-average").innerHTML = this.measurement.heartRateAverage;
-            this.calcPulseFrequencyVariance();
-
-            this.enable1 = false;
-            this.enable2 = false;
-
-            if (this.measurement.peaksCounter < 3) {
-                this.measurement.pulseFrequency.shift();
-                this.measurement.pulseFrequencyTime.shift();
-                this.measurement.pulseFrequencyVariance.shift();
-            }
-        }
-
-        this.calcAmplitude(time, value);
-    },
-    calcAmplitude: function (time, value) {
-        if (this.measurement.peaksCounter > 1 && this.calcAmplitudePeaksCounter != this.measurement.peaksCounter) {
-            this.calcAmplitudePeaksCounter = this.measurement.peaksCounter;
-            let amplitude = this.max - this.min;
-            this.threshold = this.min + amplitude * model.thresholdAmplitudePercentage / 100;
-            this.measurement.pulseThreshold.push(this.threshold);
-            this.measurement.pulseThresholdTime.push(time);
-            this.measurement.pulseAmplitude.push(amplitude);
-            this.measurement.pulseAmplitudeTime.push(time);
-            document.querySelector("#amplitude").innerHTML = amplitude + "mV";
-
-            this.calcPulseAmplitudeVariance();
-
-            this.min = 3300;
-            this.max = 0;
-        }
-
-        if (this.measurement.peaksCounter > 1 && value > this.max) {
-            this.max = value     
-        }
-        if (this.measurement.peaksCounter > 1 && value < this.min) {
-            this.min = value
-        }
     },
     calcPulseAmplitudeVariance: function () {
         let tmp = 0;
