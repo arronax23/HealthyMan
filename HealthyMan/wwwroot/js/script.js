@@ -29,6 +29,10 @@ let breathPeaksTime = [];
 let instantaneousRespiratoryRate = [];
 let instantaneousRespiratoryRateTime = [];
 
+let P1 = [];
+let f = [];
+let Y;
+let pulseWindow = [];
 
 let measurement = {
     heartRateAverage: 0,
@@ -153,47 +157,80 @@ let respiratoryRateDerivativeSign = {
 
 // Pulse Calc
 let pulse = {
-    measurement: measurement,
-    enable1: false,
-    enable2: false,
-    meanPulseAmplitude: 0,
-    meanPulseFrequency: 0,
-    max: 0,
-    min: 3300,
-    calcAmplitudePeaksCounter: 0,
-    threshold: model.initialThreshold,
-    calcAmplitudeAndFrequency: function (time, value) {
+    windowSize: 128,
+    startSearchIndex: 0,
+    stopSearchIndex: 0,
+    calcAmplitudeAndFrequency: function (time) {
+        if (pulseValues.length % this.windowSize == 0) {
+            let zeros = new Array(this.windowSize).fill(0); 
 
+            pulseWindow = pulseValues.slice(pulseValues.length - this.windowSize, pulseValues.length)
+
+            Y = fourier.dft(pulseWindow, zeros);
+
+            let T = 0.0365;
+            let Fs = 1 / T;
+            let L = this.windowSize;
+            //let P1 = [];
+            //let f = [];
+
+            for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
+                f[i] = Fs * i / L
+                if (i == 0)
+                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                else
+                    P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+            }
+
+            if (pulseValues.length == this.windowSize) {
+                this.startSearchIndex = f.findIndex(el => el >= 0.5);
+                this.stopSearchIndex = f.findIndex(el => el >= 3.33);
+            }
+
+            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+
+            pulseFrequency.push(f[frequencyIndex]);
+            pulseFrequencyTime.push(time);
+            document.querySelector("#heart-rate-instantaneous").innerHTML = 60 * f[frequencyIndex];
+            this.calcPulseFrequencyVariance();
+
+            pulseAmplitude.push(P1[frequencyIndex]);
+            pulseAmplitudeTime.push(time);
+            document.querySelector("#amplitude").innerHTML = P1[frequencyIndex];
+            this.calcPulseAmplitudeVariance();
+
+        }
+           
     },
     calcPulseAmplitudeVariance: function () {
         let tmp = 0;
-        for (let i = 0; i < this.measurement.pulseAmplitude.length; i++)
-            tmp += this.measurement.pulseAmplitude[i];
+        for (let i = 0; i < pulseAmplitude.length; i++)
+            tmp += pulseAmplitude[i];
 
-        this.meanPulseAmplitude = tmp / this.measurement.pulseAmplitude.length
+        this.meanPulseAmplitude = tmp / pulseAmplitude.length
         tmp = 0;
 
-        for (let i = 0; i < this.measurement.pulseAmplitude.length; i++)
-            tmp += (this.measurement.pulseAmplitude[i] - this.meanPulseAmplitude) ** 2;
+        for (let i = 0; i < pulseAmplitude.length; i++)
+            tmp += (pulseAmplitude[i] - this.meanPulseAmplitude) ** 2;
 
-        let pulseAmplitudeVariance = Math.round(100 * tmp / this.measurement.pulseAmplitude.length) / 100;
-        this.measurement.pulseAmplitudeVariance.push(pulseAmplitudeVariance);
-        document.querySelector("#pulse-amplitude-variance").innerHTML = pulseAmplitudeVariance;
+        let pulseAmplitudeVariance_tmp = Math.round(100 * tmp / pulseAmplitude.length) / 100;
+        pulseAmplitudeVariance.push(pulseAmplitudeVariance_tmp);
+        document.querySelector("#pulse-amplitude-variance").innerHTML = pulseAmplitudeVariance_tmp;
     },
     calcPulseFrequencyVariance: function () {
         let tmp = 0;
-        for (let i = 0; i < this.measurement.pulseFrequency.length; i++)
-            tmp += this.measurement.pulseFrequency[i];
+        for (let i = 0; i < pulseFrequency.length; i++)
+            tmp += pulseFrequency[i];
 
-        this.meanPulseFrequency = tmp / this.measurement.pulseFrequency.length
+        this.meanPulseFrequency = tmp / pulseFrequency.length
         tmp = 0;
 
-        for (let i = 0; i < this.measurement.pulseFrequency.length; i++)
-            tmp += (this.measurement.pulseFrequency[i] - this.meanPulseFrequency) ** 2;
+        for (let i = 0; i < pulseFrequency.length; i++)
+            tmp += (pulseFrequency[i] - this.meanPulseFrequency) ** 2;
 
-        let pulseFrequencyVariance = Math.round(10000 * tmp / this.measurement.pulseAmplitude.length) / 10000;
-        this.measurement.pulseFrequencyVariance.push(pulseFrequencyVariance);
-        document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance;
+        let pulseFrequencyVariance_tmp = Math.round(10000 * tmp / pulseAmplitude.length) / 10000;
+        pulseFrequencyVariance.push(pulseFrequencyVariance_tmp);
+        document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance_tmp;
     },
 };
 
@@ -460,7 +497,7 @@ function onMessageArrived(message) {
         pulseChart.data.datasets[0].data.push({ x: pulseTime_tmp, y: pulseValue_tmp });
         if (pulseTime_tmp > 7) pulseChart.data.datasets[0].data.shift();
         pulseChart.update(0);
-        pulse.calcPulse(pulseTime_tmp, pulseValue_tmp);
+        pulse.calcAmplitudeAndFrequency(pulseTime_tmp);
 
         ////
 
