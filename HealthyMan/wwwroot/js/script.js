@@ -158,43 +158,60 @@ let respiratoryRateDerivativeSign = {
 // Pulse Calc
 let pulse = {
     windowSize: 128,
-    startSearchIndex: 0,
-    stopSearchIndex: 0,
+    /***Goertzel ***/
+    ft_min: 1,
+    ft_max: 2,
+    T: 0.0365,
+    fs: 1 / 0.0365,
+    ft_array: [],
+    calc_ft_array: function () {
+        for (let ft = this.ft_min; ft <= this.ft_max + 1e-3; ft = ft + 0.01) {
+            ft = Math.round(100 * ft) / 100;
+            this.ft_array.push(ft);
+        }
+    },
+    calc_goertzel: function (signal) {
+        let L = signal.length;
+        let amplitude_array = [];
+
+        for (let j = 0; j < this.ft_array.length; j++) {
+            let ft = this.ft_array[j];
+            let w = 2 * Math.PI * ft / this.fs;
+            let Sine = Math.sin(w);
+            let Cosine = Math.cos(w);
+            let COEFF = 2 * Math.cos(w);
+            let Q1 = 0;
+            let Q2 = 0;
+
+            for (let i = 0; i < L; i++) {
+                Q0 = COEFF * Q1 - Q2 + signal[i];
+                Q2 = Q1;
+                Q1 = Q0;
+            }
+
+            let Real = (Q1 - Q2 * Cosine);
+            let Imag = (Q2 * Sine);
+
+            amplitude_array[j] = 2 * (Math.sqrt(Real ** 2 + Imag ** 2) / L);
+        }
+
+        return amplitude_array;
+
+    },
     calcAmplitudeAndFrequency: function (time) {
         if (pulseValues.length % this.windowSize == 0) {
-            let zeros = new Array(this.windowSize).fill(0); 
 
-            pulseWindow = pulseValues.slice(pulseValues.length - this.windowSize, pulseValues.length)
+            let pulseWindow = pulseValues.slice(pulseValues.length - this.windowSize, pulseValues.length);
+            let amplitude_array =  calc_goertzel(pulseWindow);
 
-            Y = fourier.dft(pulseWindow, zeros);
+            let frequencyIndex = amplitude_array.findIndex(el => el == Math.max(...amplitude_array));
 
-            let T = 0.0365;
-            let Fs = 1 / T;
-            let L = this.windowSize;
-            //let P1 = [];
-            //let f = [];
-
-            for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
-                f[i] = Fs * i / L
-                if (i == 0)
-                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
-                else
-                    P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
-            }
-
-            if (pulseValues.length == this.windowSize) {
-                this.startSearchIndex = f.findIndex(el => el >= 0.5);
-                this.stopSearchIndex = f.findIndex(el => el >= 3.33);
-            }
-
-            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
-
-            pulseFrequency.push(f[frequencyIndex]);
+            pulseFrequency.push(this.f_array[frequencyIndex]);
             pulseFrequencyTime.push(time);
             document.querySelector("#heart-rate-instantaneous").innerHTML = 60 * f[frequencyIndex];
             this.calcPulseFrequencyVariance();
 
-            pulseAmplitude.push(P1[frequencyIndex]);
+            pulseAmplitude.push(amplitude_array[frequencyIndex]);
             pulseAmplitudeTime.push(time);
             document.querySelector("#amplitude").innerHTML = P1[frequencyIndex];
             this.calcPulseAmplitudeVariance();
