@@ -1,17 +1,11 @@
 ﻿let pulseValues = [];
 let pulseTime = [];
 
-let pulseThreshold = [model.initialThreshold];
-let pulseThresholdTime = [];
-
-let heartBeatsValues = [];
-let heartBeatsTime = [];
-
 let pulseAmplitude = [];
 let pulseAmplitudeTime = [];
 let pulseAmplitudeVariance = [];
 let pulseFrequency = [];
-let pulseFrequencyTime = [];
+let pulseFrequencyTime = [0];
 let pulseFrequencyVariance = [];
 
 let gsrValues = []; //Ω
@@ -36,16 +30,8 @@ let pulseWindow = [];
 
 let measurement = {
     heartRateAverage: 0,
-    peaksCounter: 0,
-    //variance: 0,
     pulseValues: pulseValues,
     pulseTime: pulseTime,
-    initialThreshold: model.initialThreshold,
-    thresholdAmplitudePercentage: model.thresholdAmplitudePercentage,
-    heartBeatsValues: heartBeatsValues,
-    heartBeatsTime: heartBeatsTime,
-    pulseThreshold: pulseThreshold,
-    pulseThresholdTime: pulseThresholdTime,
     pulseAmplitude: pulseAmplitude,
     pulseAmplitudeTime: pulseAmplitudeTime,
     pulseAmplitudeVariance: pulseAmplitudeVariance,
@@ -154,13 +140,12 @@ let respiratoryRateDerivativeSign = {
 }
 
 
-
 // Pulse Calc
 let pulse = {
-    windowSize: 128,
+    windowSize: 256,
     /***Goertzel ***/
-    ft_min: 1,
-    ft_max: 2,
+    ft_min: 0.5,
+    ft_max: 3.33,
     T: 0.0365,
     fs: 1 / 0.0365,
     ft_array: [],
@@ -202,18 +187,21 @@ let pulse = {
         if (pulseValues.length % this.windowSize == 0) {
 
             let pulseWindow = pulseValues.slice(pulseValues.length - this.windowSize, pulseValues.length);
-            let amplitude_array =  calc_goertzel(pulseWindow);
+            let amplitude_array =  this.calc_goertzel(pulseWindow);
 
             let frequencyIndex = amplitude_array.findIndex(el => el == Math.max(...amplitude_array));
 
-            pulseFrequency.push(this.f_array[frequencyIndex]);
+            let frequency = Math.round(100 * this.ft_array[frequencyIndex]) / 100;
+            pulseFrequency.push(frequency);
             pulseFrequencyTime.push(time);
-            document.querySelector("#heart-rate-instantaneous").innerHTML = 60 * f[frequencyIndex];
+            document.querySelector("#frequency").innerHTML = frequency;
+            document.querySelector("#heart-rate-instantaneous").innerHTML = 60 * frequency;
             this.calcPulseFrequencyVariance();
 
-            pulseAmplitude.push(amplitude_array[frequencyIndex]);
+            let amplitude = Math.round(100 * amplitude_array[frequencyIndex]) / 100;
+            pulseAmplitude.push(amplitude);
             pulseAmplitudeTime.push(time);
-            document.querySelector("#amplitude").innerHTML = P1[frequencyIndex];
+            document.querySelector("#amplitude").innerHTML = amplitude;
             this.calcPulseAmplitudeVariance();
 
         }
@@ -245,7 +233,7 @@ let pulse = {
         for (let i = 0; i < pulseFrequency.length; i++)
             tmp += (pulseFrequency[i] - this.meanPulseFrequency) ** 2;
 
-        let pulseFrequencyVariance_tmp = Math.round(10000 * tmp / pulseAmplitude.length) / 10000;
+        let pulseFrequencyVariance_tmp = Math.round(10000 * tmp / pulseFrequency.length) / 10000;
         pulseFrequencyVariance.push(pulseFrequencyVariance_tmp);
         document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance_tmp;
     },
@@ -488,8 +476,10 @@ client.connect({ onSuccess: onConnect});
 //client.connect(options);
 
 function onConnect() {
+    pulse.calc_ft_array();
     console.log("Connected to MQTT Broker");
     client.subscribe("HealthyMan/Data");
+    
     //client.subscribe("HealthyMan/Pulse/Data");
     //client.subscribe("HealthyMan/GSR/Data");
     //client.subscribe("HealthyMan/RespiratoryRate/Data");
@@ -576,12 +566,6 @@ btnStart.addEventListener("click", function () {
     gsrChart.data.datasets[0].data.length = 0;
     pulseTime.length = 0;
     pulseValues.length = 0;
-    heartBeatsValues.length = 0;
-    heartBeatsTime.length = 0;
-    pulseThreshold.length = 0;
-    pulseThreshold.push(model.initialThreshold);
-    pulseThresholdTime.length = 0;
-    pulseThresholdTime.push(0);
     gsrTime.length = 0;
     gsrValues.length = 0;
     resistanceValues.length = 0;
@@ -598,12 +582,12 @@ btnStart.addEventListener("click", function () {
     signTime.length = 0;
     breathPeaksTime.length = 0;
     breathPeaksValues.length = 0;
-    measurement.peaksCounter = 0;
     pulseAmplitude.length = 0;
     pulseAmplitudeTime.length = 0;
     pulseAmplitudeVariance.length = 0;
     pulseFrequency.length = 0;
     pulseFrequencyTime.length = 0;
+    pulseFrequencyTime.push(0);
     pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;

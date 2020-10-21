@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using HealthyMan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HealthyMan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201020174424_Deleted_PeaksCounter")]
+    partial class Deleted_PeaksCounter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,16 @@ namespace HealthyMan.Migrations
                     b.Property<List<float>>("GSRValues")
                         .HasColumnType("real[]");
 
+                    b.Property<List<float>>("HeartBeatsTime")
+                        .HasColumnType("real[]");
+
+                    b.Property<List<float>>("HeartBeatsValues")
+                        .HasColumnType("real[]");
+
                     b.Property<int>("HeartRateAverage")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("InitialThreshold")
                         .HasColumnType("integer");
 
                     b.Property<List<float>>("InstantaneousRespiratoryRate")
@@ -72,6 +83,12 @@ namespace HealthyMan.Migrations
                     b.Property<List<float>>("PulseFrequencyVariance")
                         .HasColumnType("real[]");
 
+                    b.Property<List<float>>("PulseThreshold")
+                        .HasColumnType("real[]");
+
+                    b.Property<List<float>>("PulseThresholdTime")
+                        .HasColumnType("real[]");
+
                     b.Property<List<float>>("PulseTime")
                         .HasColumnType("real[]");
 
@@ -83,6 +100,9 @@ namespace HealthyMan.Migrations
 
                     b.Property<List<float>>("RespiratoryRateValues")
                         .HasColumnType("real[]");
+
+                    b.Property<int>("ThresholdAmplitudePercentage")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("timestamp without time zone");

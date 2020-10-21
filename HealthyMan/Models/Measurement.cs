@@ -14,18 +14,8 @@ namespace HealthyMan.Models
         [Display(Name = "Average heart rate")]
         public int HeartRateAverage { get; set; }
         [Display(Name = "Peaks counter")]
-        public int PeaksCounter { get; set; }
         public List<float> PulseValues { get; set; }
         public List<float> PulseTime { get; set; }
-
-        [Display(Name = "Initial static threshold")]
-        public int InitialThreshold { get; set; }
-        [Display(Name = "Percentage of amplitude for dynamic threshold")]
-        public int ThresholdAmplitudePercentage { get; set; }
-        public List<float> HeartBeatsValues { get; set; }
-        public List<float> HeartBeatsTime { get; set; }
-        public List<float> PulseThreshold { get; set; }
-        public List<float> PulseThresholdTime { get; set; }
         public List<float> PulseAmplitude { get; set; }
         public List<float> PulseAmplitudeTime { get; set; }
         public List<float> PulseAmplitudeVariance { get; set; }

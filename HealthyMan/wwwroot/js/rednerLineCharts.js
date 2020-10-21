@@ -108,7 +108,11 @@
 
     for (let i = 0; i < model.pulseFrequencyTime.length; i++) {
         pulseFrequencyDataTable.addRow([model.pulseFrequencyTime[i], model.pulseFrequency[i]]);
+        pulseFrequencyDataTable.addRow([(model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2, model.pulseFrequency[i]]);
+        pulseFrequencyDataTable.addRow([model.pulseFrequencyTime[i+1], model.pulseFrequency[i]]);
         pulseFrequencyVarianceDataTable.addRow([model.pulseFrequencyTime[i], model.pulseFrequencyVariance[i]]);
+        pulseFrequencyVarianceDataTable.addRow([(model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2, model.pulseFrequencyVariance[i]]);
+        pulseFrequencyVarianceDataTable.addRow([model.pulseFrequencyTime[i+1], model.pulseFrequencyVariance[i]]);
     }
 
     for (let i = 0; i < model.gsrTime.length; i++)
@@ -136,9 +140,12 @@
         }
     }
 
+    //InstantaneousRespiratoryRateDataTable.addRow([model.breathPeaksTime[0], null]);
     if (model.instantaneousRespiratoryRateTime != null) {
         for (let i = 0; i < model.instantaneousRespiratoryRateTime.length; i++) {
-            InstantaneousRespiratoryRateDataTable.addRow([model.instantaneousRespiratoryRateTime[i], model.instantaneousRespiratoryRate[i]]);
+            InstantaneousRespiratoryRateDataTable.addRow([model.breathPeaksTime[i], model.instantaneousRespiratoryRate[i]]);
+            InstantaneousRespiratoryRateDataTable.addRow([(model.breathPeaksTime[i] + model.breathPeaksTime[i + 1]) / 2, model.instantaneousRespiratoryRate[i]]);
+            InstantaneousRespiratoryRateDataTable.addRow([model.breathPeaksTime[i+1], model.instantaneousRespiratoryRate[i]]);
         }
     }
     for (let i = 0; i < model.pulseTime.length; i++) {
@@ -202,12 +209,21 @@
     );
         respiratoryRateChart.draw(respiratoryRateDataTable, options);
 
+    /*
     options.series[0].color = "#0000cc";
     let InstantaneousRespiratoryRateChart = new google.visualization.SteppedAreaChart(
         document.getElementById("instantaneous_respiratory_rate_chart")
     );
     InstantaneousRespiratoryRateChart.draw(InstantaneousRespiratoryRateDataTable, options);
+    */
 
+    
+    options.series[0].color = "#0000cc";
+    let InstantaneousRespiratoryRateChart = new google.visualization.LineChart(
+        document.getElementById("instantaneous_respiratory_rate_chart")
+    );
+    InstantaneousRespiratoryRateChart.draw(InstantaneousRespiratoryRateDataTable, options);
+    
 
     options.series[0].color = "#000000";
     let diffChart = new google.visualization.LineChart(
