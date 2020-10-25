@@ -8,11 +8,11 @@ namespace HealthyMan.Models
 {
     public class Settings
     {
-        public int? SettingsId { get; set; }
-        [Display(Name = "Initial static threshold")]
-        public int InitialThreshold { get; set; }
-        [Display(Name = "Percentage of amplitude for dynamic threshold")]
-        public int ThresholdAmplitudePercentage { get; set; }
+        public int? SettingsId { get; set; }       
+        [Display(Name = "FFT window size")]
+        public int FFTWindowSize { get; set; }
+        [Display(Name = "FFT window size with padding")]
+        public int FFTWindowSizeWithPadding { get; set; }
         [Display(Name = "Moving mean respiratory rate window length")]
         public int MovMeanRespiratoryRateWindowLength { get; set; }
     }

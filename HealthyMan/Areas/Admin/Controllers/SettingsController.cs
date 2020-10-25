@@ -27,8 +27,8 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> SetDefaultSettings()
         {
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
-            currentSettigns.InitialThreshold = 1650;
-            currentSettigns.ThresholdAmplitudePercentage = 50;
+            currentSettigns.FFTWindowSize = 128;
+            currentSettigns.FFTWindowSizeWithPadding = 1024;
             currentSettigns.MovMeanRespiratoryRateWindowLength = 41;
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
@@ -38,8 +38,8 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> SaveSettings(Settings settings)
         {
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
-            currentSettigns.InitialThreshold = settings.InitialThreshold;
-            currentSettigns.ThresholdAmplitudePercentage = settings.ThresholdAmplitudePercentage;
+            currentSettigns.FFTWindowSize = settings.FFTWindowSize;
+            currentSettigns.FFTWindowSizeWithPadding = settings.FFTWindowSizeWithPadding;
             currentSettigns.MovMeanRespiratoryRateWindowLength = settings.MovMeanRespiratoryRateWindowLength;
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();

@@ -80,7 +80,7 @@ let movMean1RespiratoryRateCalc = {
 
         if (this.length >= this.movMeanRespiratoryRateWindowLength) {
             this.index = this.length - this.movMeanRespiratoryRateWindowLength + (this.movMeanRespiratoryRateWindowLength - 1) / 2;
-            movMean1RespiratoryRate[this.index] = Math.round(mean(respiratoryRateValues.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length)));
+            movMean1RespiratoryRate[this.index] = Math.round(100 * mean(respiratoryRateValues.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length))) / 100;
             respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[movMean1RespiratoryRateCalc.index], y: movMean1RespiratoryRate[movMean1RespiratoryRateCalc.index] });
         }
         
