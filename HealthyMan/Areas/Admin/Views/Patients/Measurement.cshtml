@@ -53,6 +53,18 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.HeartRateAverage)
     </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FFTWindowSize)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.FFTWindowSize)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FFTWindowSizeWithPadding)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.FFTWindowSizeWithPadding)
+    </dd>
 </dl>
 <div id="pulse_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
 <div id="instantaneous_heart_rate_chart" style="width: 1110px; height: 500px; margin: auto;"></div>

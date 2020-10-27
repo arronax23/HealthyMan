@@ -22,6 +22,10 @@ namespace HealthyMan.Models
         public List<float> PulseFrequency { get; set; }
         public List<float> PulseFrequencyTime { get; set; }
         public List<float> PulseFrequencyVariance { get; set; }
+        [Display(Name = "FFT window size")]
+        public int FFTWindowSize { get; set; }
+        [Display(Name = "FFT window size with padding")]
+        public int FFTWindowSizeWithPadding { get; set; }
         public List<float> GSRValues { get; set; }
         public List<float> GSRTime { get; set; }
         public List<float> RespiratoryRateValues { get; set; }

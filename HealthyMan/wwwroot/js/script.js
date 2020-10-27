@@ -23,10 +23,12 @@ let breathPeaksTime = [];
 let instantaneousRespiratoryRate = [];
 let instantaneousRespiratoryRateTime = [];
 
+/*
 let P1 = [];
 let f = [];
 let Y;
 let pulseWindow = [];
+*/
 
 let measurement = {
     heartRateAverage: 0,
@@ -38,6 +40,8 @@ let measurement = {
     pulseFrequency: pulseFrequency,
     pulseFrequencyTime: pulseFrequencyTime,
     pulseFrequencyVariance: pulseFrequencyVariance,
+    fftWindowSize: model.fftWindowSize,
+    fftWindowSizeWithPadding: model.fftWindowSizeWithPadding,
     gsrValues: gsrValues,
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
@@ -142,21 +146,21 @@ let respiratoryRateDerivativeSign = {
 
 // Pulse Calc
 let pulse = {
-    windowSize: 128,
-    windowSizeWithPadding: 1024,
+    fftWindowSize: model.fftWindowSize,
+    fftWindowSizeWithPadding: model.fftWindowSizeWithPadding,
     startSearchIndex: 0,
     stopSearchIndex: 0,
     Fs: 1/0.0365,
     f: [],
     calcAmplitudeAndFrequency: function (time) {
-        if (pulseValues.length % this.windowSize == 0) {
+        if (pulseValues.length % this.fftWindowSize == 0) {
 
-            let pulseWindow = pulseValues.slice(pulseValues.length - this.windowSize, pulseValues.length);
+            let pulseWindow = pulseValues.slice(pulseValues.length - this.fftWindowSize, pulseValues.length);
 
-            if (this.windowSize < this.windowSizeWithPadding) {
+            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
                 let mean_pulse = mean(pulseWindow);
 
-                for (let i = this.windowSize; i < this.windowSizeWithPadding; i++)
+                for (let i = this.fftWindowSize; i < this.fftWindowSizeWithPadding; i++)
                     pulseWindow[i] = mean_pulse;
             }
 
@@ -167,7 +171,7 @@ let pulse = {
             let L = pulseWindow.length;
             let P1 = [];
 
-            if (pulseValues.length == this.windowSize) {
+            if (pulseValues.length == this.fftWindowSize) {
                 for (let i = 0; i < Math.floor((L / 2)) + 1; i++) 
                     this.f[i] = this.Fs * i / L
 
