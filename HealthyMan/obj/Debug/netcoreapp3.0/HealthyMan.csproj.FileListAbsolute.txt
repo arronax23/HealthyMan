@@ -181,3 +181,4 @@ D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Hea
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.MvcApplicationPartsAssemblyInfo.cache
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Settings\Index.cshtml.g.cs
 D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\HealthyMan.csprojAssemblyReference.cache
+D:\Pulpit\VisualStudioProjects\HealthyMan\HealthyMan\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\GSRCalibration\index.cshtml.g.cs

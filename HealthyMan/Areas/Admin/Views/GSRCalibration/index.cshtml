@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "GSR Calibration";
+}
+
+<h1>GSR Calibration</h1>
+<div>
+    <h4 style="display: inline-block">Calibration data:&nbsp;&nbsp;</h4><h4 style="display: inline-block" id="calibration-data">null</h4>
+</div>
+<button id="btn-start" class="btn btn-success">Start calibration</button>
+
+@section Scripts {
+    <script src="~/lib/paho-mqtt/mqttws31.min.js" type="text/javascript"></script>
+    <script>
+        let client = new Paho.MQTT.Client("localhost", 9001, "browser");
+
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        client.connect({ onSuccess: onConnect});
+
+        function onConnect() {
+            console.log("Connected to MQTT Broker");
+            client.subscribe("HealthyMan/GSRCalibration");
+        }
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("onConnectionLost:" + responseObject.errorMessage);
+            }
+        }
+
+
+        function onMessageArrived(message) {
+            if (message.destinationName === "HealthyMan/GSRCalibration") {
+                //console.log(message.payloadString);
+                document.querySelector("#calibration-data").innerHTML = message.payloadString;
+            }
+
+        }
+
+        //let target;
+        let btn = document.querySelector("#btn-start");
+        btn.addEventListener("click", function (e) {
+            //console.log(e.target);
+            //target = e.target;
+            if (e.target.id == "btn-start") {
+                e.target.id = "btn-stop"
+                e.target.className = "btn btn-danger"
+                e.target.innerHTML = "Stop calibration"     
+
+                message = new Paho.MQTT.Message("1");
+                message.destinationName = "HealthyMan/GSRCalibrationEnable";
+                client.send(message);
+            }
+            else if (e.target.id == "btn-stop") {
+                e.target.id = "btn-start"
+                e.target.className = "btn btn-success"
+                e.target.innerHTML = "Start calibration"
+
+                message = new Paho.MQTT.Message("0");
+                message.destinationName = "HealthyMan/GSRCalibrationEnable";
+                client.send(message);
+            }
+        });
+    </script>
+}

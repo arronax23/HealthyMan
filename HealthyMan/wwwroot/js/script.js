@@ -153,9 +153,15 @@ let pulse = {
     Fs: 1/0.0365,
     f: [],
     calcAmplitudeAndFrequency: function (time) {
-        if (pulseValues.length % this.fftWindowSize == 0) {
+        if (
+            pulseValues.length % (this.fftWindowSize - 1) == 0 && pulseValues.length != (this.fftWindowSize - 1) ||
+            pulseValues.length % this.fftWindowSize == 0 && pulseValues.length == this.fftWindowSize
+        ) {
 
             let pulseWindow = pulseValues.slice(pulseValues.length - this.fftWindowSize, pulseValues.length);
+
+            console.log(pulseWindow.length);
+            console.log(time);
 
             if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
                 let mean_pulse = mean(pulseWindow);
@@ -183,20 +189,25 @@ let pulse = {
                 if (i == 0)
                     P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
                 else
-                    P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                    P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
             }
 
             let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
 
-            pulseFrequency.push(this.f[frequencyIndex]);
+            let frequency = Math.round(1000 * this.f[frequencyIndex]) / 1000;
+            let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
+
+            pulseFrequency.push(frequency);
             pulseFrequencyTime.push(time);
-            document.querySelector("#heart-rate-instantaneous").innerHTML = 60 * this.f[frequencyIndex];
-            document.querySelector("#frequency").innerHTML = this.f[frequencyIndex];
+            document.querySelector("#heart-rate-instantaneous").innerHTML = instantaneousHeartRate;
+            document.querySelector("#frequency").innerHTML = frequency;
             this.calcPulseFrequencyVariance();
+
+            let amplitude = Math.round(100 * P1[frequencyIndex]) / 100;
 
             pulseAmplitude.push(P1[frequencyIndex]);
             pulseAmplitudeTime.push(time);
-            document.querySelector("#amplitude").innerHTML = P1[frequencyIndex];
+            document.querySelector("#amplitude").innerHTML = amplitude;
             this.calcPulseAmplitudeVariance();
 
         }
@@ -233,6 +244,7 @@ let pulse = {
         document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance_tmp;
     },
 };
+
 
 // GSR Trend Calc
 let gsrTrend = {
@@ -587,15 +599,21 @@ btnStart.addEventListener("click", function () {
     pulse.enable1 = false;
     pulse.enable2 = false;
 
+    document.querySelector("#heart-rate-instantaneous").innerHTML = 0;
+    document.querySelector("#frequency").innerHTML = 0;
+    document.querySelector("#amplitude").innerHTML = 0;
+    document.querySelector("#pulse-amplitude-variance").innerHTML = 0;
+    document.querySelector("#pulse-frequency-variance").innerHTML = 0;
+
     message = new Paho.MQTT.Message("1");
-    message.destinationName = "HealthyMan/Start";
+    message.destinationName = "HealthyMan/MeasurementEnable";
     client.send(message);
 });
 
 let btnStop = document.querySelector("#btn-stop");
 btnStop.addEventListener("click", function () {
-    message = new Paho.MQTT.Message("1");
-    message.destinationName = "HealthyMan/Stop";
+    message = new Paho.MQTT.Message("0");
+    message.destinationName = "HealthyMan/MeasurementEnable";
     client.send(message);
 });
 

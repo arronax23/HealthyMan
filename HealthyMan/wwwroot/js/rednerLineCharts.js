@@ -34,7 +34,7 @@
 
     let pulseDataTable = new google.visualization.DataTable();
     pulseDataTable.addColumn("number", "Time");
-    pulseDataTable.addColumn("number", "Voltage [mV]");
+    pulseDataTable.addColumn("number", "Pulse sensor voltage [mV]");
     pulseDataTable.addColumn("number", "Threshold [mV]");
     pulseDataTable.addColumn("number", "Heart beat [mV]");
 
@@ -78,7 +78,7 @@
 
     let respiratoryRateDataTable = new google.visualization.DataTable();
     respiratoryRateDataTable.addColumn("number", "Time");
-    respiratoryRateDataTable.addColumn("number", "Voltage [mV]");
+    respiratoryRateDataTable.addColumn("number", "Respiratory Rate sensor voltage [mV]");
     respiratoryRateDataTable.addColumn("number", "Moving average [mV]");
     respiratoryRateDataTable.addColumn("number", "Breath peaks [mV]");
 
@@ -114,15 +114,21 @@
            
 
     for (let i = 0; i < model.pulseFrequency.length; i++) {
-        instantaneousHeartRateDataTable.addRow([model.pulseFrequencyTime[i], 60 * model.pulseFrequency[i]]);
-        instantaneousHeartRateDataTable.addRow([(model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2, 60 * model.pulseFrequency[i]]);
-        instantaneousHeartRateDataTable.addRow([model.pulseFrequencyTime[i + 1], 60 * model.pulseFrequency[i]]);
+        let instantaneousHeartRate = Math.round(100 * 60 * model.pulseFrequency[i]) / 100;
+        instantaneousHeartRateDataTable.addRow([model.pulseFrequencyTime[i], instantaneousHeartRate]);
+        instantaneousHeartRateDataTable.addRow([(model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2, instantaneousHeartRate]);
+        instantaneousHeartRateDataTable.addRow([model.pulseFrequencyTime[i + 1], instantaneousHeartRate]);
     }
 
 
     for (let i = 0; i < model.pulseAmplitudeTime.length; i++) {
         pulseAmplitudeDataTable.addRow([model.pulseAmplitudeTime[i], model.pulseAmplitude[i]]);
+        pulseAmplitudeDataTable.addRow([(model.pulseAmplitudeTime[i] + model.pulseAmplitudeTime[i + 1]) / 2, model.pulseAmplitude[i]]);
+        pulseAmplitudeDataTable.addRow([model.pulseAmplitudeTime[i + 1], model.pulseAmplitude[i]]);
+
         pulseAmplitudeVarianceDataTable.addRow([model.pulseAmplitudeTime[i], model.pulseAmplitudeVariance[i]]);
+        pulseAmplitudeVarianceDataTable.addRow([(model.pulseAmplitudeTime[i] + model.pulseAmplitudeTime[i + 1]) /2, model.pulseAmplitudeVariance[i]]);
+        pulseAmplitudeVarianceDataTable.addRow([model.pulseAmplitudeTime[i + 1], model.pulseAmplitudeVariance[i]]);
     }
 
     for (let i = 0; i < model.pulseFrequencyTime.length; i++) {
