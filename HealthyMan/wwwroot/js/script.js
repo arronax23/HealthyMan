@@ -15,6 +15,14 @@ let conductanceValues = []; //uS
 
 let respiratoryRateValues = [];
 let respiratoryRateTime = [];
+let respiratoryRateAmplitude = [];
+let respiratoryRateAmplitudeTime = [0];
+let respiratoryRateAmplitudeVariance = [];
+let respiratoryRateFrequency = [];
+let respiratoryRateFrequencyTime = [0];
+let respiratoryRateFrequencyVariance = [];
+
+
 let movMean1RespiratoryRate = [];
 let signValues = [];
 let signTime = [];
@@ -23,12 +31,6 @@ let breathPeaksTime = [];
 let instantaneousRespiratoryRate = [];
 let instantaneousRespiratoryRateTime = [];
 
-/*
-let P1 = [];
-let f = [];
-let Y;
-let pulseWindow = [];
-*/
 
 let measurement = {
     heartRateAverage: 0,
@@ -60,90 +62,6 @@ let measurement = {
     }
 };
 
-let movMean1RespiratoryRateCalc = {
-    length: 0,
-    index: 0,
-    movMeanRespiratoryRateWindowLength: model.movMeanRespiratoryRateWindowLength,
-    calc: function () {
-        this.length = respiratoryRateTime.length;
-        if (movMean1RespiratoryRate[0] == undefined && this.length >= this.movMeanRespiratoryRateWindowLength) {
-            for (let i = 0; i < (this.movMeanRespiratoryRateWindowLength - 1) / 2; i++) {
-                movMean1RespiratoryRate[i] = respiratoryRateValues[i];
-                //
-                if (respiratoryRateValues[i + 1] > respiratoryRateValues[i]) {
-                    signValues.push(1);
-                    signTime.push(respiratoryRateTime[i]);
-                }
-                else if (respiratoryRateValues[i + 1] < respiratoryRateValues[i]) {
-                    signValues.push(-1);
-                    signTime.push(respiratoryRateTime[i]);
-                }
-            }
-                
-        } 
-
-        if (this.length >= this.movMeanRespiratoryRateWindowLength) {
-            this.index = this.length - this.movMeanRespiratoryRateWindowLength + (this.movMeanRespiratoryRateWindowLength - 1) / 2;
-            movMean1RespiratoryRate[this.index] = Math.round(100 * mean(respiratoryRateValues.slice(this.length - this.movMeanRespiratoryRateWindowLength, this.length))) / 100;
-            respiratoryRateChart.data.datasets[1].data.push({ x: respiratoryRateTime[movMean1RespiratoryRateCalc.index], y: movMean1RespiratoryRate[movMean1RespiratoryRateCalc.index] });
-        }
-        
-    }
-}
-
-let respiratoryRateDerivativeSign = {
-    enable: false,
-    calc: function () {   
-        if (movMean1RespiratoryRate.length > (model.movMeanRespiratoryRateWindowLength - 1) / 2) {
-            if (movMean1RespiratoryRate[movMean1RespiratoryRate.length - 1] > movMean1RespiratoryRate[movMean1RespiratoryRate.length - 2]) {
-                signValues.push(1);
-                signTime.push(respiratoryRateTime[movMean1RespiratoryRate.length - 2]);
-                this.enable = true;
-            }
-            else if (movMean1RespiratoryRate[movMean1RespiratoryRate.length - 1] < movMean1RespiratoryRate[movMean1RespiratoryRate.length - 2]) {
-                signValues.push(-1);
-                signTime.push(respiratoryRateTime[movMean1RespiratoryRate.length - 2]);
-                this.enable = true;
-            }
-
-        }
-
-        if (signValues[signValues.length - 1] == -1 &&
-            signValues[signValues.length - 2] == -1 &&
-            signValues[signValues.length - 3] == -1 &&
-            signValues[signValues.length - 4] == -1 &&
-            signValues[signValues.length - 5] == -1 &&
-            signValues[signValues.length - 6] == -1 &&
-            signValues[signValues.length - 7] == -1 &&
-            signValues[signValues.length - 8] == 1 &&
-            signValues[signValues.length - 9] == 1 &&
-            signValues[signValues.length - 10] == 1 &&
-            signValues[signValues.length - 11] == 1 &&
-            signValues[signValues.length - 12] == 1 &&
-            signValues[signValues.length - 13] == 1 &&
-            signValues[signValues.length - 14] == 1 &&
-            this.enable == true
-        ) {
-            breathPeaksTime.push(Math.round(1000 * (signTime[signTime.length - 7] + signTime[signTime.length - 8]) / 2) / 1000);
-            let index1 = respiratoryRateTime.findIndex(r => r == signTime[signTime.length - 8]);
-            let index2 = respiratoryRateTime.findIndex(r => r == signTime[signTime.length - 7]);
-
-            breathPeaksValues.push((movMean1RespiratoryRate[index2] + movMean1RespiratoryRate[index1]) / 2);
-            respiratoryRateChart.data.datasets[2].data.push({ x: breathPeaksTime[breathPeaksTime.length - 1], y: breathPeaksValues[breathPeaksTime.length - 1] });
-
-            if (breathPeaksTime.length >= 2) {
-                respiratoryRate_tmp = Math.round(100 * 60 / (breathPeaksTime[breathPeaksTime.length - 1] - breathPeaksTime[breathPeaksTime.length - 2])) / 100;
-                instantaneousRespiratoryRateTime.push(breathPeaksTime[breathPeaksTime.length - 1]);
-                instantaneousRespiratoryRate.push(respiratoryRate_tmp);
-                document.querySelector("#respiratory-rate").innerHTML = instantaneousRespiratoryRate[instantaneousRespiratoryRate.length - 1];
-            }
-
-            this.enable = false;
-        }
-    }
-}
-
-
 // Pulse Calc
 let pulse = {
     fftWindowSize: model.fftWindowSize,
@@ -152,6 +70,8 @@ let pulse = {
     stopSearchIndex: 0,
     Fs: 1/0.0365,
     f: [],
+    meanPulseAmplitude: 0,
+    meanPulseFrequency: 0,  
     calcAmplitudeAndFrequency: function (time) {
         if (
             pulseValues.length % (this.fftWindowSize - 1) == 0 && pulseValues.length != (this.fftWindowSize - 1) ||
@@ -160,8 +80,8 @@ let pulse = {
 
             let pulseWindow = pulseValues.slice(pulseValues.length - this.fftWindowSize, pulseValues.length);
 
-            console.log(pulseWindow.length);
-            console.log(time);
+            //console.log(pulseWindow.length);
+            //console.log(time);
 
             if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
                 let mean_pulse = mean(pulseWindow);
@@ -200,20 +120,20 @@ let pulse = {
             pulseFrequency.push(frequency);
             pulseFrequencyTime.push(time);
             document.querySelector("#heart-rate-instantaneous").innerHTML = instantaneousHeartRate;
-            document.querySelector("#frequency").innerHTML = frequency;
-            this.calcPulseFrequencyVariance();
+            document.querySelector("#heart-rate-frequency").innerHTML = frequency;
+            this.calcFrequencyVariance();
 
             let amplitude = Math.round(100 * P1[frequencyIndex]) / 100;
 
             pulseAmplitude.push(P1[frequencyIndex]);
             pulseAmplitudeTime.push(time);
-            document.querySelector("#amplitude").innerHTML = amplitude;
-            this.calcPulseAmplitudeVariance();
+            document.querySelector("#heart-rate-amplitude").innerHTML = amplitude;
+            this.calcAmplitudeVariance();
 
         }
 
     },
-    calcPulseAmplitudeVariance: function () {
+    calcAmplitudeVariance: function () {
         let tmp = 0;
         for (let i = 0; i < pulseAmplitude.length; i++)
             tmp += pulseAmplitude[i];
@@ -228,7 +148,7 @@ let pulse = {
         pulseAmplitudeVariance.push(pulseAmplitudeVariance_tmp);
         document.querySelector("#pulse-amplitude-variance").innerHTML = pulseAmplitudeVariance_tmp;
     },
-    calcPulseFrequencyVariance: function () {
+    calcFrequencyVariance: function () {
         let tmp = 0;
         for (let i = 0; i < pulseFrequency.length; i++)
             tmp += pulseFrequency[i];
@@ -242,6 +162,109 @@ let pulse = {
         let pulseFrequencyVariance_tmp = Math.round(10000 * tmp / pulseFrequency.length) / 10000;
         pulseFrequencyVariance.push(pulseFrequencyVariance_tmp);
         document.querySelector("#pulse-frequency-variance").innerHTML = pulseFrequencyVariance_tmp;
+    },
+};
+
+// Respiratory Rate Calc
+let respiratoryRate = {
+    fftWindowSize: model.fftWindowSize,
+    fftWindowSizeWithPadding: model.fftWindowSizeWithPadding,
+    startSearchIndex: 0,
+    stopSearchIndex: 0,
+    Fs: 1 / 0.0365,
+    f: [],
+    meanRespiratoryRateAmplitude: 0,
+    meanRespiratoryRateFrequency: 0,
+    calcAmplitudeAndFrequency: function (time) {
+        if (
+            respiratoryRateValues.length % (this.fftWindowSize - 1) == 0 && respiratoryRateValues.length != (this.fftWindowSize - 1) ||
+            respiratoryRateValues.length % this.fftWindowSize == 0 && respiratoryRateValues.length == this.fftWindowSize
+        ) {
+
+            let respiratoryRateWindow = respiratoryRateValues.slice(respiratoryRateValues.length - this.fftWindowSize, respiratoryRateValues.length);
+
+            //console.log(pulseWindow.length);
+            //console.log(time);
+
+            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
+                let mean_resoiratoryRate = mean(respiratoryRateWindow);
+
+                for (let i = this.fftWindowSize; i < this.fftWindowSizeWithPadding; i++)
+                    respiratoryRateWindow[i] = mean_resoiratoryRate;
+            }
+
+            let zeros = new Array(respiratoryRateWindow.length).fill(0);
+
+            Y = fourier.dft(respiratoryRateWindow, zeros);
+
+            let L = respiratoryRateWindow.length;
+            let P1 = [];
+
+            if (respiratoryRateValues.length == this.fftWindowSize) {
+                for (let i = 0; i < Math.floor((L / 2)) + 1; i++)
+                    this.f[i] = this.Fs * i / L
+
+                this.startSearchIndex = this.f.findIndex(el => el >= 0.05);
+                this.stopSearchIndex = this.f.findIndex(el => el >= 2);
+            }
+
+            for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
+                if (i == 0)
+                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                else
+                    P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
+            }
+
+            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+
+            let frequency = Math.round(1000 * this.f[frequencyIndex]) / 1000;
+            let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
+
+            respiratoryRateFrequency.push(frequency);
+            respiratoryRateFrequencyTime.push(time);
+            document.querySelector("#respiratory-rate-instantaneous").innerHTML = instantaneousHeartRate;
+            document.querySelector("#respiratory-rate-frequency").innerHTML = frequency;
+            this.calcFrequencyVariance();
+
+            let amplitude = Math.round(100 * P1[frequencyIndex]) / 100;
+
+            respiratoryRateAmplitude.push(P1[frequencyIndex]);
+            respiratoryRateAmplitudeTime.push(time);
+            document.querySelector("#respiratory-rate-amplitude").innerHTML = amplitude;
+            this.calcAmplitudeVariance();
+
+        }
+
+    },
+    calcAmplitudeVariance: function () {
+        let tmp = 0;
+        for (let i = 0; i < respiratoryRateAmplitude.length; i++)
+            tmp += respiratoryRateAmplitude[i];
+        
+        this.meanRespiratoryRateAmplitude = tmp / respiratoryRateAmplitude.length;
+        tmp = 0;
+
+        for (let i = 0; i < respiratoryRateAmplitude.length; i++)
+            tmp += (respiratoryRateAmplitude[i] - this.meanRespiratoryRateAmplitude) ** 2;
+
+        let respiratoryRateAmplitudeVariance_tmp = Math.round(100 * tmp / respiratoryRateAmplitude.length) / 100;
+        respiratoryRateAmplitudeVariance.push(respiratoryRateAmplitudeVariance_tmp);
+        document.querySelector("#respiratory-amplitude-rate-variance").innerHTML = respiratoryRateAmplitudeVariance_tmp;
+    },
+    calcFrequencyVariance: function () {
+        let tmp = 0;
+        for (let i = 0; i < respiratoryRateFrequency.length; i++)
+            tmp += respiratoryRateFrequency[i];
+
+        this.meanRespiratoryRateFrequency = tmp / respiratoryRateFrequency.length;
+        tmp = 0;
+        
+        for (let i = 0; i < respiratoryRateFrequency.length; i++)
+            tmp += (respiratoryRateFrequency[i] - this.meanRespiratoryRateFrequency) ** 2;
+
+        let respiratoryRateFrequencyVariance_tmp = Math.round(10000 * tmp / respiratoryRateFrequency.length) / 10000;
+        respiratoryRateFrequencyVariance.push(respiratoryRateFrequencyVariance_tmp);
+        document.querySelector("#respiratory-rate-frequency-variance").innerHTML = respiratoryRateFrequencyVariance_tmp;
     },
 };
 
@@ -413,29 +436,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
                         y: 0,
                     },
                 ],
-            },
-            {
-                label: "Moving average 1",
-                lineTension: 0,
-                data: [
-                    {
-                        x: 0,
-                        y: 0,
-                    },
-                ],
-                backgroundColor: "rgba(0, 0, 255, 0.5)",
-            },
-            {
-                label: "Breath peaks",
-                lineTension: 0,
-                data: [
-                    {
-                        x: 0,
-                        y: 0,
-                    },
-                ],
-                backgroundColor: "rgba(255, 0, 0, 0.5)",
-            },
+            }
         ],
     },
     options: {
@@ -499,10 +500,13 @@ function onConnectionLost(responseObject) {
 
 
 function onMessageArrived(message) {
-    if (message.destinationName === "HealthyMan/Data") {
+    if (message.destinationName === "HealthyMan/Data") {    
         //console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
+
+        // Pulse
+
         let pulseTime_tmp = Number(splitText[0]);
         let pulseValue_tmp = Number(splitText[1]);
         pulseTime.push(pulseTime_tmp);
@@ -512,7 +516,7 @@ function onMessageArrived(message) {
         pulseChart.update(0);
         pulse.calcAmplitudeAndFrequency(pulseTime_tmp);
 
-        ////
+        // GSR
 
         let GSRTime_tmp = Number(splitText[2]);
         let GSRValue_tmp = Number(splitText[3]);
@@ -542,7 +546,7 @@ function onMessageArrived(message) {
         gsrChart.update(0);
 
 
-        ////
+        // Respiratory Rate
         let respiratoryRateTime_tmp = Number(splitText[4]);
         let respiratoryRateValue_tmp = Number(splitText[5]);
         respiratoryRateTime.push(respiratoryRateTime_tmp);
@@ -550,17 +554,10 @@ function onMessageArrived(message) {
 
         respiratoryRateChart.data.datasets[0].data.push({ x: respiratoryRateTime_tmp, y: respiratoryRateValue_tmp });
 
-        movMean1RespiratoryRateCalc.calc();
-        respiratoryRateDerivativeSign.calc();
-
-        if (respiratoryRateTime_tmp > 7) {
-            respiratoryRateChart.data.datasets[0].data.shift();
-            respiratoryRateChart.data.datasets[1].data.shift();
-        }
-        if (respiratoryRateChart.data.datasets[2].data[0] != undefined && respiratoryRateTime_tmp > respiratoryRateChart.data.datasets[2].data[0].x + 7)
-            respiratoryRateChart.data.datasets[2].data.shift();
+        if (respiratoryRateTime_tmp > 7) respiratoryRateChart.data.datasets[0].data.shift();
 
         respiratoryRateChart.update(0);
+        respiratoryRate.calcAmplitudeAndFrequency(respiratoryRateTime_tmp);
     }
 }
 
@@ -600,10 +597,16 @@ btnStart.addEventListener("click", function () {
     pulse.enable2 = false;
 
     document.querySelector("#heart-rate-instantaneous").innerHTML = 0;
-    document.querySelector("#frequency").innerHTML = 0;
-    document.querySelector("#amplitude").innerHTML = 0;
+    document.querySelector("#heart-rate-frequency").innerHTML = 0;
+    document.querySelector("#heart-rate-amplitude").innerHTML = 0;
     document.querySelector("#pulse-amplitude-variance").innerHTML = 0;
     document.querySelector("#pulse-frequency-variance").innerHTML = 0;
+
+    document.querySelector("#respiratory-rate-instantaneous").innerHTML = 0;
+    document.querySelector("#respiratory-rate-frequency").innerHTML = 0;
+    document.querySelector("#respiratory-rate-amplitude").innerHTML = 0;
+    document.querySelector("#respiratory-rate-amplitude-variance").innerHTML = 0;
+    document.querySelector("#respiratory-rate-frequency-variance").innerHTML = 0;
 
     message = new Paho.MQTT.Message("1");
     message.destinationName = "HealthyMan/MeasurementEnable";
