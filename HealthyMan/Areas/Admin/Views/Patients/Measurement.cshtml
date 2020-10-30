@@ -47,42 +47,63 @@
 <hr />
 <h4 class="text-center">Pulse</h4>
 <dl class="row">
+    @*
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.HeartRateAverage)
     </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.HeartRateAverage)
     </dd>
+    *@
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.FFTWindowSize)
+        @Html.DisplayNameFor(model => model.PulseFFTWindowSize)
     </dt>
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.FFTWindowSize)
+        @Html.DisplayFor(model => model.PulseFFTWindowSize)
     </dd>
     <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.FFTWindowSizeWithPadding)
+        @Html.DisplayNameFor(model => model.PulseFFTWindowSizeWithPadding)
     </dt>
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.FFTWindowSizeWithPadding)
+        @Html.DisplayFor(model => model.PulseFFTWindowSizeWithPadding)
     </dd>
 </dl>
-<div id="pulse_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="instantaneous_heart_rate_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="pulse_amplitude_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="pulse_amplitude_variance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="pulse_frequency_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="pulse_frequency_variance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="pulse_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto; display: block"></div>
+@*<div class="text-center"><button type="button"class="btn btn-dark pulse_chart"> HIDE Pulse sensor voltage chart</button></div>*@
+<div id="instantaneous_heart_rate_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="pulse_amplitude_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="pulse_amplitude_variance_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="pulse_frequency_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="pulse_frequency_variance_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
 <hr />
 <h4 class="text-center">GSR</h4>
-<div id="resistance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="conductance_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="resistance_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="conductance_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
 <hr />
 <h4 class="text-center">Respiratory rate</h4>
-<div id="respiratoryRate_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
-<div id="instantaneous_respiratory_rate_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.RespiratoryRateFFTWindowSize)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.RespiratoryRateFFTWindowSize)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.RespiratoryRateFFTWindowSizeWithPadding)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.RespiratoryRateFFTWindowSizeWithPadding)
+    </dd>
+</dl>
+<div id="respiratoryRate_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="instantaneous_respiratory_rate_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="respiratory_rate_amplitude_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="respiratory_rate_amplitude_variance_chart" style="position: relative; width: 70vw; height: 50vh; 500px; margin: auto;"></div>
+<div id="respiratory_rate_frequency_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
+<div id="respiratory_rate_frequency_variance_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
 <hr />
 <h4 class="text-center">Time difference</h4>
-<div id="diff_chart" style="width: 1110px; height: 500px; margin: auto;"></div>
+<div id="diff_chart" style="position: relative; width: 70vw; height: 50vh; margin: auto;"></div>
 <hr />
 <a asp-action="Patient" asp-route-id="@Model.Patient.PatientId" class="btn btn-primary">Back</a> |
 <a asp-action="DeleteMeasurement" asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
@@ -92,7 +113,7 @@
     <script src="~/js/mean.js"></script>
     <script src="~/js/calcMovMean.js"></script>
     <script>
-        let model = @Html.Raw(Json.Serialize(Model));
+    let model = @Html.Raw(Json.Serialize(Model));
     </script>
     <script src="~/js/rednerLineCharts.js"></script>
 }

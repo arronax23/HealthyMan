@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using HealthyMan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HealthyMan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201030125623_Added_RespiratoryRate_ForurierPadding_related_properties_to_Measurement")]
+    partial class Added_RespiratoryRate_ForurierPadding_related_properties_to_Measurement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +34,12 @@ namespace HealthyMan.Migrations
 
                     b.Property<List<float>>("BreathPeaksValues")
                         .HasColumnType("real[]");
+
+                    b.Property<int>("FFTWindowSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FFTWindowSizeWithPadding")
+                        .HasColumnType("integer");
 
                     b.Property<List<float>>("GSRTime")
                         .HasColumnType("real[]");
@@ -63,12 +71,6 @@ namespace HealthyMan.Migrations
                     b.Property<List<float>>("PulseAmplitudeVariance")
                         .HasColumnType("real[]");
 
-                    b.Property<int>("PulseFFTWindowSize")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PulseFFTWindowSizeWithPadding")
-                        .HasColumnType("integer");
-
                     b.Property<List<float>>("PulseFrequency")
                         .HasColumnType("real[]");
 
@@ -92,12 +94,6 @@ namespace HealthyMan.Migrations
 
                     b.Property<List<float>>("RespiratoryRateAmplitudeVariance")
                         .HasColumnType("real[]");
-
-                    b.Property<int>("RespiratoryRateFFTWindowSize")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RespiratoryRateFFTWindowSizeWithPadding")
-                        .HasColumnType("integer");
 
                     b.Property<List<float>>("RespiratoryRateFrequency")
                         .HasColumnType("real[]");
@@ -152,16 +148,13 @@ namespace HealthyMan.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("PulseFFTWindowSize")
+                    b.Property<int>("FFTWindowSize")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PulseFFTWindowSizeWithPadding")
+                    b.Property<int>("FFTWindowSizeWithPadding")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RespiratoryRateFFTWindowSize")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RespiratoryRateFFTWindowSizeWithPadding")
+                    b.Property<int>("MovMeanRespiratoryRateWindowLength")
                         .HasColumnType("integer");
 
                     b.HasKey("SettingsId");

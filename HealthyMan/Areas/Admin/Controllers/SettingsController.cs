@@ -27,9 +27,12 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> SetDefaultSettings()
         {
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
-            currentSettigns.FFTWindowSize = 128;
-            currentSettigns.FFTWindowSizeWithPadding = 1024;
-            currentSettigns.MovMeanRespiratoryRateWindowLength = 41;
+            currentSettigns.PulseFFTWindowSize = 128;
+            currentSettigns.PulseFFTWindowSizeWithPadding = 1024;
+
+            currentSettigns.RespiratoryRateFFTWindowSize = 128;
+            currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = 2048;
+
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -38,9 +41,12 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> SaveSettings(Settings settings)
         {
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
-            currentSettigns.FFTWindowSize = settings.FFTWindowSize;
-            currentSettigns.FFTWindowSizeWithPadding = settings.FFTWindowSizeWithPadding;
-            currentSettigns.MovMeanRespiratoryRateWindowLength = settings.MovMeanRespiratoryRateWindowLength;
+            currentSettigns.PulseFFTWindowSize = settings.PulseFFTWindowSize;
+            currentSettigns.PulseFFTWindowSizeWithPadding = settings.PulseFFTWindowSizeWithPadding;
+
+            currentSettigns.RespiratoryRateFFTWindowSize = settings.RespiratoryRateFFTWindowSize;
+            currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = settings.RespiratoryRateFFTWindowSizeWithPadding;
+
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

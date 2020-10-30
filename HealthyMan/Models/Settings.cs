@@ -10,10 +10,13 @@ namespace HealthyMan.Models
     {
         public int? SettingsId { get; set; }       
         [Display(Name = "FFT window size")]
-        public int FFTWindowSize { get; set; }
+        public int PulseFFTWindowSize { get; set; }
         [Display(Name = "FFT window size with padding")]
-        public int FFTWindowSizeWithPadding { get; set; }
-        [Display(Name = "Moving mean respiratory rate window length")]
-        public int MovMeanRespiratoryRateWindowLength { get; set; }
+        public int PulseFFTWindowSizeWithPadding { get; set; }
+        [Display(Name = "FFT window size")]
+        public int RespiratoryRateFFTWindowSize { get; set; }
+        [Display(Name = "FFT window size with padding")]
+        public int RespiratoryRateFFTWindowSizeWithPadding { get; set; }
+
     }
 }

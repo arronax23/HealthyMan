@@ -23,18 +23,28 @@ namespace HealthyMan.Models
         public List<float> PulseFrequencyTime { get; set; }
         public List<float> PulseFrequencyVariance { get; set; }
         [Display(Name = "FFT window size")]
-        public int FFTWindowSize { get; set; }
+        public int PulseFFTWindowSize { get; set; }
         [Display(Name = "FFT window size with padding")]
-        public int FFTWindowSizeWithPadding { get; set; }
+        public int PulseFFTWindowSizeWithPadding { get; set; }
+        [Display(Name = "FFT window size")]
+        public int RespiratoryRateFFTWindowSize { get; set; }
+        [Display(Name = "FFT window size with padding")]
+        public int RespiratoryRateFFTWindowSizeWithPadding { get; set; }
         public List<float> GSRValues { get; set; }
         public List<float> GSRTime { get; set; }
         public List<float> RespiratoryRateValues { get; set; }
         public List<float> RespiratoryRateTime { get; set; }
-        public List<float> MovMean1RespiratoryRate { get; set; }
-        public List<float> BreathPeaksValues { get; set; }
-        public List<float> BreathPeaksTime { get; set; }
-        public List<float> InstantaneousRespiratoryRate { get; set; }
-        public List<float> InstantaneousRespiratoryRateTime { get; set; }
+        public List<float> MovMean1RespiratoryRate { get; set; } // to be deleted
+        public List<float> BreathPeaksValues { get; set; } // to be deleted
+        public List<float> BreathPeaksTime { get; set; } // to be deleted
+        public List<float> InstantaneousRespiratoryRate { get; set; } // to be deleted
+        public List<float> InstantaneousRespiratoryRateTime { get; set; } // to be deleted
+        public List<float>  RespiratoryRateAmplitude { get; set; }
+        public List<float>  RespiratoryRateAmplitudeTime { get; set; }
+        public List<float>  RespiratoryRateAmplitudeVariance { get; set; }
+        public List<float>  RespiratoryRateFrequency { get; set; }
+        public List<float>  RespiratoryRateFrequencyTime { get; set; }
+        public List<float> RespiratoryRateFrequencyVariance { get; set; }
 
         [Display(Name = "Time stamp")]
         public DateTime TimeStamp { get; set; }

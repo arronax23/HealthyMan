@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20200816123528_test.Designer.cs" />
     <Compile Remove="Migrations\20201005130238_BreathPeaks_added-to_Measurement.cs" />
     <Compile Remove="Migrations\20201005130238_BreathPeaks_added-to_Measurement.Designer.cs" />
+    <Compile Remove="Migrations\20201030125344_Added_RespiratoryRate_ForurierPadding_related_properties_to_Measurement.cs" />
+    <Compile Remove="Migrations\20201030125344_Added_RespiratoryRate_ForurierPadding_related_properties_to_Measurement.Designer.cs" />
   </ItemGroup>
 
 

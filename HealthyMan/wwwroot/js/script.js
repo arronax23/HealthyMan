@@ -1,6 +1,5 @@
 ﻿let pulseValues = [];
 let pulseTime = [];
-
 let pulseAmplitude = [];
 let pulseAmplitudeTime = [0];
 let pulseAmplitudeVariance = [];
@@ -23,13 +22,11 @@ let respiratoryRateFrequencyTime = [0];
 let respiratoryRateFrequencyVariance = [];
 
 
-let movMean1RespiratoryRate = [];
-let signValues = [];
-let signTime = [];
-let breathPeaksValues = [];
-let breathPeaksTime = [];
-let instantaneousRespiratoryRate = [];
-let instantaneousRespiratoryRateTime = [];
+let movMean1RespiratoryRate = [];  // to be deleted
+let breathPeaksValues = [];  // to be deleted
+let breathPeaksTime = [];  // to be deleted
+let instantaneousRespiratoryRate = [];  // to be deleted
+let instantaneousRespiratoryRateTime = [];  // to be deleted
 
 
 let measurement = {
@@ -42,17 +39,25 @@ let measurement = {
     pulseFrequency: pulseFrequency,
     pulseFrequencyTime: pulseFrequencyTime,
     pulseFrequencyVariance: pulseFrequencyVariance,
-    fftWindowSize: model.fftWindowSize,
-    fftWindowSizeWithPadding: model.fftWindowSizeWithPadding,
+    pulseFFTWindowSize: model.pulseFFTWindowSize,
+    pulseFFTWindowSizeWithPadding: model.pulseFFTWindowSizeWithPadding,
+    respiratoryRateFFTWindowSize: model.respiratoryRateFFTWindowSize,
+    respiratoryRateFFTWindowSizeWithPadding: model.respiratoryRateFFTWindowSizeWithPadding,
     gsrValues: gsrValues,
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
     respiratoryRateTime: respiratoryRateTime,
-    movMean1RespiratoryRate: movMean1RespiratoryRate,
-    breathPeaksValues: breathPeaksValues,
-    breathPeaksTime: breathPeaksTime,
-    instantaneousRespiratoryRate: instantaneousRespiratoryRate,
-    instantaneousRespiratoryRateTime: instantaneousRespiratoryRateTime,
+    movMean1RespiratoryRate: movMean1RespiratoryRate,  // to be deleted
+    breathPeaksValues: breathPeaksValues,  // to be deleted
+    breathPeaksTime: breathPeaksTime, // to be deleted
+    instantaneousRespiratoryRate: instantaneousRespiratoryRate,  // to be deleted
+    instantaneousRespiratoryRateTime: instantaneousRespiratoryRateTime,  // to be deleted
+    respiratoryRateAmplitude: respiratoryRateAmplitude,
+    respiratoryRateAmplitudeTime: respiratoryRateAmplitudeTime,
+    respiratoryRateAmplitudeVariance: respiratoryRateAmplitudeVariance,
+    respiratoryRateFrequency: respiratoryRateFrequency,
+    respiratoryRateFrequencyTime: respiratoryRateFrequencyTime,
+    respiratoryRateFrequencyVariance: respiratoryRateFrequencyVariance,
     timeStamp: new Date(),
     // Patient
     patient: {
@@ -64,8 +69,8 @@ let measurement = {
 
 // Pulse Calc
 let pulse = {
-    fftWindowSize: model.fftWindowSize,
-    fftWindowSizeWithPadding: model.fftWindowSizeWithPadding,
+    fftWindowSize: model.pulseFFTWindowSize,
+    fftWindowSizeWithPadding: model.pulseFFTWindowSizeWithPadding,
     startSearchIndex: 0,
     stopSearchIndex: 0,
     Fs: 1/0.0365,
@@ -167,8 +172,8 @@ let pulse = {
 
 // Respiratory Rate Calc
 let respiratoryRate = {
-    fftWindowSize: model.fftWindowSize,
-    fftWindowSizeWithPadding: model.fftWindowSizeWithPadding,
+    fftWindowSize: model.respiratoryRateFFTWindowSize,
+    fftWindowSizeWithPadding: model.respiratoryRateFFTWindowSizeWithPadding,
     startSearchIndex: 0,
     stopSearchIndex: 0,
     Fs: 1 / 0.0365,
@@ -249,7 +254,7 @@ let respiratoryRate = {
 
         let respiratoryRateAmplitudeVariance_tmp = Math.round(100 * tmp / respiratoryRateAmplitude.length) / 100;
         respiratoryRateAmplitudeVariance.push(respiratoryRateAmplitudeVariance_tmp);
-        document.querySelector("#respiratory-amplitude-rate-variance").innerHTML = respiratoryRateAmplitudeVariance_tmp;
+        document.querySelector("#respiratory-rate-amplitude-variance").innerHTML = respiratoryRateAmplitudeVariance_tmp;
     },
     calcFrequencyVariance: function () {
         let tmp = 0;
@@ -577,12 +582,8 @@ btnStart.addEventListener("click", function () {
     respiratoryRateValues.length = 0;
     movMean1RespiratoryRate.length = 0;
     respiratoryRateChart.data.datasets[0].data.length = 0;
-    respiratoryRateChart.data.datasets[1].data.length = 0;
-    respiratoryRateChart.data.datasets[2].data.length = 0;
     instantaneousRespiratoryRate.length = 0;
     instantaneousRespiratoryRateTime.length = 0;
-    signValues.length = 0;
-    signTime.length = 0;
     breathPeaksTime.length = 0;
     breathPeaksValues.length = 0;
     pulseAmplitude.length = 0;
@@ -595,6 +596,14 @@ btnStart.addEventListener("click", function () {
     pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
+    respiratoryRateAmplitude.length = 0;
+    respiratoryRateAmplitudeTime.length = 0;
+    respiratoryRateAmplitudeTime.push(0);
+    respiratoryRateAmplitudeVariance.length = 0;
+    respiratoryRateFrequency.length = 0;
+    respiratoryRateFrequencyTime.length = 0;
+    respiratoryRateFrequencyTime.push(0);
+    respiratoryRateFrequencyVariance.length = 0;
 
     document.querySelector("#heart-rate-instantaneous").innerHTML = 0;
     document.querySelector("#heart-rate-frequency").innerHTML = 0;
