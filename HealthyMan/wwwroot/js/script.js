@@ -88,13 +88,20 @@ let pulse = {
             //console.log(pulseWindow.length);
             //console.log(time);
 
-            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
-                let mean_pulse = mean(pulseWindow);
+            let mean_pulse = mean(pulseWindow);
 
+
+            for (let i = 0; i < pulseWindow.length; i++)
+                if (pulseWindow[i] < mean_pulse) pulseWindow[i] = mean_pulse;
+
+
+            mean_pulse = mean(pulseWindow);
+            
+            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {              
                 for (let i = this.fftWindowSize; i < this.fftWindowSizeWithPadding; i++)
                     pulseWindow[i] = mean_pulse;
             }
-
+          
             let zeros = new Array(pulseWindow.length).fill(0);
 
             Y = fourier.dft(pulseWindow, zeros);
@@ -106,18 +113,22 @@ let pulse = {
                 for (let i = 0; i < Math.floor((L / 2)) + 1; i++) 
                     this.f[i] = this.Fs * i / L
 
-                this.startSearchIndex = this.f.findIndex(el => el >= 0.5);
-                this.stopSearchIndex = this.f.findIndex(el => el >= 3.33);
+                //this.startSearchIndex = this.f.findIndex(el => el >= 0.5);
+                //this.stopSearchIndex = this.f.findIndex(el => el >= 3.33);
             }
 
             for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
                 if (i == 0)
-                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                    //P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                    P1[i] = 0;
                 else
                     P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
             }
 
-            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+            console.log(P1);
+
+            //let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1));
 
             let frequency = Math.round(1000 * this.f[frequencyIndex]) / 1000;
             let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
@@ -209,18 +220,20 @@ let respiratoryRate = {
                 for (let i = 0; i < Math.floor((L / 2)) + 1; i++)
                     this.f[i] = this.Fs * i / L
 
-                this.startSearchIndex = this.f.findIndex(el => el >= 0.05);
-                this.stopSearchIndex = this.f.findIndex(el => el >= 2);
+                //this.startSearchIndex = this.f.findIndex(el => el >= 0.05);
+                //this.stopSearchIndex = this.f.findIndex(el => el >= 2);
             }
 
             for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
                 if (i == 0)
-                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                    //P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
+                    P1[i] = 0;
                 else
                     P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
             }
 
-            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+            //let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1));
 
             let frequency = Math.round(1000 * this.f[frequencyIndex]) / 1000;
             let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
@@ -473,7 +486,7 @@ var respiratoryRateChart = new Chart(respiratoryRateContext, {
 });
 
 /***********************************************Paho.MQTT.Client*******************************************************/
-let client = new Paho.MQTT.Client("localhost", 9001, "browser");
+let client = new Paho.MQTT.Client("localhost", 9001, "Browser_Measurement");
 
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
@@ -490,7 +503,7 @@ client.connect({ onSuccess: onConnect});
 
 function onConnect() {
     console.log("Connected to MQTT Broker");
-    client.subscribe("HealthyMan/Data");
+    client.subscribe("HealthyMan/Measurement");
     
     //client.subscribe("HealthyMan/Pulse/Data");
     //client.subscribe("HealthyMan/GSR/Data");
@@ -505,8 +518,8 @@ function onConnectionLost(responseObject) {
 
 
 function onMessageArrived(message) {
-    if (message.destinationName === "HealthyMan/Data") {    
-        //console.log(message.payloadString);
+    if (message.destinationName === "HealthyMan/Measurement") {    
+        console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
 

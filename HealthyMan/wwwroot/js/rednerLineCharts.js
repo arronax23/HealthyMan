@@ -87,19 +87,19 @@
 
     let respiratoryRateAmplitudeDataTable = new google.visualization.DataTable();
     respiratoryRateAmplitudeDataTable.addColumn("number", "Time");
-    respiratoryRateAmplitudeDataTable.addColumn("number", "Pulse amplitude [mV]");
+    respiratoryRateAmplitudeDataTable.addColumn("number", "Respiratory Rate amplitude [mV]");
 
     let respiratoryRateAmplitudeVarianceDataTable = new google.visualization.DataTable();
     respiratoryRateAmplitudeVarianceDataTable.addColumn("number", "Time");
-    respiratoryRateAmplitudeVarianceDataTable.addColumn("number", "Pulse amplitude variance");
+    respiratoryRateAmplitudeVarianceDataTable.addColumn("number", "Respiratory Rate amplitude variance");
 
     let respiratoryRateFrequencyDataTable = new google.visualization.DataTable();
     respiratoryRateFrequencyDataTable.addColumn("number", "Time");
-    respiratoryRateFrequencyDataTable.addColumn("number", "Pulse frequency [Hz]");
+    respiratoryRateFrequencyDataTable.addColumn("number", "Respiratory Rate frequency [Hz]");
 
     let respiratoryRateFrequencyVarianceDataTable = new google.visualization.DataTable();
     respiratoryRateFrequencyVarianceDataTable.addColumn("number", "Time");
-    respiratoryRateFrequencyVarianceDataTable.addColumn("number", "Pulse frequency variance");
+    respiratoryRateFrequencyVarianceDataTable.addColumn("number", "Respiratory Rate frequency variance");
 
     let diffDataTable = new google.visualization.DataTable();
     diffDataTable.addColumn("number", "Number");
@@ -179,9 +179,9 @@
         respiratoryRateFrequencyDataTable.addRow([(model.respiratoryRateFrequencyTime[i] + model.respiratoryRateFrequencyTime[i + 1]) / 2, model.respiratoryRateFrequency[i]]);
         respiratoryRateFrequencyDataTable.addRow([model.respiratoryRateFrequencyTime[i + 1], model.respiratoryRateFrequency[i]]);
 
-        respiratoryRateFrequencyVarianceDataTable.addRow([model.pulseFrequencyTime[i], model.respiratoryRateFrequencyVariance[i]]);
-        respiratoryRateFrequencyVarianceDataTable.addRow([(model.pulseFrequencyTime[i] + model.respiratoryRateFrequencyTime[i + 1]) / 2, model.respiratoryRateFrequencyVariance[i]]);
-        respiratoryRateFrequencyVarianceDataTable.addRow([model.pulseFrequencyTime[i + 1], model.respiratoryRateFrequencyVariance[i]]);
+        respiratoryRateFrequencyVarianceDataTable.addRow([model.respiratoryRateFrequencyTime[i], model.respiratoryRateFrequencyVariance[i]]);
+        respiratoryRateFrequencyVarianceDataTable.addRow([(model.respiratoryRateFrequencyTime[i] + model.respiratoryRateFrequencyTime[i + 1]) / 2, model.respiratoryRateFrequencyVariance[i]]);
+        respiratoryRateFrequencyVarianceDataTable.addRow([model.respiratoryRateFrequencyTime[i + 1], model.respiratoryRateFrequencyVariance[i]]);
     }
 
     /*

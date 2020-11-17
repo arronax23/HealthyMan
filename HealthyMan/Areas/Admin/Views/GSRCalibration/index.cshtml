@@ -4,6 +4,7 @@
 
 <h1>GSR Calibration</h1>
 <div>
+    <h4>Set calibration data to 512 by using GSR sensor potentiometer</h4>
     <h4 style="display: inline-block">Calibration data:&nbsp;&nbsp;</h4><h4 style="display: inline-block" id="calibration-data">null</h4>
 </div>
 <button id="btn-start" class="btn btn-success">Start calibration</button>
@@ -11,7 +12,7 @@
 @section Scripts {
     <script src="~/lib/paho-mqtt/mqttws31.min.js" type="text/javascript"></script>
     <script>
-        let client = new Paho.MQTT.Client("localhost", 9001, "browser");
+        let client = new Paho.MQTT.Client("localhost", 9001, "Browser_GSRCalibration");
 
         client.onConnectionLost = onConnectionLost;
         client.onMessageArrived = onMessageArrived;
