@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\lib\chartjs-plugin-zoom\" />
   </ItemGroup>
 
 </Project>

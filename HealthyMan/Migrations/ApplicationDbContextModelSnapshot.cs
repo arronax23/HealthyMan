@@ -27,12 +27,6 @@ namespace HealthyMan.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<List<float>>("BreathPeaksTime")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("BreathPeaksValues")
-                        .HasColumnType("real[]");
-
                     b.Property<List<float>>("GSRTime")
                         .HasColumnType("real[]");
 
@@ -41,15 +35,6 @@ namespace HealthyMan.Migrations
 
                     b.Property<int>("HeartRateAverage")
                         .HasColumnType("integer");
-
-                    b.Property<List<float>>("InstantaneousRespiratoryRate")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("InstantaneousRespiratoryRateTime")
-                        .HasColumnType("real[]");
-
-                    b.Property<List<float>>("MovMean1RespiratoryRate")
-                        .HasColumnType("real[]");
 
                     b.Property<int?>("PatientId")
                         .HasColumnType("integer");

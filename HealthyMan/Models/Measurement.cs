@@ -34,11 +34,6 @@ namespace HealthyMan.Models
         public List<float> GSRTime { get; set; }
         public List<float> RespiratoryRateValues { get; set; }
         public List<float> RespiratoryRateTime { get; set; }
-        public List<float> MovMean1RespiratoryRate { get; set; } // to be deleted
-        public List<float> BreathPeaksValues { get; set; } // to be deleted
-        public List<float> BreathPeaksTime { get; set; } // to be deleted
-        public List<float> InstantaneousRespiratoryRate { get; set; } // to be deleted
-        public List<float> InstantaneousRespiratoryRateTime { get; set; } // to be deleted
         public List<float>  RespiratoryRateAmplitude { get; set; }
         public List<float>  RespiratoryRateAmplitudeTime { get; set; }
         public List<float>  RespiratoryRateAmplitudeVariance { get; set; }

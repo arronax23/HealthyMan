@@ -5,34 +5,35 @@
 
 <h1>Settings</h1>
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-4">
         <a asp-area="Admin" asp-controller="Settings" asp-action="SetDefaultSettings" class="btn btn-danger">Reset settings (Set default settings)</a>
         <form asp-area="Admin" asp-controller="Settings" asp-action="SaveSettings" class="mt-3">
+            <h5>* Ts (sampling period) = 35ms</h5>
             <h4>Pulse</h4>
-            <div class="form-group">
-                <label asp-for="PulseFFTWindowSize" class="control-label"></label>
-                <input asp-for="PulseFFTWindowSize" class="form-control" />
-                <span asp-validation-for="PulseFFTWindowSize" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PulseFFTWindowSizeWithPadding" class="control-label"></label>
-                <input asp-for="PulseFFTWindowSizeWithPadding" class="form-control" />
-                <span asp-validation-for="PulseFFTWindowSizeWithPadding" class="text-danger"></span>
-            </div>
-            <h4>GSR</h4>
-            <div class="form-group">
-                <label asp-for="RespiratoryRateFFTWindowSize" class="control-label"></label>
-                <input asp-for="RespiratoryRateFFTWindowSize" class="form-control" />
-                <span asp-validation-for="RespiratoryRateFFTWindowSize" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RespiratoryRateFFTWindowSizeWithPadding" class="control-label"></label>
-                <input asp-for="RespiratoryRateFFTWindowSizeWithPadding" class="form-control" />
-                <span asp-validation-for="RespiratoryRateFFTWindowSizeWithPadding" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-success" />
-            </div>
+                <div class="form-group">
+                    <label asp-for="PulseFFTWindowSize" class="control-label"></label>
+                    <input asp-for="PulseFFTWindowSize" class="form-control" />
+                    <span asp-validation-for="PulseFFTWindowSize" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PulseFFTWindowSizeWithPadding" class="control-label"></label>
+                    <input asp-for="PulseFFTWindowSizeWithPadding" class="form-control" />
+                    <span asp-validation-for="PulseFFTWindowSizeWithPadding" class="text-danger"></span>
+                </div>
+                <h4>Respiratory rate</h4>
+                <div class="form-group">
+                    <label asp-for="RespiratoryRateFFTWindowSize" class="control-label"></label>
+                    <input asp-for="RespiratoryRateFFTWindowSize" class="form-control" />
+                    <span asp-validation-for="RespiratoryRateFFTWindowSize" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RespiratoryRateFFTWindowSizeWithPadding" class="control-label"></label>
+                    <input asp-for="RespiratoryRateFFTWindowSizeWithPadding" class="form-control" />
+                    <span asp-validation-for="RespiratoryRateFFTWindowSizeWithPadding" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-success" />
+                </div>
         </form>
     </div>
 </div>
