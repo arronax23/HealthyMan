@@ -430,21 +430,21 @@ for (let i = 0; i < model.pulseValues.length; i++) {
 pulse_chart.update(0);
 
 for (let i = 0; i < model.pulseFrequency.length; i++) {  
-    let middlePointTime = Math.round(1000 * (model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2) / 1000;
+    //let middlePointTime = Math.round(1000 * (model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2) / 1000;
 
     let instantaneousHeartRate = Math.round(100 * 60 * model.pulseFrequency[i]) / 100;
     instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i], y: instantaneousHeartRate });
-    instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: middlePointTime, y: instantaneousHeartRate });
-    instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: instantaneousHeartRate });
+    //instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: middlePointTime, y: instantaneousHeartRate });
+    //instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: instantaneousHeartRate });
 
 
     pulse_frequency_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i], y: model.pulseFrequency[i] });
-    pulse_frequency_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseFrequency[i] });
-    pulse_frequency_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: model.pulseFrequency[i] });
+    //pulse_frequency_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseFrequency[i] });
+    //pulse_frequency_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: model.pulseFrequency[i] });
 
     pulse_frequency_variance_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i], y: model.pulseFrequencyVariance[i] });
-    pulse_frequency_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseFrequencyVariance[i] });
-    pulse_frequency_variance_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: model.pulseFrequencyVariance[i] });
+    //pulse_frequency_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseFrequencyVariance[i] });
+    //pulse_frequency_variance_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: model.pulseFrequencyVariance[i] });
 
 }
 instantaneous_heart_rate_chart.update(0);

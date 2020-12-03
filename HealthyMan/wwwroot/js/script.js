@@ -1,10 +1,10 @@
 ﻿let pulseValues = [];
 let pulseTime = [];
 let pulseAmplitude = [];
-let pulseAmplitudeTime = [0];
+let pulseAmplitudeTime = [];
 let pulseAmplitudeVariance = [];
 let pulseFrequency = [];
-let pulseFrequencyTime = [0];
+let pulseFrequencyTime = [];
 let pulseFrequencyVariance = [];
 
 let gsrValues = []; //Ω
@@ -34,8 +34,10 @@ let measurement = {
     pulseFrequencyVariance: pulseFrequencyVariance,
     pulseFFTWindowSize: model.pulseFFTWindowSize,
     pulseFFTWindowSizeWithPadding: model.pulseFFTWindowSizeWithPadding,
+    pulseFFTStepSize: model.pulseFFTStepSize,
     respiratoryRateFFTWindowSize: model.respiratoryRateFFTWindowSize,
     respiratoryRateFFTWindowSizeWithPadding: model.respiratoryRateFFTWindowSizeWithPadding,
+    respiratoryRateFFTStepSize: model.respiratoryRateFFTStepSize,
     gsrValues: gsrValues,
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
@@ -59,18 +61,19 @@ let measurement = {
 let pulse = {
     fftWindowSize: model.pulseFFTWindowSize,
     fftWindowSizeWithPadding: model.pulseFFTWindowSizeWithPadding,
-    startSearchIndex: 0,
-    stopSearchIndex: 0,
+    fftStepSize: model.pulseFFTStepSize,
+    //startSearchIndex: 0,
+    //stopSearchIndex: 0,
     Fs: 1 / 0.035,
     f: [],
     meanPulseAmplitude: 0,
     meanPulseFrequency: 0,  
     calcAmplitudeAndFrequency: function (time) {
-        if (
-            pulseValues.length % (this.fftWindowSize - 1) == 0 && pulseValues.length != (this.fftWindowSize - 1) ||
-            pulseValues.length % this.fftWindowSize == 0 && pulseValues.length == this.fftWindowSize
+        if (pulseValues.length == this.fftWindowSize ||
+            pulseValues.length > this.fftWindowSize &&
+            pulseValues.length % this.fftStepSize == 0
         ) {
-
+            //console.log(pulseValues.length);
             let pulseWindow = pulseValues.slice(pulseValues.length - this.fftWindowSize, pulseValues.length);
 
             //console.log(pulseWindow.length);
@@ -173,22 +176,23 @@ let pulse = {
 let respiratoryRate = {
     fftWindowSize: model.respiratoryRateFFTWindowSize,
     fftWindowSizeWithPadding: model.respiratoryRateFFTWindowSizeWithPadding,
-    startSearchIndex: 0,
-    stopSearchIndex: 0,
+    fftStepSize: model.respiratoryRateFFTStepSize,
+    //startSearchIndex: 0,
+    //stopSearchIndex: 0,
     Fs: 1 / 0.035,
     f: [],
     meanRespiratoryRateAmplitude: 0,
     meanRespiratoryRateFrequency: 0,
     calcAmplitudeAndFrequency: function (time) {
         if (
-            respiratoryRateValues.length % (this.fftWindowSize - 1) == 0 &&
-            respiratoryRateValues.length != (this.fftWindowSize - 1) ||
-            respiratoryRateValues.length == this.fftWindowSize
+            respiratoryRateValues.length == this.fftWindowSize ||
+            respiratoryRateValues.length > this.fftWindowSize &&
+            respiratoryRateValues.length % this.fftStepSize == 0
         ) {
-
+            //console.log(respiratoryRateValues.length);
             let respiratoryRateWindow = respiratoryRateValues.slice(respiratoryRateValues.length - this.fftWindowSize, respiratoryRateValues.length);
 
-            //console.log(pulseWindow.length);
+            //console.log(respiratoryRateWindow.length);
             //console.log(time);
 
             if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
@@ -561,11 +565,11 @@ btnStart.addEventListener("click", function () {
     respiratoryRateChart.data.datasets[0].data.length = 0;
     pulseAmplitude.length = 0;
     pulseAmplitudeTime.length = 0;
-    pulseAmplitudeTime.push(0);
+    //pulseAmplitudeTime.push(0);
     pulseAmplitudeVariance.length = 0;
     pulseFrequency.length = 0;
     pulseFrequencyTime.length = 0;
-    pulseFrequencyTime.push(0);
+    //pulseFrequencyTime.push(0);
     pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;

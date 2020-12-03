@@ -4,71 +4,72 @@
     ViewData["Title"] = "Measurement";
 }
 
-    <div class="text-center">
-        <h1>Measurement</h1>
-        <hr />
-        <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
-            <canvas id="pulseChart" width="80"></canvas>
-        </div>
-        <div class="form-group">
-            <span><b>Instantaneous heart rate: </b></span><span id="heart-rate-instantaneous">0</span>&nbsp;
-            @*<span><b>Average heart rate: </b></span><span id="heart-rate-average">0</span>&nbsp;*@
-            <span><b>Frequency: </b></span><span id="heart-rate-frequency">0</span>&nbsp;
-            <span><b>Frequency variance: </b></span><span id="pulse-frequency-variance">0</span>&nbsp;
-            <span><b>Amplitude: </b></span><span id="heart-rate-amplitude">0</span>&nbsp;
-            <span><b>Amplitude variance: </b></span><span id="pulse-amplitude-variance">0</span>
-
-        </div>
-        <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
-            <canvas id="GSRChart" width="80"></canvas>
-        </div>
-        <div class="form-group">
-            <div class="radio-buttons">
-                <input type="radio" id="om" name="gsr" value="om" checked>
-                <label for="om">kΩ</label>
-                <input type="radio" id="siemens" name="gsr" value="siemens">
-                <label for="siemens">uS</label>
-            </div>
-            <span id="gsr-name"><b>Resistance: </b></span><span id="gsr-value">0</span>
-        </div>
-        <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
-            <canvas id="RespiratoryRateChart" width="80"></canvas>
-        </div>
-        <div class="form-group">
-            <span><b>Instantaneous respiratory rate: </b></span><span id="respiratory-rate-instantaneous">0</span>&nbsp;
-            <span><b>Frequency: </b></span><span id="respiratory-rate-frequency">0</span>&nbsp;
-            <span><b>Frequency variance: </b></span><span id="respiratory-rate-frequency-variance">0</span>&nbsp;
-            <span><b>Amplitude: </b></span><span id="respiratory-rate-amplitude">0</span>&nbsp;
-            <span><b>Amplitude variance: </b></span><span id="respiratory-rate-amplitude-variance">0</span>
-
-        </div>
-        <div class="form-group">
-            <button id="btn-start" class="btn btn-success">Start</button>
-            <button id="btn-stop" class="btn btn-danger">Stop</button>
-        </div>
-        <hr />
-        <div id="form">
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName">
-            </div>
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName">
-            </div>
-            <div class="form-group">
-                <label for="birthDate">Birth Date</label>
-                <input type="date" id="birthDate">
-            </div>
-            <button id="btn-send" class="btn btn-primary">Send</button>
-        </div>
+<div class="text-center">
+    <h1>Measurement</h1>
+    <hr />
+    <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
+        <canvas id="pulseChart" width="80"></canvas>
     </div>
+    <div class="form-group">
+        <span><b>Instantaneous heart rate: </b></span><span id="heart-rate-instantaneous">0</span>&nbsp;
+        @*<span><b>Average heart rate: </b></span><span id="heart-rate-average">0</span>&nbsp;*@
+        <span><b>Frequency: </b></span><span id="heart-rate-frequency">0</span>&nbsp;
+        <span><b>Frequency variance: </b></span><span id="pulse-frequency-variance">0</span>&nbsp;
+        <span><b>Amplitude: </b></span><span id="heart-rate-amplitude">0</span>&nbsp;
+        <span><b>Amplitude variance: </b></span><span id="pulse-amplitude-variance">0</span>
+
+    </div>
+    <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
+        <canvas id="GSRChart" width="80"></canvas>
+    </div>
+    <div class="form-group">
+        <div class="radio-buttons">
+            <input type="radio" id="om" name="gsr" value="om" checked>
+            <label for="om">kΩ</label>
+            <input type="radio" id="siemens" name="gsr" value="siemens">
+            <label for="siemens">uS</label>
+        </div>
+        <span id="gsr-name"><b>Resistance: </b></span><span id="gsr-value">0</span>
+    </div>
+    <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
+        <canvas id="RespiratoryRateChart" width="80"></canvas>
+    </div>
+    <div class="form-group">
+        <span><b>Instantaneous respiratory rate: </b></span><span id="respiratory-rate-instantaneous">0</span>&nbsp;
+        <span><b>Frequency: </b></span><span id="respiratory-rate-frequency">0</span>&nbsp;
+        <span><b>Frequency variance: </b></span><span id="respiratory-rate-frequency-variance">0</span>&nbsp;
+        <span><b>Amplitude: </b></span><span id="respiratory-rate-amplitude">0</span>&nbsp;
+        <span><b>Amplitude variance: </b></span><span id="respiratory-rate-amplitude-variance">0</span>
+
+    </div>
+    <div class="form-group">
+        <button id="btn-start" class="btn btn-success">Start</button>
+        <button id="btn-stop" class="btn btn-danger">Stop</button>
+    </div>
+    <hr />
+    <div id="form">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName">
+        </div>
+        <div class="form-group">
+            <label for="birthDate">Birth Date</label>
+            <input type="date" id="birthDate">
+        </div>
+        <button id="btn-send" class="btn btn-primary">Send</button>
+    </div>
+</div>
 
 @section Scripts {
     <script src="~/lib//Chart.js/Chart.min.js"></script>
     <script src="~/lib/paho-mqtt/mqttws31.min.js" type="text/javascript"></script>
     <script src="~/lib/fourier/fourier.js" type="text/javascript"></script>
     <script src="~/js/mean.js"></script>
+    <script src="~/lib/slayer/slayer_bundle.js"></script>
     <script>
         let model = @Html.Raw(Json.Serialize(Model));
     </script>

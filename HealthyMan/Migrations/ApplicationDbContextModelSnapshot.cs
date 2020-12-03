@@ -48,6 +48,9 @@ namespace HealthyMan.Migrations
                     b.Property<List<float>>("PulseAmplitudeVariance")
                         .HasColumnType("real[]");
 
+                    b.Property<int>("PulseFFTStepSize")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PulseFFTWindowSize")
                         .HasColumnType("integer");
 
@@ -77,6 +80,9 @@ namespace HealthyMan.Migrations
 
                     b.Property<List<float>>("RespiratoryRateAmplitudeVariance")
                         .HasColumnType("real[]");
+
+                    b.Property<int>("RespiratoryRateFFTStepSize")
+                        .HasColumnType("integer");
 
                     b.Property<int>("RespiratoryRateFFTWindowSize")
                         .HasColumnType("integer");
@@ -137,10 +143,16 @@ namespace HealthyMan.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("PulseFFTStepSize")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PulseFFTWindowSize")
                         .HasColumnType("integer");
 
                     b.Property<int>("PulseFFTWindowSizeWithPadding")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RespiratoryRateFFTStepSize")
                         .HasColumnType("integer");
 
                     b.Property<int>("RespiratoryRateFFTWindowSize")

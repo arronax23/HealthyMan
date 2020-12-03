@@ -29,9 +29,11 @@ namespace HealthyMan.Areas.Admin.Controllers
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
             currentSettigns.PulseFFTWindowSize = 128;
             currentSettigns.PulseFFTWindowSizeWithPadding = 1024;
+            currentSettigns.PulseFFTStepSize = 10;
 
-            currentSettigns.RespiratoryRateFFTWindowSize = 128;
+            currentSettigns.RespiratoryRateFFTWindowSize = 256;
             currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = 2048;
+            currentSettigns.RespiratoryRateFFTStepSize = 10;
 
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
@@ -43,9 +45,11 @@ namespace HealthyMan.Areas.Admin.Controllers
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
             currentSettigns.PulseFFTWindowSize = settings.PulseFFTWindowSize;
             currentSettigns.PulseFFTWindowSizeWithPadding = settings.PulseFFTWindowSizeWithPadding;
+            currentSettigns.PulseFFTStepSize = settings.PulseFFTStepSize;
 
             currentSettigns.RespiratoryRateFFTWindowSize = settings.RespiratoryRateFFTWindowSize;
             currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = settings.RespiratoryRateFFTWindowSizeWithPadding;
+            currentSettigns.RespiratoryRateFFTStepSize = settings.RespiratoryRateFFTStepSize;
 
             _context.Update(currentSettigns);
             await _context.SaveChangesAsync();

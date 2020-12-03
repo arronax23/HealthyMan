@@ -26,10 +26,14 @@ namespace HealthyMan.Models
         public int PulseFFTWindowSize { get; set; }
         [Display(Name = "FFT window size with padding")]
         public int PulseFFTWindowSizeWithPadding { get; set; }
+        [Display(Name = "FFT step size [number of samples]")]
+        public int PulseFFTStepSize { get; set; }
         [Display(Name = "FFT window size")]
         public int RespiratoryRateFFTWindowSize { get; set; }
         [Display(Name = "FFT window size with padding")]
         public int RespiratoryRateFFTWindowSizeWithPadding { get; set; }
+        [Display(Name = "FFT step size [number of samples]")]
+        public int RespiratoryRateFFTStepSize { get; set; }
         public List<float> GSRValues { get; set; }
         public List<float> GSRTime { get; set; }
         public List<float> RespiratoryRateValues { get; set; }
