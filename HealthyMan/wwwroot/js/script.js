@@ -71,7 +71,7 @@ let pulse = {
     f: [],
     meanPulseAmplitude: 0,
     meanPulseFrequency: 0,  
-    calcAmplitudeAndFrequency: function (time) {
+    calcAmplitudeAndFrequency: function () {
         if (pulseValues.length == this.fftWindowSize ||
             pulseValues.length > this.fftWindowSize &&
             pulseValues.length % this.fftStepSize == 0
@@ -130,7 +130,9 @@ let pulse = {
             let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
 
             pulseFrequency.push(frequency);
-            pulseFrequencyTime.push(time);
+            let timeIndex = pulseValues.length - Math.floor(this.fftWindowSize / 2);
+            let time = pulseTime[timeIndex];
+            pulseProcessedDataTime.push(time);
             document.querySelector("#heart-rate-instantaneous").innerHTML = instantaneousHeartRate;
             document.querySelector("#heart-rate-frequency").innerHTML = frequency;
             this.calcFrequencyVariance();
@@ -138,7 +140,6 @@ let pulse = {
             let amplitude = Math.round(100 * P1[frequencyIndex]) / 100;
 
             pulseAmplitude.push(amplitude);
-            pulseAmplitudeTime.push(time);
             document.querySelector("#heart-rate-amplitude").innerHTML = amplitude;
             this.calcAmplitudeVariance();
 
@@ -188,7 +189,7 @@ let respiratoryRate = {
     f: [],
     meanRespiratoryRateAmplitude: 0,
     meanRespiratoryRateFrequency: 0,
-    calcAmplitudeAndFrequency: function (time) {
+    calcAmplitudeAndFrequency: function () {
         if (
             respiratoryRateValues.length == this.fftWindowSize ||
             respiratoryRateValues.length > this.fftWindowSize &&
@@ -238,8 +239,11 @@ let respiratoryRate = {
             let frequency = Math.round(1000 * this.f[frequencyIndex]) / 1000;
             let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
 
-            respiratoryRateFrequency.push(frequency);
-            respiratoryRateFrequencyTime.push(time);
+            respiratoryRateFrequency.push(frequency);   
+
+            let timeIndex = respiratoryRateValues.length - Math.floor(this.fftWindowSize / 2);
+            let time = respiratoryRateTime[timeIndex];
+            respiratoryRateProcessedDataTime.push(time);
             document.querySelector("#respiratory-rate-instantaneous").innerHTML = instantaneousHeartRate;
             document.querySelector("#respiratory-rate-frequency").innerHTML = frequency;
             this.calcFrequencyVariance();
@@ -247,7 +251,6 @@ let respiratoryRate = {
             let amplitude = Math.round(100 * P1[frequencyIndex]) / 100;
 
             respiratoryRateAmplitude.push(amplitude);
-            respiratoryRateAmplitudeTime.push(time);
             document.querySelector("#respiratory-rate-amplitude").innerHTML = amplitude;
             this.calcAmplitudeVariance();
 
@@ -508,7 +511,7 @@ function onMessageArrived(message) {
         pulseChart.data.datasets[0].data.push({ x: pulseTime_tmp, y: pulseValue_tmp });
         if (pulseTime_tmp > 7) pulseChart.data.datasets[0].data.shift();
         pulseChart.update(0);
-        pulse.calcAmplitudeAndFrequency(pulseTime_tmp);
+        pulse.calcAmplitudeAndFrequency();
 
         // GSR
 
@@ -551,7 +554,7 @@ function onMessageArrived(message) {
         if (respiratoryRateTime_tmp > 7) respiratoryRateChart.data.datasets[0].data.shift();
 
         respiratoryRateChart.update(0);
-        respiratoryRate.calcAmplitudeAndFrequency(respiratoryRateTime_tmp);
+        respiratoryRate.calcAmplitudeAndFrequency();
     }
 }
 
@@ -571,18 +574,16 @@ btnStart.addEventListener("click", function () {
     respiratoryRateValues.length = 0;
     respiratoryRateChart.data.datasets[0].data.length = 0;
     pulseAmplitude.length = 0;
-    pulseAmplitudeTime.length = 0;
+    pulseProcessedDataTime.length = 0;
     pulseAmplitudeVariance.length = 0;
     pulseFrequency.length = 0;
-    pulseFrequencyTime.length = 0;
     pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
     respiratoryRateAmplitude.length = 0;
-    respiratoryRateAmplitudeTime.length = 0;
+    respiratoryRateProcessedDataTime.length = 0;
     respiratoryRateAmplitudeVariance.length = 0;
     respiratoryRateFrequency.length = 0;
-    respiratoryRateFrequencyTime.length = 0;
     respiratoryRateFrequencyVariance.length = 0;
 
     document.querySelector("#heart-rate-instantaneous").innerHTML = 0;
