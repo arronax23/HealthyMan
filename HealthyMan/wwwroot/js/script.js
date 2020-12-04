@@ -1,24 +1,29 @@
-﻿let pulseValues = [];
+﻿//raw
 let pulseTime = [];
+let pulseValues = [];
+
+//processed
+let pulseProcessedDataTime = [];
 let pulseAmplitude = [];
-let pulseAmplitudeTime = [];
 let pulseAmplitudeVariance = [];
 let pulseFrequency = [];
-let pulseFrequencyTime = [];
 let pulseFrequencyVariance = [];
 
-let gsrValues = []; //Ω
+// raw
 let gsrTime = [];
+let gsrValues = []; //Ω
 let resistanceValues = []; //kΩ
 let conductanceValues = []; //uS
 
-let respiratoryRateValues = [];
+// raw
 let respiratoryRateTime = [];
+let respiratoryRateValues = [];
+
+//processed
+let respiratoryRateProcessedDataTime = [];
 let respiratoryRateAmplitude = [];
-let respiratoryRateAmplitudeTime = [0];
 let respiratoryRateAmplitudeVariance = [];
 let respiratoryRateFrequency = [];
-let respiratoryRateFrequencyTime = [0];
 let respiratoryRateFrequencyVariance = [];
 
 
@@ -26,11 +31,10 @@ let measurement = {
     heartRateAverage: 0,
     pulseValues: pulseValues,
     pulseTime: pulseTime,
+    pulseProcessedDataTime: pulseProcessedDataTime,
     pulseAmplitude: pulseAmplitude,
-    pulseAmplitudeTime: pulseAmplitudeTime,
     pulseAmplitudeVariance: pulseAmplitudeVariance,
     pulseFrequency: pulseFrequency,
-    pulseFrequencyTime: pulseFrequencyTime,
     pulseFrequencyVariance: pulseFrequencyVariance,
     pulseFFTWindowSize: model.pulseFFTWindowSize,
     pulseFFTWindowSizeWithPadding: model.pulseFFTWindowSizeWithPadding,
@@ -42,11 +46,10 @@ let measurement = {
     gsrTime: gsrTime,
     respiratoryRateValues: respiratoryRateValues,
     respiratoryRateTime: respiratoryRateTime,
+    respiratoryRateProcessedDataTime: respiratoryRateProcessedDataTime,
     respiratoryRateAmplitude: respiratoryRateAmplitude,
-    respiratoryRateAmplitudeTime: respiratoryRateAmplitudeTime,
     respiratoryRateAmplitudeVariance: respiratoryRateAmplitudeVariance,
     respiratoryRateFrequency: respiratoryRateFrequency,
-    respiratoryRateFrequencyTime: respiratoryRateFrequencyTime,
     respiratoryRateFrequencyVariance: respiratoryRateFrequencyVariance,
     timeStamp: new Date(),
     // Patient
@@ -109,9 +112,11 @@ let pulse = {
             }
 
             for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
-                if (i == 0)
+                if (i == 0) //DC term
                     //P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
                     P1[i] = 0;
+                else if (i == Math.floor((L / 2))) //Nyquist frequency
+                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
                 else
                     P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
             }
@@ -218,9 +223,11 @@ let respiratoryRate = {
             }
 
             for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
-                if (i == 0)
+                if (i == 0) // DC term
                     //P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / L;
                     P1[i] = 0;
+                else if (i == Math.floor((L / 2))) //Nyquist frequency
+                    P1[i] = Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
                 else
                     P1[i] = 2 * Math.sqrt(Y[0][i] ** 2 + Y[1][i] ** 2) / this.fftWindowSize;
             }
@@ -565,21 +572,17 @@ btnStart.addEventListener("click", function () {
     respiratoryRateChart.data.datasets[0].data.length = 0;
     pulseAmplitude.length = 0;
     pulseAmplitudeTime.length = 0;
-    //pulseAmplitudeTime.push(0);
     pulseAmplitudeVariance.length = 0;
     pulseFrequency.length = 0;
     pulseFrequencyTime.length = 0;
-    //pulseFrequencyTime.push(0);
     pulseFrequencyVariance.length = 0;
     pulse.enable1 = false;
     pulse.enable2 = false;
     respiratoryRateAmplitude.length = 0;
     respiratoryRateAmplitudeTime.length = 0;
-    respiratoryRateAmplitudeTime.push(0);
     respiratoryRateAmplitudeVariance.length = 0;
     respiratoryRateFrequency.length = 0;
     respiratoryRateFrequencyTime.length = 0;
-    respiratoryRateFrequencyTime.push(0);
     respiratoryRateFrequencyVariance.length = 0;
 
     document.querySelector("#heart-rate-instantaneous").innerHTML = 0;

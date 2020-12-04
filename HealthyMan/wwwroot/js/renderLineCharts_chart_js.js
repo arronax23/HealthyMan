@@ -429,20 +429,20 @@ for (let i = 0; i < model.pulseValues.length; i++) {
 }
 pulse_chart.update(0);
 
-for (let i = 0; i < model.pulseFrequency.length; i++) {  
+for (let i = 0; i < model.pulseProcessedDataTime.length; i++) {  
     //let middlePointTime = Math.round(1000 * (model.pulseFrequencyTime[i] + model.pulseFrequencyTime[i + 1]) / 2) / 1000;
 
     let instantaneousHeartRate = Math.round(100 * 60 * model.pulseFrequency[i]) / 100;
-    instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i], y: instantaneousHeartRate });
+    instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: model.pulseProcessedDataTime[i], y: instantaneousHeartRate });
     //instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: middlePointTime, y: instantaneousHeartRate });
     //instantaneous_heart_rate_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: instantaneousHeartRate });
 
 
-    pulse_frequency_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i], y: model.pulseFrequency[i] });
+    pulse_frequency_chart.data.datasets[0].data.push({ x: model.pulseProcessedDataTime[i], y: model.pulseFrequency[i] });
     //pulse_frequency_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseFrequency[i] });
     //pulse_frequency_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: model.pulseFrequency[i] });
 
-    pulse_frequency_variance_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i], y: model.pulseFrequencyVariance[i] });
+    pulse_frequency_variance_chart.data.datasets[0].data.push({ x: model.pulseProcessedDataTime[i], y: model.pulseFrequencyVariance[i] });
     //pulse_frequency_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseFrequencyVariance[i] });
     //pulse_frequency_variance_chart.data.datasets[0].data.push({ x: model.pulseFrequencyTime[i + 1], y: model.pulseFrequencyVariance[i] });
 
@@ -451,17 +451,17 @@ instantaneous_heart_rate_chart.update(0);
 pulse_frequency_chart.update(0);
 pulse_frequency_variance_chart.update(0);
 
-for (let i = 0; i < model.pulseAmplitudeTime.length; i++) {
-    let middlePointTime = Math.round(1000 * (model.pulseAmplitudeTime[i] + model.pulseAmplitudeTime[i + 1]) / 2) / 1000;
+for (let i = 0; i < model.pulseProcessedDataTime.length; i++) {
+    //let middlePointTime = Math.round(1000 * (model.pulseAmplitudeTime[i] + model.pulseAmplitudeTime[i + 1]) / 2) / 1000;
 
 
-    pulse_amplitude_chart.data.datasets[0].data.push({ x: model.pulseAmplitudeTime[i], y: model.pulseAmplitude[i] });
-    pulse_amplitude_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseAmplitude[i] });
-    pulse_amplitude_chart.data.datasets[0].data.push({ x: model.pulseAmplitudeTime[i + 1], y: model.pulseAmplitude[i] });
+    pulse_amplitude_chart.data.datasets[0].data.push({ x: model.pulseProcessedDataTime[i], y: model.pulseAmplitude[i] });
+    //pulse_amplitude_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseAmplitude[i] });
+    //pulse_amplitude_chart.data.datasets[0].data.push({ x: model.pulseAmplitudeTime[i + 1], y: model.pulseAmplitude[i] });
 
-    pulse_amplitude_variance_chart.data.datasets[0].data.push({ x: model.pulseAmplitudeTime[i], y: model.pulseAmplitudeVariance[i] });
-    pulse_amplitude_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseAmplitudeVariance[i] });
-    pulse_amplitude_variance_chart.data.datasets[0].data.push({ x: model.pulseAmplitudeTime[i + 1], y: model.pulseAmplitudeVariance[i] });
+    pulse_amplitude_variance_chart.data.datasets[0].data.push({ x: model.pulseProcessedDataTime[i], y: model.pulseAmplitudeVariance[i] });
+    //pulse_amplitude_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.pulseAmplitudeVariance[i] });
+    //pulse_amplitude_variance_chart.data.datasets[0].data.push({ x: model.pulseAmplitudeTime[i + 1], y: model.pulseAmplitudeVariance[i] });
 
 }
 pulse_amplitude_chart.update(0);
@@ -890,38 +890,38 @@ for (let i = 0; i < model.respiratoryRateValues.length; i++) {
 respiratoryRate_chart.update(0);
 
 
-for (let i = 0; i < model.respiratoryRateFrequency.length; i++) {
-    let middlePointTime = Math.round(1000 * (model.respiratoryRateFrequencyTime[i] + model.respiratoryRateFrequencyTime[i + 1]) / 2) / 1000;
+for (let i = 0; i < model.respiratoryRateProcessedDataTime.length; i++) {
+    //let middlePointTime = Math.round(1000 * (model.respiratoryRateFrequencyTime[i] + model.respiratoryRateFrequencyTime[i + 1]) / 2) / 1000;
 
     let instantaneousRespiraotryRate = Math.round(100 * 60 * model.respiratoryRateFrequency[i]) / 100;
-    instantaneous_respiratory_rate_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i], y: instantaneousRespiraotryRate });
-    instantaneous_respiratory_rate_chart.data.datasets[0].data.push({ x: middlePointTime, y: instantaneousRespiraotryRate });
-    instantaneous_respiratory_rate_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i + 1], y: instantaneousRespiraotryRate });
+    instantaneous_respiratory_rate_chart.data.datasets[0].data.push({ x: model.respiratoryRateProcessedDataTime[i], y: instantaneousRespiraotryRate });
+    //instantaneous_respiratory_rate_chart.data.datasets[0].data.push({ x: middlePointTime, y: instantaneousRespiraotryRate });
+    //instantaneous_respiratory_rate_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i + 1], y: instantaneousRespiraotryRate });
 
 
-    respiratory_rate_frequency_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i], y: model.respiratoryRateFrequency[i] });
-    respiratory_rate_frequency_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateFrequency[i] });
-    respiratory_rate_frequency_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i + 1], y: model.respiratoryRateFrequency[i] });
+    respiratory_rate_frequency_chart.data.datasets[0].data.push({ x: model.respiratoryRateProcessedDataTime[i], y: model.respiratoryRateFrequency[i] });
+    //respiratory_rate_frequency_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateFrequency[i] });
+    //respiratory_rate_frequency_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i + 1], y: model.respiratoryRateFrequency[i] });
 
-    respiratory_rate_frequency_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i], y: model.respiratoryRateFrequencyVariance[i] });
-    respiratory_rate_frequency_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateFrequencyVariance[i] });
-    respiratory_rate_frequency_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i + 1], y: model.respiratoryRateFrequencyVariance[i] });
+    respiratory_rate_frequency_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateProcessedDataTime[i], y: model.respiratoryRateFrequencyVariance[i] });
+    //respiratory_rate_frequency_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateFrequencyVariance[i] });
+    //respiratory_rate_frequency_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateFrequencyTime[i + 1], y: model.respiratoryRateFrequencyVariance[i] });
 
 }
 instantaneous_respiratory_rate_chart.update(0);
 respiratory_rate_frequency_chart.update(0);
 respiratory_rate_frequency_variance_chart.update(0);
 
-for (let i = 0; i < model.respiratoryRateAmplitude.length; i++) {
-    let middlePointTime = Math.round(1000 * (model.respiratoryRateAmplitudeTime[i] + model.respiratoryRateAmplitudeTime[i + 1]) / 2) / 1000;
+for (let i = 0; i < model.respiratoryRateProcessedDataTime.length; i++) {
+    //let middlePointTime = Math.round(1000 * (model.respiratoryRateAmplitudeTime[i] + model.respiratoryRateAmplitudeTime[i + 1]) / 2) / 1000;
 
-    respiratory_rate_amplitude_chart.data.datasets[0].data.push({ x: model.respiratoryRateAmplitudeTime[i], y: model.respiratoryRateAmplitude[i] });
-    respiratory_rate_amplitude_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateAmplitude[i] });
-    respiratory_rate_amplitude_chart.data.datasets[0].data.push({ x: model.respiratoryRateAmplitudeTime[i + 1], y: model.respiratoryRateAmplitude[i] });
+    respiratory_rate_amplitude_chart.data.datasets[0].data.push({ x: model.respiratoryRateProcessedDataTime[i], y: model.respiratoryRateAmplitude[i] });
+    //respiratory_rate_amplitude_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateAmplitude[i] });
+    //respiratory_rate_amplitude_chart.data.datasets[0].data.push({ x: model.respiratoryRateAmplitudeTime[i + 1], y: model.respiratoryRateAmplitude[i] });
 
-    respiratory_rate_amplitude_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateAmplitudeTime[i], y: model.respiratoryRateAmplitudeVariance[i] });
-    respiratory_rate_amplitude_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateAmplitudeVariance[i] });
-    respiratory_rate_amplitude_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateAmplitudeTime[i + 1], y: model.respiratoryRateAmplitudeVariance[i] });
+    respiratory_rate_amplitude_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateProcessedDataTime[i], y: model.respiratoryRateAmplitudeVariance[i] });
+    //respiratory_rate_amplitude_variance_chart.data.datasets[0].data.push({ x: middlePointTime, y: model.respiratoryRateAmplitudeVariance[i] });
+    //respiratory_rate_amplitude_variance_chart.data.datasets[0].data.push({ x: model.respiratoryRateAmplitudeTime[i + 1], y: model.respiratoryRateAmplitudeVariance[i] });
 
 }
 respiratory_rate_amplitude_chart.update(0);

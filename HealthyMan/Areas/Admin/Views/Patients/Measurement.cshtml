@@ -66,6 +66,12 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.PulseFFTWindowSizeWithPadding)
     </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.PulseFFTStepSize)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.PulseFFTStepSize)
+    </dd>
 </dl>
 <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
     <canvas id="pulse_chart"></canvas>
@@ -108,6 +114,12 @@
     </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.RespiratoryRateFFTWindowSizeWithPadding)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.RespiratoryRateFFTStepSize)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.RespiratoryRateFFTStepSize)
     </dd>
 </dl>
 <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
