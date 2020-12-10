@@ -27,6 +27,8 @@ namespace HealthyMan.Models
         public int PulseFFTWindowSizeWithPadding { get; set; }
         [Display(Name = "FFT step size")]
         public int PulseFFTStepSize { get; set; }
+        [Display(Name = "Pulse processing method")]
+        public string PulseProcessingMethod { get; set; }
         [Display(Name = "FFT window size")]
         public int RespiratoryRateFFTWindowSize { get; set; }
         [Display(Name = "FFT window size with padding")]

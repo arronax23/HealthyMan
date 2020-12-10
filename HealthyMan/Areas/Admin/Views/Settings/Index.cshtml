@@ -3,17 +3,24 @@
     ViewData["Title"] = "Index";
 }
 
-@section Scripts{ 
-    <script src="~/lib/slayer/slayer_bundle.js"></script>
-    <script src="~/js/slayer_test.js"></script>
+@section Scripts{
+    <script src="~/js/findpeaks.js"></script>
+    <script src="~/lib/fourier/fourier.js" type="text/javascript"></script>
+    <script src="~/js/mean.js"></script>
+    <script src="~/lib/nayuki/fft.js"></script>
+    @*<script src="~/js/findpeaks_test.js"></script>*@
+    @*<script src="~/js/PulseProcessing.js"></script>*@
+    @*<script src="~/js/PulseProcessing2_old.js"></script>*@
+    @*<script src="~/js/RespiratoryRateProcessing.js"></script>*@
 }
 
 <h1>Settings</h1>
-<div class="row">
-    <div class="col-sm-4">
-        <a asp-area="Admin" asp-controller="Settings" asp-action="SetDefaultSettings" class="btn btn-danger">Reset settings (Set default settings)</a>
-        <form asp-area="Admin" asp-controller="Settings" asp-action="SaveSettings" class="mt-3">
-            <h5>* Ts (sampling period) = 35ms</h5>
+<h5>* Ts (sampling period) = 35ms</h5>
+<a asp-area="Admin" asp-controller="Settings" asp-action="SetDefaultSettings" class="btn btn-danger">Reset settings (Set default settings)</a>
+<form asp-area="Admin" asp-controller="Settings" asp-action="SaveSettings" class="mt-3">
+    <div class="row">
+        <div class="col-sm-4">
+
             <h4>Pulse</h4>
             <div class="form-group">
                 <label asp-for="PulseFFTWindowSize" class="control-label"></label>
@@ -30,6 +37,19 @@
                 <input asp-for="PulseFFTStepSize" class="form-control" />
                 <span asp-validation-for="PulseFFTStepSize" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="PulseProcessingMethod" class="control-label"></label>
+                @*<input asp-for="PulseProcessingMethod" class="form-control" />*@
+                <select asp-for="PulseProcessingMethod" asp-items="ViewBag.PulseProcessingMethods" class="form-control">
+                    <option>Please select one</option>
+                </select>
+                <span asp-validation-for="PulseProcessingMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save all" class="btn btn-success" />
+            </div>
+        </div>
+        <div class="col-sm-4">
             <h4>Respiratory rate</h4>
             <div class="form-group">
                 <label asp-for="RespiratoryRateFFTWindowSize" class="control-label"></label>
@@ -46,9 +66,7 @@
                 <input asp-for="RespiratoryRateFFTStepSize" class="form-control" />
                 <span asp-validation-for="RespiratoryRateFFTStepSize" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-success" />
-            </div>
-        </form>
+
+        </div>
     </div>
-</div>
+</form>

@@ -145,16 +145,13 @@
 <a asp-action="DeleteMeasurement" asp-route-id="@Model.MeasurementId" class="btn btn-danger">Delete measurement</a>
 @section Scripts{
     <script type="text/javascript" src="~/lib/google-charts/loader.js"></script>
-    <script type="text/javascript" src="~/lib/Chart.js/Chart.min.js"></script>
+    <script type="text/javascript" src="~/lib/chart.js/Chart.min.js"></script>
     <script type="text/javascript" src="~/lib/chartjs-plugin-zoom/hammer.min.js"></script>
     <script type="text/javascript" src="~/lib/chartjs-plugin-zoom/chartjs-plugin-zoom.min.js"></script>
     <script src="~/js/mean.js"></script>
-    <script src="~/js/calcMovMean.js"></script>
     <script>
     let model = @Html.Raw(Json.Serialize(Model));
     </script>
-    @*<script src="~/js/rednerLineCharts_google_charts.js"></script>*@
-
-    <script src="~/js/renderLineCharts_chart_js.js"></script>
+    <script src="~/js/renderLineCharts.js"></script>
 }
 

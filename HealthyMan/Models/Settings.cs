@@ -15,11 +15,14 @@ namespace HealthyMan.Models
         public int PulseFFTWindowSizeWithPadding { get; set; }
         [Display(Name = "FFT step size [number of samples]")]
         public int PulseFFTStepSize { get; set; }
+        [Display(Name = "Pulse processing method")]
+        public string PulseProcessingMethod { get; set; }
         [Display(Name = "FFT window size [number of samples]")]
         public int RespiratoryRateFFTWindowSize { get; set; }
         [Display(Name = "FFT window size with padding [number of samples]")]
         public int RespiratoryRateFFTWindowSizeWithPadding { get; set; }
         [Display(Name = "FFT step size [number of samples]")]
         public int RespiratoryRateFFTStepSize { get; set; }
+
     }
 }
