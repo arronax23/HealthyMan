@@ -105,21 +105,23 @@ for (let i = 0; i < respiratoryRate_values.length; i++) {
     respiratoryRate.calcAmplitudeAndFrequency();
 }
 
-console.log("respiratoryRateFrequency");
-console.log(respiratoryRateFrequency);
 console.log("respRate");
 console.log(respRate);
+console.log("respiratoryRateFrequency");
+console.log(respiratoryRateFrequency);
 console.log("respiratoryRateProcessedDataTime");
 console.log(respiratoryRateProcessedDataTime);
 
-copyToClipboard(respiratoryRateFrequency);
-copyToClipboard(respRate);
-copyToClipboard(respiratoryRateProcessedDataTime);
+copyToTextArea(respRate,"#respRate");
+copyToTextArea(respiratoryRateFrequency,"#respiratoryRateFrequency");
+copyToTextArea(respiratoryRateProcessedDataTime,"#respiratoryRateProcessedDataTime");
 
-function copyToClipboard(text) {
+function copyToTextArea(text, div_id) {
     var dummy = document.createElement("textarea");
-    document.body.appendChild(dummy);
+    var div = document.querySelector(div_id);
+    //document.body.appendChild(dummy);
+    div.appendChild(dummy);
     dummy.value = text;
-    dummy.select();
-    document.execCommand("copy");
+    //dummy.select();
+    //document.execCommand("copy");
 }

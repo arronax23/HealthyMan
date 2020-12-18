@@ -134,21 +134,23 @@ for (let i = 0; i < pulse_values.length; i++) {
     pulse.calcAmplitudeAndFrequency();
 }
 
-console.log("pulseFrequency");
-console.log(pulseFrequency);
 console.log("heartRate");
 console.log(heartRate);
+console.log("pulseFrequency");
+console.log(pulseFrequency);
 console.log("pulseProcessedDataTime");
 console.log(pulseProcessedDataTime);
 
-copyToClipboard(pulseFrequency);
-copyToClipboard(heartRate);
-copyToClipboard(pulseProcessedDataTime);
+copyToTextArea(heartRate,"#heartRate");
+copyToTextArea(pulseFrequency,"#pulseFrequency");
+copyToTextArea(pulseProcessedDataTime,"#pulseProcessedDataTime");
 
-function copyToClipboard(text) {
+function copyToTextArea(text,div_id) {
     var dummy = document.createElement("textarea");
-    document.body.appendChild(dummy);
+    var div = document.querySelector(div_id);
+    //document.body.appendChild(dummy);
+    div.appendChild(dummy);
     dummy.value = text;
-    dummy.select();
-    document.execCommand("copy");
+    //dummy.select();
+    //document.execCommand("copy");
 }

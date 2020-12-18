@@ -23,8 +23,8 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.PulseProcessingMethods = new List<SelectListItem>();
-            ViewBag.PulseProcessingMethods.Add(new SelectListItem() { Text = "findpeaks", Value = "findpeaks" });
-            ViewBag.PulseProcessingMethods.Add(new SelectListItem() { Text = "double mean", Value = "doubleMean" });
+            ViewBag.PulseProcessingMethods.Add(new SelectListItem() { Text = "find peaks", Value = "find peaks" });
+            ViewBag.PulseProcessingMethods.Add(new SelectListItem() { Text = "double mean", Value = "double mean" });
             return View(await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1));
         }
 
@@ -34,7 +34,7 @@ namespace HealthyMan.Areas.Admin.Controllers
             currentSettigns.PulseFFTWindowSize = 128;
             currentSettigns.PulseFFTWindowSizeWithPadding = 1024;
             currentSettigns.PulseFFTStepSize = 10;
-            currentSettigns.PulseProcessingMethod = "findpeaks";
+            currentSettigns.PulseProcessingMethod = "find peaks";
 
             currentSettigns.RespiratoryRateFFTWindowSize = 256;
             currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = 2048;

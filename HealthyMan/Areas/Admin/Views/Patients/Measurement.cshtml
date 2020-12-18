@@ -72,6 +72,12 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.PulseFFTStepSize)
     </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.PulseProcessingMethod)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.PulseProcessingMethod)
+    </dd>
 </dl>
 <div class="chart-container" style="position: relative; height:25vh; width:69.4vw">
     <canvas id="pulse_chart"></canvas>

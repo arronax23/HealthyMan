@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "RespiratoryRateProcessingJs";
+}
+
+@section Scripts{
+    <script src="~/js/findpeaks.js"></script>
+    @*<script src="~/lib/fourier/fourier.js" type="text/javascript"></script>*@
+    <script src="~/js/mean.js"></script>
+    <script src="~/lib/nayuki/fft.js"></script>
+    <script src="~/js/RespiratoryRateProcessing.js"></script>
+}
+
+<h1><i>RespiratoryRateProcessing.js</i></h1>
+<div>
+    <div id="respRate" class="d-inline-block mr-4">
+        <h5>respRate</h5>
+    </div>
+    <div id="respiratoryRateFrequency" class="d-inline-block mr-4">
+        <h5>respiratoryRateFrequency</h5>
+    </div>
+    <div id="respiratoryRateProcessedDataTime" class="d-inline-block">
+        <h5>respiratoryRateProcessedDataTime</h5>
+    </div>
+</div>

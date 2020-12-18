@@ -39,6 +39,7 @@ let measurement = {
     pulseFFTWindowSize: model.pulseFFTWindowSize,
     pulseFFTWindowSizeWithPadding: model.pulseFFTWindowSizeWithPadding,
     pulseFFTStepSize: model.pulseFFTStepSize,
+    pulseProcessingMethod: model.pulseProcessingMethod,
     respiratoryRateFFTWindowSize: model.respiratoryRateFFTWindowSize,
     respiratoryRateFFTWindowSizeWithPadding: model.respiratoryRateFFTWindowSizeWithPadding,
     respiratoryRateFFTStepSize: model.respiratoryRateFFTStepSize,
@@ -67,9 +68,16 @@ let pulse = {
     fftStepSize: model.pulseFFTStepSize,
     Fs: 1 / 0.035,
     f: [],
+    pulseProcessingMethod: model.pulseProcessingMethod,
     meanPulseAmplitude: 0,
-    meanPulseFrequency: 0,  
+    meanPulseFrequency: 0,
     calcAmplitudeAndFrequency: function () {
+        if (this.pulseProcessingMethod != "double mean")
+            this.calcAmplitudeAndFrequency_findpeaks();
+        else
+            this.calcAmplitudeAndFrequency_doubleMean();
+    },
+    calcAmplitudeAndFrequency_findpeaks: function () {
         if (pulseValues.length == this.fftWindowSize ||
             pulseValues.length > this.fftWindowSize &&
             pulseValues.length % this.fftStepSize == 0
@@ -81,12 +89,12 @@ let pulse = {
             //console.log(time);
 
             mean_pulse = mean(pulseWindow);
-            
-            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {              
+
+            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
                 for (let i = this.fftWindowSize; i < this.fftWindowSizeWithPadding; i++)
                     pulseWindow[i] = mean_pulse;
             }
-          
+
             let zeros = new Array(pulseWindow.length).fill(0);
 
             let Y_real = [...pulseWindow]
@@ -97,7 +105,7 @@ let pulse = {
             let P1 = [];
 
             if (pulseValues.length == this.fftWindowSize) {
-                for (let i = 0; i < Math.floor((L / 2)) + 1; i++) 
+                for (let i = 0; i < Math.floor((L / 2)) + 1; i++)
                     this.f[i] = this.Fs * i / L
             }
 
@@ -114,30 +122,30 @@ let pulse = {
             //console.log(P1);
 
             let peaks = findpeaks(this.f, P1);
-            console.log(peaks);
+            //console.log(peaks);
 
             peaks.sort(function (a, b) {
                 return b.P1 - a.P1;
             });
 
-            console.log(peaks);
+            //console.log(peaks);
 
             let top2Peaks = [];
             top2Peaks[0] = peaks[0];
             top2Peaks[1] = peaks[1];
 
-            console.log(top2Peaks);
+            //console.log(top2Peaks);
 
             top2Peaks.sort(function (a, b) {
                 return a.f - b.f;
             });
 
-            console.log(top2Peaks);
+            //console.log(top2Peaks);
 
             let pulsePeak = top2Peaks[0];
 
-            console.log(pulsePeak);
-            console.log("END");
+            //console.log(pulsePeak);
+            //console.log("END");
 
             let frequency = Math.round(1000 * pulsePeak.f) / 1000;
             let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
@@ -158,6 +166,78 @@ let pulse = {
 
         }
 
+    },
+    calcAmplitudeAndFrequency_doubleMean: function () {
+        if (pulseValues.length == this.fftWindowSize ||
+            pulseValues.length > this.fftWindowSize &&
+            pulseValues.length % this.fftStepSize == 0
+        ) {
+            //console.log(pulseValues.length);
+            let pulseWindow = pulseValues.slice(pulseValues.length - this.fftWindowSize, pulseValues.length);
+
+            //console.log(pulseWindow.length);
+            //console.log(time);
+
+            let mean_pulse = mean(pulseWindow);
+
+
+            for (let i = 0; i < pulseWindow.length; i++)
+                if (pulseWindow[i] < mean_pulse) pulseWindow[i] = mean_pulse;
+
+
+            mean_pulse = mean(pulseWindow);
+
+            if (this.fftWindowSize < this.fftWindowSizeWithPadding) {
+                for (let i = this.fftWindowSize; i < this.fftWindowSizeWithPadding; i++)
+                    pulseWindow[i] = mean_pulse;
+            }
+
+            let zeros = new Array(pulseWindow.length).fill(0);
+
+            let Y_real = [...pulseWindow]
+            let Y_imag = [...zeros]
+            transform(Y_real, Y_imag); // modifies FFT inputs to FFT outputs
+
+            let L = pulseWindow.length;
+            let P1 = [];
+
+            if (pulseValues.length == this.fftWindowSize) {
+                for (let i = 0; i < Math.floor((L / 2)) + 1; i++)
+                    this.f[i] = this.Fs * i / L
+            }
+
+            for (let i = 0; i < Math.floor((L / 2)) + 1; i++) {
+                if (i == 0) //DC term
+                    //P1[i] = Math.sqrt(Y_real[i] ** 2 + Y_imag[i] ** 2) / L;
+                    P1[i] = 0;
+                else if (i == Math.floor((L / 2))) //Nyquist frequency
+                    P1[i] = Math.sqrt(Y_real[i] ** 2 + Y_imag[i] ** 2) / this.fftWindowSize;
+                else
+                    P1[i] = 2 * Math.sqrt(Y_real[i] ** 2 + Y_imag[i] ** 2) / this.fftWindowSize;
+            }
+
+            //console.log(P1);
+
+            //let frequencyIndex = P1.findIndex(el => el == Math.max(...P1.slice(this.startSearchIndex, this.stopSearchIndex + 1)));
+            let frequencyIndex = P1.findIndex(el => el == Math.max(...P1));
+
+            let frequency = Math.round(1000 * this.f[frequencyIndex]) / 1000;
+            let instantaneousHeartRate = Math.round(100 * 60 * frequency) / 100;
+
+            pulseFrequency.push(frequency);
+            let timeIndex = pulseValues.length - Math.floor(this.fftWindowSize / 2);
+            let time = pulseTime[timeIndex];
+            pulseProcessedDataTime.push(time);
+            document.querySelector("#heart-rate-instantaneous").innerHTML = instantaneousHeartRate;
+            document.querySelector("#heart-rate-frequency").innerHTML = frequency;
+            this.calcFrequencyVariance();
+
+            let amplitude = Math.round(100 * P1[frequencyIndex]) / 100;
+
+            pulseAmplitude.push(amplitude);
+            document.querySelector("#heart-rate-amplitude").innerHTML = amplitude;
+            this.calcAmplitudeVariance();
+        }
     },
     calcAmplitudeVariance: function () {
         let tmp = 0;
@@ -507,7 +587,7 @@ function onConnectionLost(responseObject) {
 
 function onMessageArrived(message) {
     if (message.destinationName === "HealthyMan/Measurement") {
-        start = window.performance.now();
+        //start = window.performance.now();
         //console.log(message.payloadString);
         let splitText = message.payloadString.split(":");
         //console.log(splitText);
@@ -564,9 +644,8 @@ function onMessageArrived(message) {
 
         respiratoryRateChart.update(0);
         respiratoryRate.calcAmplitudeAndFrequency();
-        stop = window.performance.now();
-
-        console.log(stop - start);
+        //stop = window.performance.now();
+        //console.log(stop - start);
     }
 }
 
