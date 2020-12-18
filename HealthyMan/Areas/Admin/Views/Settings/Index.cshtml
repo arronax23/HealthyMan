@@ -3,19 +3,8 @@
     ViewData["Title"] = "Index";
 }
 
-@section Scripts{
-    <script src="~/js/findpeaks.js"></script>
-    <script src="~/lib/fourier/fourier.js" type="text/javascript"></script>
-    <script src="~/js/mean.js"></script>
-    <script src="~/lib/nayuki/fft.js"></script>
-    @*<script src="~/js/findpeaks_test.js"></script>*@
-    @*<script src="~/js/PulseProcessing.js"></script>*@
-    @*<script src="~/js/PulseProcessing2_old.js"></script>*@
-    @*<script src="~/js/RespiratoryRateProcessing.js"></script>*@
-}
-
 <h1>Settings</h1>
-<h5>* Ts (sampling period) = 35ms</h5>
+<h6>* Ts (sampling period) = 35ms</h6>
 <a asp-area="Admin" asp-controller="Settings" asp-action="SetDefaultSettings" class="btn btn-danger">Reset settings (Set default settings)</a>
 <form asp-area="Admin" asp-controller="Settings" asp-action="SaveSettings" class="mt-3">
     <div class="row">
