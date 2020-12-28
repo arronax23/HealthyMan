@@ -31,6 +31,12 @@ namespace HealthyMan.Areas.Admin.Controllers
         public async Task<IActionResult> SetDefaultSettings()
         {
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
+            bool settingsAlreadyExists = false;
+            if (currentSettigns == null)
+                currentSettigns = new Settings() { SettingsId = 1 };
+            else
+                settingsAlreadyExists = true;
+
             currentSettigns.PulseFFTWindowSize = 128;
             currentSettigns.PulseFFTWindowSizeWithPadding = 1024;
             currentSettigns.PulseFFTStepSize = 10;
@@ -40,7 +46,11 @@ namespace HealthyMan.Areas.Admin.Controllers
             currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = 2048;
             currentSettigns.RespiratoryRateFFTStepSize = 255;
 
-            _context.Update(currentSettigns);
+            if (settingsAlreadyExists == true)
+                _context.Update(currentSettigns);
+            else
+                await _context.AddAsync(currentSettigns);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
