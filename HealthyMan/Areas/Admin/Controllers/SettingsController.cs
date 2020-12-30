@@ -22,20 +22,38 @@ namespace HealthyMan.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await CreateDefaultSettings();
+
             ViewBag.PulseProcessingMethods = new List<SelectListItem>();
             ViewBag.PulseProcessingMethods.Add(new SelectListItem() { Text = "find peaks", Value = "find peaks" });
             ViewBag.PulseProcessingMethods.Add(new SelectListItem() { Text = "double mean", Value = "double mean" });
             return View(await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1));
         }
 
+        private async Task CreateDefaultSettings()
+        {
+            Settings settings = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
+            if (settings == null)
+            {
+                settings = new Settings();
+                settings.SettingsId = 1;
+                settings.PulseFFTWindowSize = 128;
+                settings.PulseFFTWindowSizeWithPadding = 1024;
+                settings.PulseFFTStepSize = 10;
+                settings.PulseProcessingMethod = "find peaks";
+
+                settings.RespiratoryRateFFTWindowSize = 256;
+                settings.RespiratoryRateFFTWindowSizeWithPadding = 2048;
+                settings.RespiratoryRateFFTStepSize = 255;
+
+                await _context.AddAsync(settings);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task<IActionResult> SetDefaultSettings()
         {
             Settings currentSettigns = await _context.Settings.SingleOrDefaultAsync(s => s.SettingsId == 1);
-            bool settingsAlreadyExists = false;
-            if (currentSettigns == null)
-                currentSettigns = new Settings() { SettingsId = 1 };
-            else
-                settingsAlreadyExists = true;
 
             currentSettigns.PulseFFTWindowSize = 128;
             currentSettigns.PulseFFTWindowSizeWithPadding = 1024;
@@ -46,11 +64,7 @@ namespace HealthyMan.Areas.Admin.Controllers
             currentSettigns.RespiratoryRateFFTWindowSizeWithPadding = 2048;
             currentSettigns.RespiratoryRateFFTStepSize = 255;
 
-            if (settingsAlreadyExists == true)
-                _context.Update(currentSettigns);
-            else
-                await _context.AddAsync(currentSettigns);
-
+            _context.Update(currentSettigns);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
