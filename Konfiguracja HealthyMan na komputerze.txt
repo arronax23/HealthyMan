@@ -1,7 +1,0 @@
-1. zainstalować broker mosquitto
-2. pobrać plik mosquitto.conf i podmienić w ścieżce instalacyjnej mosquitto
-3. ustawić regułę przychodząca dla portu 1883 w zaporze Windows Defender
-4. rozpocznij usługę mosquitto w menadżerze zadań
-4. zainstalować serwer baz danych Postgres
-5. wykonać komendę Update-Database
-6. przesłać dane połączenia portem szeregowym do ESP8266 poprzez formularz w zakładce Configuration
