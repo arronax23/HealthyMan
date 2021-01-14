@@ -21,25 +21,25 @@ namespace HealthyMan
         }
         // POST: api/Measurement
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Measurement pulseMeasurement)
+        public async Task<IActionResult> Post([FromBody] Measurement measurement)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data");
 
-            if (_context.Patients.Any(p => p.FirstName == pulseMeasurement.Patient.FirstName &&
-                                           p.LastName == pulseMeasurement.Patient.LastName &&
-                                           p.BirthDate == pulseMeasurement.Patient.BirthDate)
+            if (_context.Patients.Any(p => p.FirstName == measurement.Patient.FirstName &&
+                                           p.LastName == measurement.Patient.LastName &&
+                                           p.BirthDate == measurement.Patient.BirthDate)
                 )
             {
-                Patient alreadyKnownPatient = _context.Patients.SingleOrDefault(p => p.FirstName == pulseMeasurement.Patient.FirstName &&
-                                     p.LastName == pulseMeasurement.Patient.LastName &&
-                                     p.BirthDate == pulseMeasurement.Patient.BirthDate);
+                Patient alreadyKnownPatient = _context.Patients.SingleOrDefault(p => p.FirstName == measurement.Patient.FirstName &&
+                                     p.LastName == measurement.Patient.LastName &&
+                                     p.BirthDate == measurement.Patient.BirthDate);
 
-                pulseMeasurement.Patient = alreadyKnownPatient;
+                measurement.Patient = alreadyKnownPatient;
             }
-            pulseMeasurement.TimeStamp = DateTime.Now;
+            measurement.TimeStamp = DateTime.Now;
 
-            await _context.AddAsync(pulseMeasurement);
+            await _context.AddAsync(measurement);
             await _context.SaveChangesAsync();
 
             return Ok();
