@@ -26,17 +26,14 @@ namespace HealthyMan
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data");
 
-            if (_context.Patients.Any(p => p.FirstName == measurement.Patient.FirstName &&
-                                           p.LastName == measurement.Patient.LastName &&
-                                           p.BirthDate == measurement.Patient.BirthDate)
-                )
-            {
-                Patient alreadyKnownPatient = _context.Patients.SingleOrDefault(p => p.FirstName == measurement.Patient.FirstName &&
-                                     p.LastName == measurement.Patient.LastName &&
-                                     p.BirthDate == measurement.Patient.BirthDate);
+            Patient alreadyKnownPatient = 
+                _context.Patients.SingleOrDefault(p => p.FirstName == measurement.Patient.FirstName &&
+                                                       p.LastName == measurement.Patient.LastName &&
+                                                       p.BirthDate == measurement.Patient.BirthDate);
 
+            if (alreadyKnownPatient != null)
                 measurement.Patient = alreadyKnownPatient;
-            }
+
             measurement.TimeStamp = DateTime.Now;
 
             await _context.AddAsync(measurement);
